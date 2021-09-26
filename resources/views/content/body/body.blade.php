@@ -78,7 +78,7 @@
         .product-name span {
             font-size: 16px;
             letter-spacing: 0.24px;
-            -webkit-line-clamp: 2;
+            -webkit-line-clamp: 1;
             -webkit-box-orient: vertical;
             overflow: hidden;
             display: -webkit-box;
@@ -277,6 +277,10 @@
             font-family: Montserrat;
         }
 
+        #category-1 {
+            color: #c27b43;
+        }
+
     </style>
 
     <div class="body owl-carousel ">
@@ -312,62 +316,59 @@
     </script>
     <div class="show-product">
         <a>You want it? We got it</a>
+        @foreach ($categories as $b)
+            <span><a href="Javascript:0" 
+                class="change-product" 
+                id="category-{{ $b['id'] }}"
+                data-url="{{ route('home-product-category', $b['id']  ) }}">
+                
+                {{ $b['name'] }}</a></span>
+        @endforeach
 
-            <span><a href="Javascript:0" class="change-product" id="category-"
-                    data-change-product=""
-                    data-id=""
-                    >
-                   </a></span>
-      
         <div class="buy-product">
 
-
-      
+            @foreach ($products as $p)
                 <div class="product-info">
                     <a href=""> <img src="{{ asset('/images/phone1.jpg') }}" alt=""></a>
                     <div class="add">
                         <a href="Javascript:0" onclick="addProductCart()"><span>Add To Cart</span></a>
                     </div>
                     <div class="product-name">
-                        <span> Refurbished Good</span>
+                        <span>{{ $p['name'] }} </span>
                     </div>
                     <div class="product-price">
-                        <span>$</span>
+                        <span>{{ $p['price'] }}$</span>
                     </div>
                 </div>
-       
-
-
-
+            @endforeach
 
         </div>
     </div>
     <script>
         $('.change-product').click(function() {
-       
-            let changeProduct = $(this).data("change-product");
-    
+            let getid = $(this).attr('id');
+         
+            let changeProduct = $(this).data("url");
+
             $.ajax({
                 type: "get",
                 url: changeProduct,
                 success: function(data) {
-       
                     var html = ''
-                    $.each(data[0].products, function(key, data) {
-                        html += ' <div class="product-info">' +
-                            '<a href=""> <img src="" alt=""></a>' +
-                            '<div class="add">' +
-                            ' <a href="Javascript:0"  onclick="addProductCart()" ><span >Add To Cart</span></a> ' +
-                            '  </div>' +
-                            '<div class="product-name">' +
-                            '<span Refurbished Good</span>' +
-                            '</div>' +
-                            ' <div class="product-price">' +
-                            '<span>$</span>' +
-                            '</div> </div>'
+                    $.each(data, function(key, data) {
+                    html += '<div class="product-info">' +
+                   ' <a href=""> <img src="{{ asset('/images/phone1.jpg') }}" alt=""></a>'+
+                   ' <div class="add">'+
+                    '<a href="Javascript:0" onclick="addProductCart()"><span>Add To Cart</span></a></div>'+
+                    '<div class="product-name">'+
+                    '<span> ' + data.name + ' </span></div>'+
+                    '<div class="product-price">'+
+                    '<span>' + data.price + '$</span></div></div>'
 
                     });
                     $('.buy-product').html(html);
+                    $('.change-product').css('color', '#757575')
+                    $('#' + getid).css('color', '#c27b43');
 
                 }
             });

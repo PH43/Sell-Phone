@@ -236,51 +236,57 @@
         width: 100%;
 
     }
-    .acction-users {
-                    position: absolute;
-                    display: inline-block;
-                    width: 180px;
-                    padding: 10px 0px;
-                    ;
-                    transform: translateX(-20px);
-                    background-color: black;
-                    color: white;
-                    height: 100px;;
-                    border-radius: 10px;
-                    margin-top: 10px;
-                }
-                .users{
-                    list-style: none;font-weight: 600
-                }
-                .users a{
-                    text-decoration: none;
-                    color: black;
-                }
-                .users:hover .acction-users {
-                    display: block;
-                }
-                .acction-users a{
-                    font-weight: 500;
-                    display: block;
-                    text-decoration: none;
-                    margin-left: 5px;
-                    color: white;
-                    padding: 5px 0px;
-                    font-size: 16px;
-                }
-                .acction-users a:hover{
-                    opacity: 0.8;
-                    font-size: 13px;
-                }
 
+    .acction-users {
+        position: absolute;
+        display: inline-block;
+        width: 180px;
+        padding: 10px 0px;
+        ;
+        transform: translateX(-20px);
+        background-color: black;
+        color: white;
+        height: 100px;
+        ;
+        border-radius: 10px;
+        margin-top: 10px;
+    }
+
+    .users {
+        list-style: none;
+        font-weight: 600
+    }
+
+    .users a {
+        text-decoration: none;
+        color: black;
+    }
+
+    .users:hover .acction-users {
+        display: block;
+    }
+
+    .acction-users a {
+        font-weight: 500;
+        display: block;
+        text-decoration: none;
+        margin-left: 5px;
+        color: white;
+        padding: 5px 0px;
+        font-size: 16px;
+    }
+
+    .acction-users a:hover {
+        opacity: 0.8;
+        font-size: 13px;
+    }
 
 </style>
 <header class="fixed-top">
     <div class="header-top ">
         <div class="header-top1">
             <div class="header-name">
-                <a href="http://localhost/duy1/public/show"><img src="{{ asset('../public/images/2.jpg') }}"
-                        alt=""></a>
+                <a href=""><img src="" alt=""></a>
             </div>
             <div class="header-search">
                 <form action="">
@@ -301,7 +307,7 @@
                             </div>
 
                         </div>
-                        
+
                         <div style="float: right;margin-right: 10px;margin-top: 5px;">
                             <a href="" style="color:black;padding: 5px 10px;background-color: orangered;opacity: 1;"
                                 href="">Xem
@@ -310,7 +316,7 @@
                     </div>
                 </span>
             </div>
-         
+
             <div class="header-login">
                 @guest
                     @if (Route::has('login'))
@@ -318,14 +324,14 @@
                     @endif
                 @else
 
-                    <li class="users" ><a href=""> {{ Auth::user()->name }}</a>
+                    <li class="users"><a href=""> {{ Auth::user()->name }}</a>
                     <li class="acction-users">
-                        <a style=""  href="{{ route('logout') }}" onclick="event.preventDefault();
-                                          document.getElementById('logout-form').submit();">
+                        <a style="" href="{{ route('logout') }}" onclick="event.preventDefault();
+                                                  document.getElementById('logout-form').submit();">
                             {{ __('Logout') }}
 
                             <form id="logout-form" action="{{ route('logout') }}" method="POST" class="d-none">
-                                
+
                                 @csrf
                             </form>
                         </a>
@@ -339,17 +345,21 @@
                 </div>
 
             @endguest
-<script>
-    $('.acction-users').hide();
-   
-     $('.users').click(function(){
-         event.preventDefault();
-        $('.acction-users').toggle(300);
-    });
- 
+            <script>
+                $('.acction-users').hide();
 
- 
-</script>
+                $(document).click(function(e) {
+                    var users = $('.users');
+                    if (users.is(e.target) && users.has(e.target).lenght === 0) {
+                        $('.acction-users').hide();
+                    }
+                });
+
+                $('.users').click(function() {
+                    event.preventDefault();
+                    $('.acction-users').toggle(300);
+                });
+            </script>
         </div>
 
     </div>
@@ -359,23 +369,30 @@
         <div class="header-menu">
 
 
-@foreach ($brands as $brands)
-<li> <a href="">{{$brands['name']}} </a>
-    <div class="categories-phone">
-        @foreach ($brands['brands'] as $br)
-        <a style="color:white;" href="">{{ $br->name }}</a>      
-        @endforeach
-    </div>
-</li>
+            @foreach ($categories as $categories)
+                <li> <a href="{{ route('list-product-category', ['cate' => $categories['id'],
+                'colum' => 'id',
+                'type' => 'desc',
+                'qty' => 6
+                
+                
+                ]) 
+                }}">{{ $categories['name'] }} </a>
+                    <div class="categories-phone">
+                        @foreach ($categories['brands'] as $br)
+                            <a style="color:white;" href="">{{ $br->name }}</a>
+                        @endforeach
+                    </div>
+                </li>
 
 
 
 
 
-@endforeach
-<li><a>Kính cường lực</a></li>
-<li><a>Phụ kiện</a></li>
-<li><a>More</a></li>            
+            @endforeach
+            <li><a>Kính cường lực</a></li>
+            <li><a>Phụ kiện</a></li>
+            <li><a>More</a></li>
         </div>
     </div>
 

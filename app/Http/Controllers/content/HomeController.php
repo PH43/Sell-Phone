@@ -11,7 +11,24 @@ class HomeController extends Controller
 {
     public function home()
     {
-        return view('content/body/body');
+        $products = categories::GetProductCategories(1,6);
+        return view('content/body/body' ,compact('products'));
+    }
+public function productCategory($id){
+    $products = categories::GetProductCategories($id,6);
+  return  response()->json($products);
+}
+
+    public function test(){
+        $products =  brands::get();
+
+        return $products;
+    }
+    public function insert(){
+        $brands = brands::find(2);
+        $category_id = [2];
+        $brands->categories()->attach($category_id);
+   
     }
   
 }

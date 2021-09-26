@@ -23,8 +23,8 @@ class AppServiceProvider extends ServiceProvider
      * @return void
      */
     public function boot()
-    {
-        $brands =  categories::with('brands')->get();
-        view()->share('brands', $brands);
+    {   
+        $categories =  categories::with('brands')->get();
+        view()->share('categories', $categories);
     }
 }
