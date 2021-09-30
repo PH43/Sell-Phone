@@ -94,13 +94,17 @@
 
         .add {
             background-color: black;
-            width: 213px;
+            width: 100%;
             position: absolute;
 
             opacity: 0;
             transition: all 0.5s;
         }
-
+        .add-cart{
+            position: relative;
+            width: 100%;
+            height: auto;
+        }
 
         .add a {
             color: white;
@@ -329,9 +333,11 @@
             @foreach ($products as $p)
                 <div class="product-info">
                     <a href=""> <img src="{{ asset('/images/phone1.jpg') }}" alt=""></a>
+                  <div class="add-cart">
                     <div class="add">
-                        <a href="Javascript:0" onclick="addProductCart()"><span>Add To Cart</span></a>
+                        <a href="Javascript:0" ><span>Add To Cart</span></a>
                     </div>
+                  </div>
                     <div class="product-name">
                         <span>{{ $p['name'] }} </span>
                     </div>
@@ -343,37 +349,7 @@
 
         </div>
     </div>
-    <script>
-        $('.change-product').click(function() {
-            let getid = $(this).attr('id');
-         
-            let changeProduct = $(this).data("url");
-
-            $.ajax({
-                type: "get",
-                url: changeProduct,
-                success: function(data) {
-                    var html = ''
-                    $.each(data, function(key, data) {
-                    html += '<div class="product-info">' +
-                   ' <a href=""> <img src="{{ asset('/images/phone1.jpg') }}" alt=""></a>'+
-                   ' <div class="add">'+
-                    '<a href="Javascript:0" onclick="addProductCart()"><span>Add To Cart</span></a></div>'+
-                    '<div class="product-name">'+
-                    '<span> ' + data.name + ' </span></div>'+
-                    '<div class="product-price">'+
-                    '<span>' + data.price + '$</span></div></div>'
-
-                    });
-                    $('.buy-product').html(html);
-                    $('.change-product').css('color', '#757575')
-                    $('#' + getid).css('color', '#c27b43');
-
-                }
-            });
-
-        });
-    </script>
+   
     <hr style="clear: both;  transform: translateY(70px);width: 100%;height: 1px;">
 
     <div class="categories-show">
@@ -607,6 +583,36 @@
 
 
 
+<script>
+    $('.change-product').click(function() {
+        let getid = $(this).attr('id');
+     
+        let changeProduct = $(this).data("url");
 
+        $.ajax({
+            type: "get",
+            url: changeProduct,
+            success: function(data) {
+                var html = ''
+                $.each(data, function(key, data) {
+                html += '<div class="product-info">' +
+               ' <a href=""> <img src="{{ asset('/images/phone1.jpg') }}" alt=""></a>'+
+               ' <div class="add">'+
+                '<a href="Javascript:0" onclick="addProductCart()"><span>Add To Cart</span></a></div>'+
+                '<div class="product-name">'+
+                '<span> ' + data.name + ' </span></div>'+
+                '<div class="product-price">'+
+                '<span>' + data.price + '$</span></div></div>'
+
+                });
+                $('.buy-product').html(html);
+                $('.change-product').css('color', '#757575')
+                $('#' + getid).css('color', '#c27b43');
+
+            }
+        });
+
+    });
+</script>
 
 @endsection

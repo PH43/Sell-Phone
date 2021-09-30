@@ -21,11 +21,18 @@ public function productCategory($id){
   return  response()->json($products);
 }
 
-    public function search($search){
-    $products = product::where('name' ,'LIKE', "%{$search}%")->get();
+    public function search(Request $rq){
+    $search = $rq->search;
 
+    $products = product::where('name' ,'LIKE', "%{$search}%")->orWhere('price', 'LIKE', "%{$search}%")->get();
     return  response()->json($products);
+
+   
+
+
     }
+
+
     public function insert(){
         $brands = brand::find(2);
         $category_id = [2];
