@@ -60,7 +60,7 @@
         border-radius: 7px;
         width: 44%;
         height: 45px;
-position: relative;
+        position: relative;
         background-color: #f6f6f4;
     }
 
@@ -108,7 +108,7 @@ position: relative;
 
     }
 
-   
+
 
     .header-bot li {
         text-align: center;
@@ -119,7 +119,7 @@ position: relative;
         transition: all 0.5s;
         padding: 12px 25px;
         margin-top: 5px;
-      display: inline-block;
+        display: inline-block;
         text-decoration: none;
         color: black;
     }
@@ -239,8 +239,8 @@ position: relative;
     .acction-users {
         position: absolute;
         display: inline-block;
-        width: 180px;
-        padding: 10px 0px;
+
+        padding: 10px 20px;
         ;
         transform: translateX(-20px);
         background-color: black;
@@ -277,20 +277,32 @@ position: relative;
 
     .acction-users a:hover {
         opacity: 0.8;
-        font-size: 13px;
-    }
-.show-product-search{
-    width:100%;
-    height: auto;
-    position: absolute;
-    background-color: rgb(235, 235, 235);
-    margin-top: 50px;
 
-    transform: translateX(-20px)
-}
-.show-product-search span {
-    display: block;background-color: rgb(226, 226, 226);
-}
+    }
+
+    .search-product {
+        width: 100%;
+        height: auto;
+        position: absolute;
+        background-color: rgb(245, 245, 245);
+        margin-top: 45px;
+        padding-bottom: 40px;
+        transform: translateX(-20px)
+    }
+
+    .search-product span {
+        padding: 5px 5px;
+
+        display: block;
+        background-color: rgb(226, 226, 226);
+    }
+
+    .show-search-product span {
+        color: black;
+        display: block;
+        background-color: rgb(245, 245, 245);
+    }
+
 </style>
 <header class="fixed-top">
     <div class="header-top ">
@@ -300,30 +312,20 @@ position: relative;
             </div>
             <div class="header-search">
                 <form action="">
+                    @csrf
                     <i class="fas fa-search"></i>
-                    <input type="search" placeholder="Search" class="search"  >
+                    <input type="search" placeholder="Search" class="search">
                 </form>
 
-                <div class="show-product-search" style="display: none">
-                    <span >Xu hướng tìm kiếm</span>
+                <div class="search-product" style="display: none;">
+                    <span>Xu hướng tìm kiếm</span>
+                    <div class="show-search-product">
+
+                    </div>
                 </div>
             </div>
 
-            <script>
-                $(".search").keyup(function(){
-                var  search =    $(this).val()
-            $.ajax({
-                type: "get",
-                url: "http://localhost/sell-phone/public/search/"+search,
-                success: function(data){
-                    
-                }
-            })
-            
-            
-                });
-            </script>
-            
+
             <div class="header-buyonline">
                 <span>Mua online giảm 10%</span>
             </div>
@@ -355,9 +357,9 @@ position: relative;
                 @else
 
                     <li class="users"><a href=""> {{ Auth::user()->name }}</a>
-                    <li class="acction-users">
+                    <li class="acction-users" style="display: none;">
                         <a style="" href="{{ route('logout') }}" onclick="event.preventDefault();
-                                                  document.getElementById('logout-form').submit();">
+                                                              document.getElementById('logout-form').submit();">
                             {{ __('Logout') }}
 
                             <form id="logout-form" action="{{ route('logout') }}" method="POST" class="d-none">
@@ -375,59 +377,37 @@ position: relative;
                 </div>
 
             @endguest
-            <script>
-                $('.acction-users').hide();
 
-                $(document).click(function(e) {
-                    var users = $('.users');
-                    if (users.is(e.target) && users.has(e.target).lenght === 0) {
-                        $('.acction-users').hide();
-                    }
-                });
-
-                $('.users').click(function() {
-                    event.preventDefault();
-                    $('.acction-users').toggle(300);
-                });
-            </script>
         </div>
 
     </div>
     </div>
 
     <div class="header-bot">
-   
 
 
-            @foreach ($categories as $categories)
-                <li> <a href="{{ route('list-product-category', ['cate' => $categories['id'],
-         
-                
-                
-                ]) 
-                }}">{{ $categories['name'] }} </a>
-                    <div class="categories-phone">
-                        @foreach ($categories['brands'] as $br)
-                            <a style="color:white;" href="
-                            {{ route('list-product-category', 
-                            ['cate' => $categories['id'],
-                            'brands' => $br['id'],
-                            ]) 
-                            }}
+
+        @foreach ($categories as $categories)
+            <li> <a href="{{ route('list-product-category', ['cate' => $categories['id']]) }}">{{ $categories['name'] }}
+                </a>
+                <div class="categories-phone">
+                    @foreach ($categories['brands'] as $br)
+                        <a style="color:white;" href="
+                            {{ route('list-product-category', ['cate' => $categories['id'], 'brands' => $br['id']]) }}
                             ">{{ $br->name }}</a>
-                        @endforeach
-                    </div>
-                </li>
+                    @endforeach
+                </div>
+            </li>
 
 
 
 
 
-            @endforeach
-            <li><a>Kính cường lực</a></li>
-            <li><a>Phụ kiện</a></li>
-            <li><a>More</a></li>
-   
+        @endforeach
+        <li><a>Kính cường lực</a></li>
+        <li><a>Phụ kiện</a></li>
+        <li><a>More</a></li>
+
     </div>
     <div class="header-image">
         <img src="{{ asset('../public/images/slider.png') }}" alt="">
@@ -435,3 +415,46 @@ position: relative;
 </header>
 <div style="width: 100%; height:140px;clear: both;"></div>
 
+<script>
+    $('.users').click(function() {
+        event.preventDefault();
+        $('.acction-users').show(300);
+    });
+</script>
+
+
+<script>
+    $(document).click(function() {
+        $('.search-product').hide();
+        $('.acction-users').hide();
+    });
+
+
+    $(document).on('keyup', '.search', function() {
+        var search = $(this).val();
+        if (search.trim().length >= 2) {
+            $.ajax({
+                type: "POST",
+                url: "{{ route('search-product') }}",
+                data: {
+                    search: search,
+                    _token: $('input[name="_token"]').val(),
+
+                },
+                success: function(data) {
+                    var html = '';
+                    $.each(data, function(key, data) {
+                        html += '<a href=""><span>' + data.name + '</span></a>'
+
+                    });
+                    $('.search-product').show();
+                    if (search.length <= 2) {
+                        $('.search-product').hide();
+                    }
+                    $('.show-search-product').html(html);
+
+                }
+            })
+        }
+    });
+</script>

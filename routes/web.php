@@ -29,7 +29,7 @@ Auth::routes();
 Route::get('home',[HomeController::class ,'home']);
 Route::get('home/product-category/{id}',[HomeController::class, 'productCategory'])->name('home-product-category');
 
-Route::get('search/{search}',[HomeController::class ,'search'])->name('search');
+Route::post('search-product',[HomeController::class ,'search'])->name('search-product');
 
 // Show Product 
 Route::get('list-product/category',[ListProductController::class, 'productCategories'])->name('list-product-category');
