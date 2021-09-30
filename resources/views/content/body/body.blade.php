@@ -94,10 +94,9 @@
 
         .add {
             background-color: black;
-
+            width: 213px;
             position: absolute;
 
-            width: 191px;
             opacity: 0;
             transition: all 0.5s;
         }

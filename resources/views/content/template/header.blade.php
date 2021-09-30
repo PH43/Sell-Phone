@@ -60,7 +60,7 @@
         border-radius: 7px;
         width: 44%;
         height: 45px;
-
+position: relative;
         background-color: #f6f6f4;
     }
 
@@ -68,7 +68,7 @@
         display: flex;
         top: 10px;
         transform: translateX(46px);
-        width: 38%;
+        width: 90%;
         background-color: #f6f6f4;
         border: 0px;
         position: absolute;
@@ -103,16 +103,15 @@
 
     .header-bot {
         width: 100%;
+        text-align: center;
         height: 54px;
 
     }
 
-    .header-menu {
-        margin-left: 10%;
+   
 
-    }
-
-    .header-menu li {
+    .header-bot li {
+        text-align: center;
         font-size: 17px;
         font-weight: 500;
         line-height: 22px;
@@ -120,12 +119,12 @@
         transition: all 0.5s;
         padding: 12px 25px;
         margin-top: 5px;
-        float: left;
+      display: inline-block;
         text-decoration: none;
         color: black;
     }
 
-    .header-menu li a {
+    .header-bot li a {
         text-decoration: none;
         color: black;
     }
@@ -209,11 +208,11 @@
         transition: all 0.3s;
     }
 
-    .header-menu li:hover .categories-phone {
+    .header-bot li:hover .categories-phone {
         display: block;
     }
 
-    .header-menu li:hover {
+    .header-bot li:hover {
         background-color: rgb(245, 245, 245);
     }
 
@@ -280,20 +279,51 @@
         opacity: 0.8;
         font-size: 13px;
     }
+.show-product-search{
+    width:100%;
+    height: auto;
+    position: absolute;
+    background-color: rgb(235, 235, 235);
+    margin-top: 50px;
 
+    transform: translateX(-20px)
+}
+.show-product-search span {
+    display: block;background-color: rgb(226, 226, 226);
+}
 </style>
 <header class="fixed-top">
     <div class="header-top ">
         <div class="header-top1">
             <div class="header-name">
-                <a href=""><img src="" alt=""></a>
+                <a href=""><img src="{{ asset('/images/IconPage.png') }}" alt=""></a>
             </div>
             <div class="header-search">
                 <form action="">
                     <i class="fas fa-search"></i>
-                    <input type="search" placeholder="Search">
+                    <input type="search" placeholder="Search" class="search"  >
                 </form>
+
+                <div class="show-product-search" style="display: none">
+                    <span >Xu hướng tìm kiếm</span>
+                </div>
             </div>
+
+            <script>
+                $(".search").keyup(function(){
+                var  search =    $(this).val()
+            $.ajax({
+                type: "get",
+                url: "http://localhost/sell-phone/public/search/"+search,
+                success: function(data){
+                    
+                }
+            })
+            
+            
+                });
+            </script>
+            
             <div class="header-buyonline">
                 <span>Mua online giảm 10%</span>
             </div>
@@ -366,21 +396,25 @@
     </div>
 
     <div class="header-bot">
-        <div class="header-menu">
+   
 
 
             @foreach ($categories as $categories)
                 <li> <a href="{{ route('list-product-category', ['cate' => $categories['id'],
-                'colum' => 'id',
-                'type' => 'desc',
-                'qty' => 6
+         
                 
                 
                 ]) 
                 }}">{{ $categories['name'] }} </a>
                     <div class="categories-phone">
                         @foreach ($categories['brands'] as $br)
-                            <a style="color:white;" href="">{{ $br->name }}</a>
+                            <a style="color:white;" href="
+                            {{ route('list-product-category', 
+                            ['cate' => $categories['id'],
+                            'brands' => $br['id'],
+                            ]) 
+                            }}
+                            ">{{ $br->name }}</a>
                         @endforeach
                     </div>
                 </li>
@@ -393,8 +427,11 @@
             <li><a>Kính cường lực</a></li>
             <li><a>Phụ kiện</a></li>
             <li><a>More</a></li>
-        </div>
+   
     </div>
-
+    <div class="header-image">
+        <img src="{{ asset('../public/images/slider.png') }}" alt="">
+    </div>
 </header>
 <div style="width: 100%; height:140px;clear: both;"></div>
+

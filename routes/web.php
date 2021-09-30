@@ -1,5 +1,6 @@
 <?php
 
+use App\Http\Controllers\Admin\ManageProductController;
 use App\Http\Controllers\content\HomeController;
 use App\Http\Controllers\content\ListProductController;
 use Illuminate\Support\Facades\Route;
@@ -28,9 +29,14 @@ Auth::routes();
 Route::get('home',[HomeController::class ,'home']);
 Route::get('home/product-category/{id}',[HomeController::class, 'productCategory'])->name('home-product-category');
 
-Route::get('test',[HomeController::class ,'test']);
+Route::get('search/{search}',[HomeController::class ,'search'])->name('search');
 
 // Show Product 
 Route::get('list-product/category',[ListProductController::class, 'productCategories'])->name('list-product-category');
 Route::get('list-product/category/{cate}/brand/{brand}',[ListProductController::class, 'productBrands'])->name('list-product-brand');
 
+
+// admin
+Route::get('admin/statistical',[ManageProductController::class, 'statistical'])->name('admin-Statistical');
+Route::get('admin/form-Product',[ManageProductController::class, 'showform'])->name('admin-form-product');
+Route::post('admin/add-product',[ManageProductController::class, 'addProduct'])->name('admin-add-product');
