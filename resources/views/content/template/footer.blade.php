@@ -1,7 +1,7 @@
 <style>
    
     .info-page{
-    
+    background-color:white;
         border-top: 1px solid white;
      
             width:100%;
