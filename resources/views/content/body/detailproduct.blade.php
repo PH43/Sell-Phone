@@ -9,7 +9,7 @@
             margin-top: 50px;
             width: 96%;
             margin-left: 2%;
-            height: auto;
+            height: 700px;
             background-color: white;
          
         }
@@ -23,14 +23,23 @@
             border: 1px solid #b3b3b3;
             width: 45%;
             text-align: center;
+            height: 100%;
+            position: relative;
+         
             
         }
 
         .display-product img {
-
-            width: 90%;
+            margin-top: 15%;
+            width: 70%;
             object-fit: cover;
+            transition: all 0.5s;
             
+        }
+        .display-product img:hover{
+        
+            width: 80%;
+          
         }
 
         .detail-product {
@@ -162,7 +171,7 @@
         }
 
         .showdetails-product img {
-            width: 100%;
+            width: 70%;
         }
 
         .show-product {
@@ -311,16 +320,16 @@ text-align: right;
     </style>
     <div class="body">
         <div class="display-product">
-            <img src="{{ asset('../public/images/product.png') }}" alt="">
+            <img src="{{ asset('/images/productImages/' . $product[0]['image']['url'])  }}" alt="">
         </div>
         <div class="detail-product">
-            <span class="categories-product">Rượu / </span>
-            <span class="name-product">Jack Daniel's Old</span>
+            <span class="categories-product">{{ $categoryBrand[0]['name'] }} / {{  $categoryBrand[0]['brands'][0]['name'] }}  </span>
+            <span class="name-product">{{ $product[0]['name'] }}</span>
             <span class="avaluate"> <i class="fas fa-star"></i> <i class="fas fa-star"></i> <i
                     class="fas fa-star"></i> <i class="fas fa-star"></i> <i class="fas fa-star"></i> <span> 1 bài
                     đánh giá</span></span>
             <span class="price-product">
-                $ 18,99
+                {{ $product[0]['price'] }} $
             </span>
 
             <div class="card-product">
@@ -336,9 +345,7 @@ text-align: right;
                     <div class="card-info">
                         <h5>Details</h5>
                         <span>
-                            Lorem Ipsum is simply dummy text of the printing and typesetting industry. Lorem Ipsum has been
-                            the industry’s standard dummy text ever since the 1500s, when an unknown printer took a galley
-                            of type and scrambled it to make a type specimen.
+                           {{ $product[0]['description']}}
                         </span>
                     </div>
                 </div>

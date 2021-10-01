@@ -56,12 +56,12 @@
 
 
                     <div class="card-body">
-                      <form class="row g-3" >
-                        @csrf
+                      <form class="row g-3" enctype="multipart/form-data" id="insertform" >
+                        {{ csrf_field() }}
                       <div class="col-12">
                      @foreach ($category as $c)
                      <div class="form-check">
-                      <input class="form-check-input" type="radio" name="flexRadioDefault" id="flexRadioDefault1" data-id="{{ $c['id'] }}" value="{{ $c['id'] }}" >
+                      <input class="form-check-input" type="radio" name="category_id" id="flexRadioDefault1" data-id="{{ $c['id'] }}" value="{{ $c['id'] }}" >
                       <label class="form-check-label" for="flexRadioDefault1">
                         {{$c['name']}}
                       </label>
@@ -76,19 +76,24 @@
                       </div>
                         <div class="col-12">
                           <label class="form-label">Name Product</label>
-                          <input type="text" class="form-control" name="name" placeholder="Name Product">
+                          <input type="text" class="form-control" id="name" name="name" placeholder="Name Product">
                         </div>
                         <div class="col-4" style="display: inline-block;">
                           <label class="form-label">Price Product</label>
-                          <input type="text" class="form-control" name="price" placeholder="Price Product">
+                          <input type="text" class="form-control" id="price" name="price" placeholder="Price Product">
                         </div>
                         <div class="col-4" style="display: inline-block;margin-left: 2rem">
                           <label class="form-label">Quantity Product</label>
-                          <input type="text" class="form-control" name="qty" placeholder="Quantity Product">
+                          <input type="text" class="form-control" id="qty" name="qty" placeholder="Quantity Product">
                         </div>
                         <div class="col-12">
+                          <label class="form-label">Description Product</label>
+                          <input type="text" class="form-control" id="description" name="description" placeholder="Description Product">
+                        </div>
+                  
+                        <div class="col-12">
                           <label class="form-label">Images</label>
-                          <input class="form-control" type="file">
+                          <input class="form-control"  type="file" accept=".png, .jpg ,.jpeg" name="image" id="image">
                         </div>
                         <input type="submit"  id="addproduct" style="margin-top: 20px;">
                     </div>
@@ -100,33 +105,46 @@
 
                   </div>
                </div>
+
                <script>
+
+
+function isNumeric(value) {
+    return /^-?\d+$/.test(value);
+}
                 $('#addproduct').click(function(e){
+                  console.log($('#image').val());
                   e.preventDefault();
-                var category = $('input[name=flexRadioDefault]').val();
-                var brand = $('.form-select').val();
-                var name = $('input[name=name]').val();
-                var price = $('input[name=price]').val();
-                var qty = $('input[name=qty]').val();
-                var _token   = $('input[name="_token"]').val();
-                console.log(_token);
-                $.ajax({
-                  url: "{{ route('admin-add-product') }}",
-                  type: "POST",
-                  data:{ category_id: category, 
-                          brand_id: brand,
-                          name : name,
-                          price :price,
-                          qty :qty,
-                          _token:  _token ,
-                        
-                  
-                  },
-                  success: function(data){
-               console.log(data);
-                            alert('Insert thành công');
-                          }
-                });
+                
+                  if($('#name').val() == '' 
+                  &&  $('#price').val() == '' 
+                  && $('#qty').val() == '' 
+                  && $('#description').val() == ''
+                  && $('#image').val() == ''
+                  ){
+
+                    alert("Please don't leave it blank");
+                  }if($.isNumeric($('#price').val()) == false || $.isNumeric($('#qty').val())  == false){
+                    alert("Enter Invalid");
+                  }
+                  else{
+                    var form = document.getElementById('insertform');
+            
+                 $.ajax({
+                url: "{{ route('admin-insert-product') }}",
+                type: 'post',
+                    data: new FormData(form),
+                    dataType: 'JSON',
+                    contentType: false,
+                    cache: false,
+                    processData: false,
+                     success: function(data){
+                        alert('Insert thành công');
+
+                      }
+            });
+                  }
+              
                 
                 });
                 
@@ -216,7 +234,7 @@
 <script>
   $('.info-product').hide();
   $('.form-check-input').click(function(){
-  var a  =$('input[name="flexRadioDefault"]:checked').val();
+  var a  =$('input[name="category_id"]:checked').val();
   var url = new URL(window.location.href);
   url.searchParams.set('category', a );
 $.ajax({
@@ -225,7 +243,7 @@ $.ajax({
   success: function(data){
     $('.info-product').show(500);
     var html = '';    
-    html +=  '<select class="form-select" name="brands" aria-label="Default select example">' +
+    html +=  '<select class="form-select" name="brand_id" aria-label="Default select example">' +
                           '<option selected>Open this select menu</option>' 
     $.each(data, function(key, data){
         $.each(data.brands, function(key, data){
@@ -239,4 +257,6 @@ $(".brands").html(html);
 })
   });
 </script>
+
+
 @endsection

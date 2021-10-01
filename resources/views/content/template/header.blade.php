@@ -308,7 +308,7 @@
     <div class="header-top ">
         <div class="header-top1">
             <div class="header-name">
-                <a href=""><img src="{{ asset('/images/IconPage.png') }}" alt=""></a>
+                <a href="{{ route('home') }}"><img src="{{ asset('/images/IconPage.png') }}" alt=""></a>
             </div>
             <div class="header-search">
                 <form action="">

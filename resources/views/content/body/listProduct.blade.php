@@ -391,7 +391,7 @@
         <div class="buy-product">
             <div class="info-category-page">
                 <div class="info-category">
-                    <span class="name-category">Điện thoại <span class="name-factory"></span></span>
+                    <span class="name-category">{{$category['name']}} <span class="name-factory"></span></span>
                     <span><span class="count-product"> </span>
                        {{$sum}} devices found</span>
                     <div class="images-category">
@@ -428,7 +428,7 @@
                         @foreach ($item['products'] as $product)
                             <div class="product-info">
                                 <div class="product-all">
-                                    <a href=""> <img src="{{ asset('../public/images/phone1.jpg') }}" alt=""></a>
+                                    <a href="{{ route('detail-product', $product['id']) }}"> <img src="{{ asset('/images/productImages/' . $product['image']['url'])  }}" alt=""></a>
                                     <div class="product-action">
 
                                         <a href="" class="test"> <i class="fas fa-search-plus"></i></a>
@@ -480,16 +480,16 @@
                         <?php $br = explode(',', $_GET['brands']); ?>
 
                     @endif
-                    @foreach ($brands as $b)
+                    @foreach ($category['brands'] as $brand)
 
-                        <label class="container"> <label for="">{{ $b['name'] }}</label>
+                        <label class="container"> <label for="">{{ $brand['name'] }}</label>
                             <input type="checkbox" class="filter-product" id="brand" @if (isset($br))
-                            @if (in_array($b['id'], $br))
+                            @if (in_array($brand['id'], $br))
                                 checked
                             @endif
                     @endif
 
-                    value="{{ $b['id'] }}">
+                    value="{{ $brand['id'] }}">
 
                     <span class="checkmark"></span>
                     </label>
@@ -510,7 +510,14 @@
                         @for ($i = 1; $i <= 9; $i++)
                             <label class="container">Từ {{ ($i - 1) * 500 }} - {{ $i * 500 }}
                                 <input type="radio" class="filter-product" name="radio" data-min="{{ ($i - 1) * 500 }}"
-                                    data-max="{{ $i * 500 }}">
+                                    data-max="{{ $i * 500 }}"
+                                    @if (isset($_GET['min']) && isset($_GET['max']))
+                                        @if ($_GET['min'] == ($i - 1) * 500 && $_GET['max'] ==  $i * 500)
+                                            checked
+                                        @endif
+                                    @endif
+                                    
+                                    >
                                 <span class="checkmark"></span>
 
                             </label>
@@ -601,7 +608,7 @@
                             html +=
                             '<div class="product-info">'+
             '<div class="product-all">'+
-                 '<a href=""> <img src="{{ asset('../public/images/phone1.jpg') }}" alt=""></a>'+
+                 '<a href="http://localhost/sell-phone/public/detail-product/'+ data.id + '"> <img src="http://localhost/sell-phone/public/images/productImages/'+product.image.url+' " alt=""></a>'+
             '<div class="product-action">'+
                 '<a style="margin-right: 7px;"   href="" class="test" > <i  class="fas fa-search-plus"></i></a>'+
                 '<a style="margin-right: 7px;" href=""><i class="fas fa-heart"></i></a>'+
