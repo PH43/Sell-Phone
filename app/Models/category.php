@@ -20,23 +20,33 @@ class category extends Model
   }
 
 
-//----------------------------------------------------
+  //----------------------------------------------------
 
-  public function scopeGetProductCategories($query, $id, $take)
+ 
+
+public function scopeproductCategory($query, $id,$take){
+   return $query->with(['products' => function ($q) use($take) {
+    $q->take($take);
+         
+    $q->with('image');
+
+}])->where('id',$id)->get()->toArray();
+}
+
+  public function scopeBrandCategory($query, $id)
   {
-    return $query->find($id)->products->take($take)->toArray();
+    return  $query->with(['brands'])->find(1);
   }
 
-//---------------------------------------------
-
-//---------------------------------------------
-  
-  public function scopeBrandInCategory($query, $id)
+  public function scopecategoryBrand($query, $brand_id, $category_id)
   {
-    return  $query->find($id)->brands->toArray();
+    return  $query->with(['brands' => function ($q) use ($brand_id) {
+
+      $q->where('brand_id', $brand_id);
+    }])->where('id', $category_id)->get()->toArray();
   }
-
-//---------------------------------------------
-
   
+  //---------------------------------------------
+
+
 }

@@ -3,9 +3,10 @@
 namespace App\Http\Controllers\content;
 
 use App\Http\Controllers\Controller;
-use App\Models\brand;
-use App\Models\brands;
+
 use App\Models\category;
+
+use App\Models\image;
 use App\Models\product;
 use Illuminate\Http\Request;
 
@@ -13,11 +14,20 @@ class HomeController extends Controller
 {
     public function home()
     {
-        $products = category::GetProductCategories(1,6);
+
+
+          $products = category::productCategory(1,6);
+
+          //return ($products);
+
+
         return view('content/body/body' ,compact('products'));
+
+        
     }
 public function productCategory($id){
-    $products = category::GetProductCategories($id,6);
+    $products = category::productCategory($id,6);
+
   return  response()->json($products);
 }
 
@@ -31,13 +41,15 @@ public function productCategory($id){
 
 
     }
+    public function test(){
+     
+        product::truncate();
+        image::truncate();
 
-
-    public function insert(){
-        $brands = brand::find(2);
-        $category_id = [2];
-        $brands->categories()->attach($category_id);
-   
+       
     }
+
+
+
   
 }

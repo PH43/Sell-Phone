@@ -13,7 +13,7 @@ class ListProductController extends Controller
 {
     public function productCategories(Request $rq)
     {
-
+        
 
         //------------------------------
         if ($rq->has('cate') && (!$rq->has('brands'))) {
@@ -31,7 +31,8 @@ class ListProductController extends Controller
                 } else {
                     $q->take(4);
                 }
-            }])->where('id', 1)->withCount('products')->get();
+                $q->with('image');
+            }])->where('id', $rq->cate)->withCount('products')->get();
         }
 
         //------------------------------
@@ -55,15 +56,13 @@ class ListProductController extends Controller
                 } else {
                     $q->take(4);
                 }
-            }])->whereIn('brand_id', $brands)
-                ->where('category_id', $rq->cate)
-                ->withCount('products')
-
-                ->get();
+                $q->with('image');
+     }])->whereIn('brand_id', $brands) ->where('category_id', $rq->cate)->withCount('products')->get();
         }
         $brandCategory = $query->toArray();
+
         $sum = $query->sum('products_count');
-    
+
 
         //------------------------------
 
@@ -72,9 +71,9 @@ class ListProductController extends Controller
             return response()->json($brandCategory);
         } else {
 
-            $brands = category::BrandInCategory($rq->cate);
+            $category = category::BrandCategory($rq->cate);
 
-            return view('content/body/listProduct', compact('brandCategory', 'brands', 'sum'));
+            return view('content/body/listProduct', compact('brandCategory', 'category', 'sum',));
         }
     }
 }

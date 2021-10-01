@@ -283,7 +283,7 @@
         #category-1 {
             color: #c27b43;
         }
-
+    
     </style>
 
     <div class="body owl-carousel ">
@@ -330,9 +330,10 @@
 
         <div class="buy-product">
 
-            @foreach ($products as $p)
+            @foreach ($products[0]['products'] as $p)
+           
                 <div class="product-info">
-                    <a href=""> <img src="{{ asset('/images/phone1.jpg') }}" alt=""></a>
+                    <a href="{{ route('detail-product', $p['id']) }}"> <img src="{{ asset('/images/productImages/'. $p['image']['url'] ) }}" alt=""></a>
                   <div class="add-cart">
                     <div class="add">
                         <a href="Javascript:0" ><span>Add To Cart</span></a>
@@ -344,7 +345,10 @@
                     <div class="product-price">
                         <span>{{ $p['price'] }}$</span>
                     </div>
+                    
                 </div>
+
+           
             @endforeach
 
         </div>
@@ -594,11 +598,14 @@
             url: changeProduct,
             success: function(data) {
                 var html = ''
-                $.each(data, function(key, data) {
+                $.each(data[0].products, function(key, data) {
+        
                 html += '<div class="product-info">' +
-               ' <a href=""> <img src="{{ asset('/images/phone1.jpg') }}" alt=""></a>'+
-               ' <div class="add">'+
-                '<a href="Javascript:0" onclick="addProductCart()"><span>Add To Cart</span></a></div>'+
+               ' <a href="http://localhost/sell-phone/public/detail-product/'+ data.id + '" > <img src="http://localhost/sell-phone/public/images/productImages/'+data.image.url+'" alt=""></a>'+
+               '<div class="add-cart">' +
+                   ' <div class="add">' +
+                       ' <a href="Javascript:0" ><span>Add To Cart</span></a>' +
+                  '  </div></div>' +
                 '<div class="product-name">'+
                 '<span> ' + data.name + ' </span></div>'+
                 '<div class="product-price">'+
