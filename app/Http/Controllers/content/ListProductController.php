@@ -6,74 +6,36 @@ use App\Http\Controllers\Controller;
 use App\Models\brand;
 use App\Models\brand_category;
 use App\Models\category;
+use App\Models\product;
+use App\Repositories\ProductRepositoryInterface;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\DB;
 
 class ListProductController extends Controller
 {
-    public function productCategories(Request $rq)
+    protected $productRepo;
+
+    public function __construct(ProductRepositoryInterface $productRepo)
     {
-        
 
-        //------------------------------
-        if ($rq->has('cate') && (!$rq->has('brands'))) {
-            $query = category::with(['products' => function ($q) use ($rq) {
+        $this->productRepo = $productRepo;
+    }
 
-                if ($rq->has('colum') && $rq->has('type')) {
-                    $q->orderBy("$rq->colum", "$rq->type");
-                }
-                if ($rq->has('min') && $rq->has('max')) {
-                    $q->whereBetween('price', ["$rq->min", "$rq->max"]);
-                }
+    public function filterProduct(Request $rq)
+    {
 
-                if ($rq->has('take')) {
-                    $q->offset((($rq->take - 1) * 4))->take(4);
-                } else {
-                    $q->take(4);
-                }
-                $q->with('image');
-            }])->where('id', $rq->cate)->withCount('products')->get();
-        }
-
-        //------------------------------
-        if ($rq->has('cate') && $rq->has('brands')) {
-
-            $brands = explode(',', $rq->get('brands'));
-
-            $query = brand_category::with(['products' => function ($q) use ($rq) {
-
-                if ($rq->has('colum') && $rq->has('type')) {
-
-                    $q->orderBy("$rq->colum", "$rq->type");
-                }
-                if ($rq->has('min') && $rq->has('max')) {
-
-                    $q->whereBetween('price', ["$rq->min", "$rq->max"]);
-                }
-
-                if ($rq->has('take')) {
-                    $q->offset((($rq->take - 1) * 4))->take(4);
-                } else {
-                    $q->take(4);
-                }
-                $q->with('image');
-     }])->whereIn('brand_id', $brands) ->where('category_id', $rq->cate)->withCount('products')->get();
-        }
-        $brandCategory = $query->toArray();
-
-        $sum = $query->sum('products_count');
-
-
-        //------------------------------
-
+        $param = $rq->all();
+    
+          $data =  $this->productRepo->filterProduct($param);
+       
         if ($rq->ajax()) {
-            $brandCategory['sum'] = $sum;
-            return response()->json($brandCategory);
+           
+            return response()->json($data);
         } else {
 
             $category = category::BrandCategory($rq->cate);
 
-            return view('content/body/listProduct', compact('brandCategory', 'category', 'sum',));
+            return view('content/body/listProduct', compact('data', 'category',));
         }
     }
 }

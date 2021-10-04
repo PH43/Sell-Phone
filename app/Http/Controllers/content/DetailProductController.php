@@ -3,30 +3,73 @@
 namespace App\Http\Controllers\content;
 
 use App\Http\Controllers\Controller;
-use App\Models\brand;
-use App\Models\brand_category;
+
 use App\Models\category;
-use App\Models\product;
+
+use App\Repositories\CommentRepositoryInterface;
+use App\Repositories\ProductRepositoryInterface;
 use Illuminate\Http\Request;
+
 
 class DetailProductController extends Controller
 {
+    protected $productRepo;
+    protected $commentRepo;
+    public function __construct(ProductRepositoryInterface $productRepo, CommentRepositoryInterface $commentRepo)
+    {
+
+        $this->productRepo = $productRepo;
+        $this->commentRepo = $commentRepo;
+    }
+
     public function detailProduct($id)
     {
-        
 
 
-        $product = product::with('brand_category','image')->where('id', $id)->get()->toArray();
 
-        $categoryBrand = category::categoryBrand(
+        $data['product'] =    $this->productRepo->detailProduct($id);
 
-            $product[0]['brand_category']['brand_id']
+        $data['categoryBrand'] = $this->productRepo->categoryProduct($data['product'][0]['category_id'], $data['product'][0]['brand_id']);
 
-           ,$product[0]['brand_category']['category_id']
-             );
-             
+        $data['relatedProduct'] = $this->productRepo->relatedProduct($data['product'][0]['name'], $data['product'][0]['id']);
 
-         
-        return  view('content/body/detailproduct', compact('product','categoryBrand'));
+        $data['comment'] = $this->commentRepo->listComment('product_id', $data['product'][0]['id'],1,5);
+//dd($data);
+
+
+        if ($data['product'][0]['quantity'] >= 1) {
+            $data['status'] = 'stocking';
+        } else {
+            $data['status'] = 'Out of stock';
+        }
+
+        return  view('content/body/detailproduct', compact('data'));
     }
+
+    public function insertComment(Request $rq)
+    {
+    
+
+        if ($rq->has('parents_id')) {
+            $parents_id = $rq->has('parents_id');
+        }else {
+            $parents_id = null;
+        }
+        $this->commentRepo->insertComment($rq->user_id,  $rq->product_id, $rq->content, $parents_id);
+        return  response()->json();
+    }
+
+
+    public function loadMoreComments($productId ,$page){
+
+        $comments = $this->commentRepo->listComment('product_id', $productId,null ,($page*5));
+        
+        return response()->json($comments);
+    }
+   public function replyComment($cmtId){
+
+    $comments = $this->commentRepo->listComment('parents_id', $cmtId,null, null);
+        
+    return response()->json($comments);
+   }
 }

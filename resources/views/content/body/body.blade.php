@@ -330,20 +330,20 @@
 
         <div class="buy-product">
 
-            @foreach ($products[0]['products'] as $p)
+            @foreach ($products as $product)
            
                 <div class="product-info">
-                    <a href="{{ route('detail-product', $p['id']) }}"> <img src="{{ asset('/images/productImages/'. $p['image']['url'] ) }}" alt=""></a>
+                    <a href="{{ route('detail-product', $product['id']) }}"> <img src="{{ asset('/images/productImages/'. $product['image']['url'] ) }}" alt=""></a>
                   <div class="add-cart">
                     <div class="add">
                         <a href="Javascript:0" ><span>Add To Cart</span></a>
                     </div>
                   </div>
                     <div class="product-name">
-                        <span>{{ $p['name'] }} </span>
+                        <span>{{ $product['name'] }} </span>
                     </div>
                     <div class="product-price">
-                        <span>{{ $p['price'] }}$</span>
+                        <span>{{ $product['price'] }}$</span>
                     </div>
                     
                 </div>
@@ -598,10 +598,10 @@
             url: changeProduct,
             success: function(data) {
                 var html = ''
-                $.each(data[0].products, function(key, data) {
+                $.each(data, function(key, data) {
         
                 html += '<div class="product-info">' +
-               ' <a href="http://localhost/sell-phone/public/detail-product/'+ data.id + '" > <img src="http://localhost/sell-phone/public/images/productImages/'+data.image.url+'" alt=""></a>'+
+               ' <a href="http://localhost/sell-phone/public/product/'+ data.id + '" > <img src="http://localhost/sell-phone/public/images/productImages/'+data.image.url+'" alt=""></a>'+
                '<div class="add-cart">' +
                    ' <div class="add">' +
                        ' <a href="Javascript:0" ><span>Add To Cart</span></a>' +

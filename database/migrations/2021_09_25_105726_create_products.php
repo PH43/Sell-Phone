@@ -18,8 +18,11 @@ class CreateProducts extends Migration
             $table->string('name');
             $table->integer('price');
             $table->integer('quantity');
-            $table->unsignedBigInteger('brands_categories_id');
-            $table->foreign('brands_categories_id')->references('id')->on('brands_categories');
+            $table->string('description', 500) ;
+            $table->unsignedBigInteger('category_id');
+            $table->foreign('category_id')->references('id')->on('categories');
+            $table->unsignedBigInteger('brand_id');
+            $table->foreign('brand_id')->references('id')->on('brands');
    
             $table->softDeletes($column = 'deleted_at', $precision = 0);
             $table->timestamps();
