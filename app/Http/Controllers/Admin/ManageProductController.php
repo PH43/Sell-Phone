@@ -32,9 +32,8 @@ class ManageProductController extends Controller
     public function insertProduct(Request $rq)
     {
       
-     
+    
 
-        $brandCategory_id =   brand_category::select("id")->where('brand_id', $rq->brand_id)->where('category_id', $rq->category_id)->get()->toArray();
        
      
  
@@ -43,7 +42,9 @@ class ManageProductController extends Controller
         'price' => $rq->price,
         'quantity' => $rq->qty,
         'description' => "$rq->description",
-        'brand_category_id' => $brandCategory_id[0]['id'],
+        'category_id'=> $rq->category_id,
+        'brand_id'  =>  $rq->brand_id,
+   
         ]);
 
         $image = $rq->file('image');

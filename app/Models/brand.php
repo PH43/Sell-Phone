@@ -9,13 +9,16 @@ class brand extends Model
 {
     use HasFactory;
   
-    protected $table = "brands";
-    
+
+    const TABLE = 'brands';
+    protected $table = self::TABLE;
    
     public function categories(){
         return $this->belongsToMany(category::class ,'brands_categories');
       }
       public function products(){
-        return $this->hasManyThrough(product::class , brand_category::class);
+        return $this->hasMany(product::class);
       }
+
+   
 }

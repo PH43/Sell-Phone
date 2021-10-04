@@ -11,7 +11,7 @@
             margin-left: 2%;
             height: 700px;
             background-color: white;
-         
+
         }
 
         .body div {
@@ -25,8 +25,8 @@
             text-align: center;
             height: 100%;
             position: relative;
-         
-            
+
+
         }
 
         .display-product img {
@@ -34,12 +34,13 @@
             width: 70%;
             object-fit: cover;
             transition: all 0.5s;
-            
+
         }
-        .display-product img:hover{
-        
+
+        .display-product img:hover {
+
             width: 80%;
-          
+
         }
 
         .detail-product {
@@ -117,13 +118,14 @@
         }
 
         .card-infoDetail {
-
+            width: 100%;
+            text-align: left;
             margin-top: 50px;
         }
 
         .card-infoDetail span {
-
-            line-height: 20px;
+            display: block;
+            line-height: 1px;
         }
 
         .card-infoDetail h5 {
@@ -151,14 +153,13 @@
             width: 96%;
             clear: both;
             height: auto;
-        margin-left: 2%;
-            background-color:white;
+            margin-left: 2%;
+            background-color: white;
             padding-bottom: 30px;
             border-radius: 10px;
-            border: 1px solid #eeeeee
-;
-           
-       
+            border: 1px solid #eeeeee;
+
+
         }
 
         .showdetails-product {
@@ -171,11 +172,13 @@
         }
 
         .showdetails-product img {
-            width: 70%;
+            width: 100%;
         }
 
         .show-product {
-
+            width: 100%;
+            padding-top: 25px;
+            height: 330px;
 
             border: 1px solid rgb(204, 204, 204);
         }
@@ -219,133 +222,191 @@
             font-weight: 700;
             color: rgb(245, 16, 16);
         }
+
         .comment {
-                clear: both;
-                margin-top: 100px;
-                width: 96%;
-                margin-left: 2%;
-                background-color:white;
-                height: auto;
-                padding: 20px 20px;
+            clear: both;
+            margin-top: 100px;
+            width: 96%;
+            margin-left: 2%;
+            background-color: white;
+            height: auto;
+            padding: 20px 20px;
             border-radius: 10px;
             border: 1px solid #eeeeee;
-            }
+        }
 
-            .info-comment {
-                width: 100%;
+        .info-comment {
+            width: 100%;
 
-            }
+        }
 
-            .info-comment h5 {
-                float: left;
-            }
+        .info-comment h5 {
+            float: left;
+        }
 
-    
-     .enter-comment{
-         margin-top: 40px;
-         clear: both;
-         width: 100%;
-     }
-     .enter-comment form{
-         float: right;
-         width: 95%;
-         margin-top: 5px;
+
+        .enter-comment {
+            margin-top: 40px;
+            clear: both;
+            width: 100%;
+        }
+
+        .enter-comment form {
+            float: right;
+            width: 95%;
+            margin-top: 5px;
+
+        }
+
+        .enter-comment input[type="text"] {
+            height: 50px;
+            width: 90%;
+            margin-left: 1%;
+            border-radius: 10px;
+        }
+
+        .enter-comment input[type="submit"] {
+            height: 50px;
+            ;
+            width: 60px;
+            border: 0px;
+            background-color: orange;
+            border-radius: 5px;
+        }
+
+        .enter-comment img {
+            width: 60px;
+            height: 60px;
+            border-radius: 100%;
+        }
+
+        .show-comment {
+            width: 100%;
+            height: auto;
+            clear: both;
+            margin-top: 50px;
+        }
+
+        .get-comment {
+            width: 100%;
+
+            padding: 20px 0px;
+            border-top: 1px solid darkgray;
+            margin-bottom: 40px;
+        }
+
+        .get-comment img {
+            float: left;
+        }
+
+        .user-comment {
+          
+            width: 65%;
       
-     }
-    .enter-comment input[type="text"]{
-        height: 50px;
-        width: 90%;
-        margin-left: 1%;
-        border-radius: 10px;
-     }
-     .enter-comment input[type="submit"]{
-         height: 50px;;
-         width: 60px;
-         border: 0px;
-         background-color: orange;
-         border-radius: 5px;
-     }
-     .enter-comment img{
-        width: 60px;height: 60px;
-        border-radius: 100%;
+
+        transform: translateX(20px);
+        }
+        .user-comment h5 {
+            margin-right: 20px;
+
+        }
+
+        .user-comment span {
+            opacity: 0.7;
+        }
+
+        .user-comment label {
+            margin-top: 10px;
+            display: block;
+            width: 100%;
+
+        }
+
+        .user-reply {
+
+    width: 65%;
+    transform: translateX(20px);
 }
-.show-comment{
-        width: 100%;
-        height: auto;
-        clear: both;
-        margin-top: 50px;
-    }
-    .get-comment {
-        width: 100%;
-        padding-bottom: 30px;
-    }
-    .get-comment img{
-        float: left;
-    }
-    .user-comment{
-  width: 65%;
+.user-reply  h5{
+    margin-right: 20px;
+}
 
-        margin-left: 20px;
-    }
-    .user-comment h5{
-  margin-right: 20px;
- 
-    }
-    .user-comment span{
-        opacity: 0.7;
-    }
-    .user-comment label{
-        margin-top: 10px;
-        display: block;
-        width: 100%;
+.user-reply  span {
+            opacity: 0.7;
+        }
 
-    }
-   
-    .impact-comment{
-width: 100%;
+        .user-reply  label {
+            margin-top: 10px;
+            display: block;
+            width: 100%;
+            margin-bottom: 40px;
 
-text-align: right;
-    }
-    .impact-comment a{
-        margin-right: 60px;
-        font-size: 16px;
-        text-decoration: none;
-        color: #999999;
-    }
-    .mid {
-        padding: 50px 0px;
-        width: 100%;
-        height: #f8f9fa;
-    }
+        }
+        .impact-comment {
+            width: 100%;
+            margin-top: 10px;
+            text-align: right;
+     
+        }
+
+        .impact-comment a {
+            margin-right: 60px;
+            font-size: 16px;
+            text-decoration: none;
+            color: #999999;
+        }
+
+        .mid {
+            padding: 50px 0px;
+            width: 100%;
+            height: #f8f9fa;
+        }
+.loadMore {
+    width: 100%;
+    min-height: 40px;
+    text-align: center;
+    margin-top: 20px;
+}
+.loadMore a{
+    border: 1px solid rgb(170, 170, 170);
+    text-decoration: none;
+    color: black;
+    padding: 5px 10px;
+
+}
+.reply-comment{
+    display: none;
+}
     </style>
     <div class="body">
         <div class="display-product">
-            <img src="{{ asset('/images/productImages/' . $product[0]['image']['url'])  }}" alt="">
+            <img src="{{ asset('/images/productImages/' . $data['product'][0]['image']['url']) }}" alt="">
         </div>
         <div class="detail-product">
-            <span class="categories-product">{{ $categoryBrand[0]['name'] }} / {{  $categoryBrand[0]['brands'][0]['name'] }}  </span>
-            <span class="name-product">{{ $product[0]['name'] }}</span>
+            <span class="categories-product"> {{ $data['categoryBrand'][0]['name'] }} /
+                {{ $data['categoryBrand'][0]['brands'][0]['name'] }} </span>
+            <span class="name-product">{{ $data['product']['0']['name'] }}</span>
             <span class="avaluate"> <i class="fas fa-star"></i> <i class="fas fa-star"></i> <i
                     class="fas fa-star"></i> <i class="fas fa-star"></i> <i class="fas fa-star"></i> <span> 1 bài
                     đánh giá</span></span>
             <span class="price-product">
-                {{ $product[0]['price'] }} $
+                {{ $data['product']['0']['price'] }} $
             </span>
 
             <div class="card-product">
                 <div class="card-quantity"><a href="">-</a><a href="">1</a><a href="">+</a>
 
                     <a href="" style="color:white;   padding-left: 100px;
-        padding-right: 100px;" class="card-add">ADD TO CART</a>
+            padding-right: 100px;" class="card-add">ADD TO CART</a>
                     <a href="" class="card-heart"><i class="far fa-heart"></i></a>
                 </div>
 
                 <div class="card-infoDetail">
-                    <span>Availability: In Stock</span>
+                    <span>Availability: {{ $data['status'] }}</span>
                     <div class="card-info">
                         <h5>Details</h5>
                         <span>
-                           {{ $product[0]['description']}}
+                            {{ $data['product']['0']['description'] }}
                         </span>
                     </div>
                 </div>
@@ -359,192 +420,231 @@ text-align: right;
             </div>
         </div>
 
-<div style="width: 100%; height:40px;border-bottom: 1px solid #eeeeee;">
+        <div style="width: 100%; height:40px;border-bottom: 1px solid #eeeeee;">
 
-</div>
-    
+        </div>
+
     </div>
 
     <div style="background-color: #f8f9fa; clear: both;" class="mid">
-        
+
         <div class="relatedProduct">
             <h5>Related Products!</h5>
-            <div class="showdetails-product">
-                <div class="show-product">
-                    <img src="{{ asset('../public/images/product.png') }}" alt="">
+            @foreach ($data['relatedProduct'] as $product)
+                <div class="showdetails-product">
+                    <div class="show-product">
+                        <div class="image-product">
+                            <img src="{{ asset('/images/productImages/' . $product['image']['url']) }}" alt="">
+                        </div>
 
-                    <div class="acctionWith-product">
-                        <i class="fas fa-shopping-cart"></i>
-                        <i class="fas fa-search-plus"></i>
-                        <i class="far fa-heart"></i>
+                        <div class="acctionWith-product">
+                            <i class="fas fa-shopping-cart"></i>
+                            <i class="fas fa-search-plus"></i>
+                            <i class="far fa-heart"></i>
+                        </div>
+                    </div>
+                    .
+                    <div class="info-product">
+                        <span> {{ $product['name'] }}</span>
+                        </span>
+                        <span> <i class="fas fa-star"></i> <i class="fas fa-star"></i> <i class="fas fa-star"></i>
+                            <i class="fas fa-star"></i> <i class="fas fa-star"></i> </span>
+                        <span>$ 500</span>
                     </div>
                 </div>
-                .
-                <div class="info-product">
-                    <span> Dry Vineyard Sauvignon
-                    </span>
-                    <span> <i class="fas fa-star"></i> <i class="fas fa-star"></i> <i class="fas fa-star"></i> <i
-                            class="fas fa-star"></i> <i class="fas fa-star"></i> </span>
-                    <span>$ 500</span>
-                </div>
-            </div>
+            @endforeach
 
-            <div class="showdetails-product">
-                <div class="show-product">
-                    <img src="{{ asset('../public/images/product.png') }}" alt="">
 
-                    <div class="acctionWith-product">
-                        <i class="fas fa-shopping-cart"></i>
-                        <i class="fas fa-search-plus"></i>
-                        <i class="far fa-heart"></i>
-                    </div>
-                </div>
-                .
-                <div class="info-product">
-                    <span> Dry Vineyard Sauvignon
-                    </span>
-                    <span> <i class="fas fa-star"></i> <i class="fas fa-star"></i> <i class="fas fa-star"></i> <i
-                            class="fas fa-star"></i> <i class="fas fa-star"></i> </span>
-                    <span>$ 500</span>
-                </div>
-            </div>
 
-            <div class="showdetails-product">
-                <div class="show-product">
-                    <img src="{{ asset('../public/images/product.png') }}" alt="">
 
-                    <div class="acctionWith-product">
-                        <i class="fas fa-shopping-cart"></i>
-                        <i class="fas fa-search-plus"></i>
-                        <i class="far fa-heart"></i>
-                    </div>
-                </div>
-                .
-                <div class="info-product">
-                    <span> Dry Vineyard Sauvignon
-                    </span>
-                    <span> <i class="fas fa-star"></i> <i class="fas fa-star"></i> <i class="fas fa-star"></i> <i
-                            class="fas fa-star"></i> <i class="fas fa-star"></i> </span>
-                    <span>$ 500</span>
-                </div>
-            </div>
 
-            <div class="showdetails-product">
-                <div class="show-product">
-                    <img src="{{ asset('../public/images/product.png') }}" alt="">
 
-                    <div class="acctionWith-product">
-                        <i class="fas fa-shopping-cart"></i>
-                        <i class="fas fa-search-plus"></i>
-                        <i class="far fa-heart"></i>
-                    </div>
-                </div>
-                .
-                <div class="info-product">
-                    <span> Dry Vineyard Sauvignon
-                    </span>
-                    <span> <i class="fas fa-star"></i> <i class="fas fa-star"></i> <i class="fas fa-star"></i> <i
-                            class="fas fa-star"></i> <i class="fas fa-star"></i> </span>
-                    <span>$ 500</span>
-                </div>
-            </div>
 
-            <div class="showdetails-product">
-                <div class="show-product">
-                    <img src="{{ asset('../public/images/product.png') }}" alt="">
-
-                    <div class="acctionWith-product">
-                        <i class="fas fa-shopping-cart"></i>
-                        <i class="fas fa-search-plus"></i>
-                        <i class="far fa-heart"></i>
-                    </div>
-                </div>
-                .
-                <div class="info-product">
-                    <span> Dry Vineyard Sauvignon
-                    </span>
-                    <span> <i class="fas fa-star"></i> <i class="fas fa-star"></i> <i class="fas fa-star"></i> <i
-                            class="fas fa-star"></i> <i class="fas fa-star"></i> </span>
-                    <span>$ 500</span>
-                </div>
-            </div>
 
         </div>
-      
+
         <div class="comment">
-          
+
             <div class="info-comment">
 
                 <h5>136 Bình luận</h5>
-                <div class="select-comment" style="float: right">
-                    <select  class="form-select" aria-label="Default select example">
-                        <option selected>Open this select menu</option>
-                        <option value="1">One</option>
-                        <option value="2">Two</option>
-                        <option value="3">Three</option>
-                    </select>
+              
+                <div class="enter-comment">
+                    <img src="{{ asset('../public/images/avatar-profile.png') }}" alt="">
+                    <form id="formComment" method="post" action="{{ route('product-comment') }}">
+                        @csrf
+                        <input type="text" name="content" id="content">
+         
+                        <input type="hidden" name="product_id" id="productId" data-name="" value="{{ $data['product'][0]['id'] }}">
+                        @if (isset(Auth::user()->id))
+                            <input type="hidden" name="user_id" id="userId" data-name="{{ Auth::user()->name }}" value="{{ Auth::user()->id }}">
+
+                        @endif
+
+                        <input type="submit" id="commentproduct">
+                    </form>
+
+                    <div class="show-comment">
+
+
+                        @foreach ($data['comment']['data'] as $comment)
+                            <div class="get-comment"  >
+                          
+                                <img src="{{ asset('/images/avatar-profile.png') }}" alt="">
+                                <div class="user-comment" >
+                                    <h5>{{ $comment['user']['name'] }}</h5>
+                                    <span><i class="fas fa-clock"></i>   {{ $comment['created_at'] }}</span> <span><i></i></span>
+                                    <label >
+                                        {{ $comment['content'] }}
+                                    </label>
+
+                            
+                                </div>
+                                <div class="impact-comment" style="float:right">
+                                    <a href=""><i class="fas fa-thumbs-up"></i> 0</a>
+                                    <a href="" id="reply-comment" data-reply="{{ $comment['id'] }}" data-url="{{ route('reply-comment', $comment['id'] ) }}" ><i class="fas fa-reply"></i> Trả lời</a>
+                                    <a href=""><i class="fas fa-flag"></i> Báo xấu</a>
+                                </div>
+                          
+                            </div>
+                       
+                         
+                        @endforeach
+                            
+
+
+
+                    </div>
+
+
+
+
+                    <div class="loadMore">
+                        @for ($i = 2; $i <= ceil($data['comment']['count']/5); $i++ )
+                       
+                        <a href=""  data-id="{{$i}}" id="page-{{ $i }}" class="addProduct" @if ($i > 2)
+                            style="display: none;"
+                        @endif 
+                        data-page="{{ route('load-comment', [ 'productId' => $data['product'][0]['id'] 
+                          ,'page' => $i]) }}">  Load More  </a> 
+                       
+                           
+                        
+                            
+                        @endfor
+      
+                    </div>
                 </div>
-            <div class="enter-comment">
-<img src="{{ asset('../public/images/avatar-profile.png') }}" alt="">
-<form action="">
-    <input type="text">
-    <input type="submit">
-</form>
-
-<div class="show-comment">
-
-<div class="get-comment">
-    <hr>
-<img src="{{ asset('../public/images/avatar-profile.png') }}" alt="">
-<div class="user-comment">
-<h5 >Bill Gates</h5> 
-<span><i class="fas fa-clock"></i> 5 ngày trước</span> <span><i></i></span>
-<label>Cầu chương a!!</label>
-</div>
-<div class="impact-comment" style="float:right">
-    <a href=""><i class="fas fa-thumbs-up"></i> 0</a>
-    <a  href=""><i class="fas fa-reply"></i> Trả lời</a>
-    <a  href=""><i class="fas fa-flag"></i> Báo xấu</a>
-    </div>
-</div>
-<div class="get-comment">
-    <hr>
-<img src="{{ asset('../public/images/avatar-profile.png') }}" alt="">
-<div class="user-comment">
-<h5 >Bill Gates</h5> 
-<span><i class="fas fa-clock"></i> 5 ngày trước</span> <span><i></i></span>
-<label>See What You Can Do With Text Messaging
-    More than 95% of text messages are read within five minutes of receipt. 
-    EZ Texting makes it simple to communicate with your contacts via SMS messages.
-    
-    Increase Sales
-    Increase Sales
-    If you’re not promoting your business via text you’re leaving money on the table! With a 98% open rate, texting is one the best ways to let your customers know that it’s time to visit your business.
-    
-    Increase Attendance
-    Increase Attendance
-    Texting makes it easy to alert customers about upcoming appointments and events. It takes forever to call everyone on your list, and emails don't get opened. Automated text reminders increases attendance and reduces no-shows.
-    
-    Stay Top of Mind
-    Stay Top of Mind
-    Texting doesn't end when your customers make a purchase. Follow up with product information or customer service assistance. Your customers will be grateful, and your company will stay top-of-mind.
-    
-    Send Notifications
-    Send Notifications
-    Reach thousands of contacts at once with mass alerts and notifications. Texting is the easiest way to get the word out quickly.</label>
-</div>
-<div class="impact-comment" style="float:right">
-    <a href=""><i class="fas fa-thumbs-up"></i> 0</a>
-    <a  href=""><i class="fas fa-reply"></i> Trả lời</a>
-    <a  href=""><i class="fas fa-flag"></i> Báo xấu</a>
-    </div>
-</div>
-
-</div>
-
-            </div>
             </div>
         </div>
     </div>
+    <script>
+        $(document).on('click', '#commentproduct', function(e) {
+
+            e.preventDefault();
+    
+      
+           var userId = $('#userId').val();
+           var productId = $('#productId').val();
+           var token = $('input[name=_token]').val();
+            var name =  $('#userId').data('name');
+            var content = $('#content').val();
+
+            if (typeof userId == 'undefined') {
+                alert('Bạn chưa đăng nhập');
+            }
+
+            if (content == '') {
+                alert('not null');
+            } else {
+                $.ajax({
+                    type: 'POST',
+                    url: "{{ route('product-comment') }}",
+                    data: {
+                        'content': content,
+                        'user_id':userId,
+                        'product_id': productId,
+                        '_token': token,
+                        
+                    },
+                  
+                    success: function(data) {
+                        console.log(1);
+                        var comment = '';
+                        comment += '<div class="get-comment">' +
+                            '  <img src="{{ asset('/images/avatar-profile.png') }}" alt="">' +
+                            '  <div class="user-comment">' +
+                                    '<h5>' + name + '</h5>' +
+                                  '  <span><i class="fas fa-clock"></i>   '+ new Date($.now()) +'  </span> <span><i></i></span>' + 
+                                   ' <label>  ' + content + ' </label>' +
+                              ' </div>' +
+                               '<div class="impact-comment" style="float:right">' +
+                                  '  <a href=""><i class="fas fa-thumbs-up"></i> 0</a>' +
+                                   ' <a href="" id="reply-comment" data-reply="{{ $comment['id'] }}" data-url="{{ route('reply-comment', $comment['id'] ) }}"><i class="fas fa-reply"></i> Trả lời</a>' +
+                                   ' <a href=""><i class="fas fa-flag"></i> Báo xấu</a>' +
+                              '  </div></div>' +
+                              '<div class="reply-comment" id="reply-comment-{{ $comment['id'] }}"  style="  margin-bottom: 80px; margin-top: 35px;margin-left: 5%;">' +
+                          '  <div class="user-reply" data-class="reply" id="reply-{{ $comment['id'] }}" style="padding-bottom: 50px;"></div></div>'
+                  
+
+                    
+
+
+          
+                            $('.show-comment').prepend(comment);
+                         
+                          
+                            }
+                });
+            }
+
+        });
+    </script>
+
+
+<script>
+    // load more
+$(document).on('click','.addProduct', function(e){
+    e.preventDefault();
+ var page = $(this).data('page');
+ var page_id = $(this).data('id');
+
+
+    $.ajax({
+        type: "get",
+        url: page,
+        dataType: 'json',
+    
+        success: function(data) {
+            var comment = '';
+            $.each(data.data, function(key, data){
+
+                comment += '<div class="get-comment">' +
+                        
+                    '  <img src="{{ asset('/images/avatar-profile.png') }}" alt="">' +
+                    '  <div class="user-comment">' +
+                            '<h5>' + data.user.name + '</h5>' +
+            '<span><i class="fas fa-clock"></i>'+ data.updated_at +'</span> <span><i></i></span>' + 
+                           ' <label>  ' + data.content + ' </label>' +
+                         ' </div>' +
+                          '<div class="impact-comment" style="float:right">' +
+                     '  <a href=""><i class="fas fa-thumbs-up"></i> 0</a>' +
+                            ' <a href="" id="reply-comment" data-reply="'+ data.id +'" data-url="http://localhost/sell-phone/public/product/comment/reply/' + data.id + '"><i class="fas fa-reply"></i> Trả lời</a>' +
+                                   ' <a href=""><i class="fas fa-flag"></i> Báo xấu</a>' +
+                      '  </div></div>' 
+            });
+                     
+                       
+                  $('#page-'+ page_id).hide();
+          
+                  $('#page-'+ (page_id + 1)).show();
+                  
+                              $('.show-comment').html(comment);
+                            }
+    });
+});
+
+</script>
+
 
 @endsection

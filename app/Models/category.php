@@ -8,15 +8,17 @@ use Illuminate\Database\Eloquent\Model;
 class category extends Model
 {
   use HasFactory;
-  protected $table = "categories";
+
+
+  const TABLE = 'categories';
+  protected $table = self::TABLE;
   public function brands()
   {
     return $this->belongsToMany(brand::class, 'brands_categories');
   }
 
-  public function products()
-  {
-    return $this->hasManyThrough(product::class, brand_category::class);
+  public function products(){
+    return $this->hasMany(product::class);
   }
 
 
@@ -24,14 +26,7 @@ class category extends Model
 
  
 
-public function scopeproductCategory($query, $id,$take){
-   return $query->with(['products' => function ($q) use($take) {
-    $q->take($take);
-         
-    $q->with('image');
 
-}])->where('id',$id)->get()->toArray();
-}
 
   public function scopeBrandCategory($query, $id)
   {

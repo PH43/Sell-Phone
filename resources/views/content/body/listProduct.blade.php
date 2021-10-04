@@ -391,9 +391,9 @@
         <div class="buy-product">
             <div class="info-category-page">
                 <div class="info-category">
-                    <span class="name-category">{{$category['name']}} <span class="name-factory"></span></span>
+                    <span class="name-category">{{ $category['name'] }} <span class="name-factory"></span></span>
                     <span><span class="count-product"> </span>
-                       {{$sum}} devices found</span>
+                        devices found</span>
                     <div class="images-category">
                         <img src="https://ruouthuonghieu.com/wp-content/uploads/2019/04/ballentines.jpg" alt="">
                     </div>
@@ -418,47 +418,48 @@
 
 
 
-                        
+
                     </div>
 
                 </div>
                 <div class="show-list-product">
 
-                    @foreach ($brandCategory as $item)
-                        @foreach ($item['products'] as $product)
-                            <div class="product-info">
-                                <div class="product-all">
-                                    <a href="{{ route('detail-product', $product['id']) }}"> <img src="{{ asset('/images/productImages/' . $product['image']['url'])  }}" alt=""></a>
-                                    <div class="product-action">
+                    @foreach ($data['products'] as $product)
 
-                                        <a href="" class="test"> <i class="fas fa-search-plus"></i></a>
-                                        <a href=""><i class="fas fa-heart"></i></a>
-                                        <a href=""><i class="fas fa-shopping-cart"></i></a>
-                                    </div>
-                                </div>
-                                <div class="product-details">
-                                    <span>{{ $product['name'] }}</span>
-                                    <span>
-                                        @for ($i = 1; $i <= 5; $i++)
-                                            <i id="stars-{{ $i }}" data-stars="{{ $i }}"
-                                                class="stars fas fa-star"></i>
-                                        @endfor
-                                    </span>
-                                    <span>{{ number_format($product['price'], 0, ',') }} $ </span></span>
+                        <div class="product-info">
+                            <div class="product-all">
+                                <a href="{{ route('detail-product', $product['id']) }}"> <img
+                                        src="{{ asset('/images/productImages/' . $product['image']['url']) }}"
+                                        alt=""></a>
+                                <div class="product-action">
+
+                                    <a href="" class="test"> <i class="fas fa-search-plus"></i></a>
+                                    <a href=""><i class="fas fa-heart"></i></a>
+                                    <a href=""><i class="fas fa-shopping-cart"></i></a>
                                 </div>
                             </div>
-                        @endforeach
+                            <div class="product-details">
+                                <span>{{ $product['name'] }}</span>
+                                <span>
+                                    @for ($i = 1; $i <= 5; $i++)
+                                        <i id="stars-{{ $i }}" data-stars="{{ $i }}"
+                                            class="stars fas fa-star"></i>
+                                    @endfor
+                                </span>
+                                <span>{{ number_format($product['price'], 0, ',') }} $ </span></span>
+                            </div>
+                        </div>
+
                     @endforeach
 
                 </div>
 
                 <div class="take-product">
-
-                    @for ($i = 1; $i <= ceil($sum / 4); $i++)
-                        <a href="Javascript:0" class="filter-product"  data-page="{{ $i }}"
-                      
-                            id="take-{{ $i }}">{{ $i }}</a>
+                    @for ($i = 1; $i <= ceil($data['count']/4); $i++) 
+                    <a href="Javascript:0" style="margin-right:5px;"  class="filter-product" data-page="{{$i}}"  id="take-{{$i}}"> {{$i}} </a>             
+                        
                     @endfor
+
 
                 </div>
 
@@ -468,7 +469,6 @@
             <h3>Filter Product</h3>
 
 
-
             <div class="redirect-categories">
 
                 <div class="add-product-checkbox">
@@ -476,6 +476,11 @@
 
 
                     <a onclick="showbrands(1)" href="Javascript:0">Hãng sản xuất</a>
+
+
+            
+
+
                     @if (isset($_GET['brands']))
                         <?php $br = explode(',', $_GET['brands']); ?>
 
@@ -499,28 +504,26 @@
                     <div class="filter-price" style="margin-top:20px;">
                         <a href="">Lọc giá</a>
                         <label class="container">Tất cả
-                            <input type="radio" class="filter-product" name="radio" data-min="1" data-max="2"
-                            @if (!isset($_GET["min"]))
-                                checked
+                            <input type="radio" class="filter-product" name="radio" data-min="1" data-max="2" @if (!isset($_GET['min']))
+                            checked
                             @endif
                             >
                             <span class="checkmark"></span>
 
                         </label>
                         @for ($i = 1; $i <= 9; $i++)
-                            <label class="container">Từ {{ ($i - 1) * 500 }} - {{ $i * 500 }}
-                                <input type="radio" class="filter-product" name="radio" data-min="{{ ($i - 1) * 500 }}"
-                                    data-max="{{ $i * 500 }}"
-                                    @if (isset($_GET['min']) && isset($_GET['max']))
-                                        @if ($_GET['min'] == ($i - 1) * 500 && $_GET['max'] ==  $i * 500)
-                                            checked
-                                        @endif
-                                    @endif
-                                    
-                                    >
-                                <span class="checkmark"></span>
+                            <label class="container">Từ {{ ($i -1) * 500 + 1 }} - {{ $i * 500 }}
+                                <input type="radio" class="filter-product" name="radio" data-min="{{ ($i -1 ) * 500  + 1}}"
+                                    data-max="{{ $i * 500 }}" @if (isset($_GET['min']) && isset($_GET['max']))
+                                @if ($_GET['min'] == ($i - 1) * 500 + 1 && $_GET['max'] == $i * 500)
+                                    checked
+                                @endif
+                        @endif
 
-                            </label>
+                        >
+                        <span class="checkmark"></span>
+
+                        </label>
                         @endfor
                         <label class="container">Trên 4500
                             <input type="radio" class="filter-product" name="radio" data-min="4500" data-max="999999999">
@@ -548,16 +551,18 @@
 
             var url = new URL(window.location.href);
 
-            url.searchParams.set('take', 1);
+            url.searchParams.set('page', 1);
             //  brand    ---------------------------------------------
             var brands = Array.from(document.querySelectorAll("#brand"))
                 .filter(checkbox => checkbox.checked)
                 .map(checkbox => checkbox.value);
 
-            // --------------------------
+            
             if (brands !== '') {
                 url.searchParams.set('brands', brands.toString());
             }
+
+       
 
             if (url.searchParams.get('brands') == '') {
                 url.searchParams.delete('brands');
@@ -578,18 +583,19 @@
             if (typeof min !== 'undefined' && typeof max !== 'undefined') {
                 url.searchParams.set('min', min, );
                 url.searchParams.set('max', max, );
+                url.searchParams.delete('take');
             }
             if (min == 1 && max == 2) {
                 url.searchParams.delete('min');
                 url.searchParams.delete('max');
             }
-            
+
             // phan trang
             var page = $(this).data("page");
             if (typeof page !== 'undefined') {
-        
 
-                url.searchParams.set('take', (page));
+
+                url.searchParams.set('page', (page));
 
             }
 
@@ -601,14 +607,13 @@
                 success: function(data) {
 
                     var html = ''
-                    $.each(data, function(key, data) {
+                    $.each(data.products, function(key, product) {
 
-                        $.each(data.products, function(key, product) {
+                        html +=
 
-                            html +=
-                            '<div class="product-info">'+
+                        '<div class="product-info">'+
             '<div class="product-all">'+
-                 '<a href="http://localhost/sell-phone/public/detail-product/'+ data.id + '"> <img src="http://localhost/sell-phone/public/images/productImages/'+product.image.url+' " alt=""></a>'+
+                 '<a href="http://localhost/sell-phone/public/product/'+ product.id + '"> <img src="http://localhost/sell-phone/public/images/productImages/'+product.image.url+' " alt=""></a>'+
             '<div class="product-action">'+
                 '<a style="margin-right: 7px;"   href="" class="test" > <i  class="fas fa-search-plus"></i></a>'+
                 '<a style="margin-right: 7px;" href=""><i class="fas fa-heart"></i></a>'+
@@ -621,26 +626,22 @@
                ' @endfor</span>'+
                 '<span> ' + product.price + ' $ </span></span></div></div>'
 
-                        })
                     });
-                    //  phan trang
-                    var count = Math.ceil(data.sum / 4);
+
+                    var count = Math.ceil(data.count / 4);
+                    console.log(count);
                     var page = '';
                     //------------------------------------------------------------------
                     for (var i = 1; i <= count; i++) {
                         page +=
-                            '<a href="Javascript:0" style="margin-right:5px;"  class="filter-product" data-page="' + i + '"  id="take-' + i + '">' + i + '</a>'
+         '<a href="Javascript:0" style="margin-right:5px;"  class="filter-product" data-page="' + i + '"  id="take-' + i + '">' + i + '</a>'
                     }
                     //-----------------------------------------------------------------------
-                    if (typeof min == 'undefined' && typeof max == 'undefined') {
-                        $('.take-product').html(page);
-                    }
-                    if (min == 1 && max == 2) {
-                        $('.take-product').html(page);
-                    } else {
-                        $('.take-product').html(' ');
-                    }
-                    
+
+                    $('.take-product').html(page);
+
+
+
                     //-------------------------------------------------------------------------------
 
                     $('.show-list-product').html(html);

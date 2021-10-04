@@ -56,7 +56,7 @@
 
 
                     <div class="card-body">
-                      <form class="row g-3" enctype="multipart/form-data" id="insertform" >
+                      <form class="row g-3"  enctype="multipart/form-data" id="insertform" >
                         {{ csrf_field() }}
                       <div class="col-12">
                      @foreach ($category as $c)
@@ -117,10 +117,10 @@ function isNumeric(value) {
                   e.preventDefault();
                 
                   if($('#name').val() == '' 
-                  &&  $('#price').val() == '' 
-                  && $('#qty').val() == '' 
-                  && $('#description').val() == ''
-                  && $('#image').val() == ''
+                 ||  $('#price').val() == '' 
+                 || $('#qty').val() == '' 
+                  || $('#description').val() == ''
+                 || $('#image').val() == ''
                   ){
 
                     alert("Please don't leave it blank");
