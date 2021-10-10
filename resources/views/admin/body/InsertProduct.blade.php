@@ -152,18 +152,21 @@ function isNumeric(value) {
                <div class="col-12 col-lg-4">
                   <div class="card shadow-none bg-light border">
                     <div class="card-body">
+                      <h5>Discount</h5>
                         <div class="row g-3">
                           <div class="col-12">
-                            <label class="form-label">Price</label>
-                            <input type="text" class="form-control" placeholder="Price">
+                            <label class="form-label">Name</label>
+                            <input type="text" class="form-control" placeholder="Name">
                           </div>
                           <div class="col-12">
-                            <label class="form-label">Status</label>
-                            <select class="form-select">
-                              <option>Published</option>
-                              <option>Draft</option>
-                            </select>
+                            <label class="form-label">Init</label>
+                            <input type="text" class="form-control" placeholder="Init">
                           </div>
+                          <div class="col-12">
+                            <label class="form-label">Value</label>
+                            <input type="text" class="form-control" placeholder="Value">
+                          </div>
+                     
                           <div class="col-12">
                             <label class="form-label">Tags</label>
                             <input type="text" class="form-control" placeholder="Tags">

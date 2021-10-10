@@ -25,6 +25,24 @@ class BackendServiceProvider extends ServiceProvider
             'App\Repositories\HomeRepositoryInterface',
             'App\Repositories\HomeRepository',
         );
+
+        $this->app->bind(
+    
+            'App\Repositories\CartRepositoryInterface',
+            'App\Repositories\CartRepository',
+        );
+
+        $this->app->bind(
+    
+            'App\Repositories\OrderRepositoryInterface',
+            'App\Repositories\OrderRepository',
+        );
+
+        $this->app->bind(
+    
+            'App\Repositories\AddressRepositoryInterface',
+            'App\Repositories\AddressRepository',
+        );
     }
 }
 ?>

@@ -15,10 +15,10 @@ class CreateBrandsCategories extends Migration
     {
         Schema::create('brands_categories', function (Blueprint $table) {
             $table->id();
-            $table->unsignedBigInteger('brands_id');
-            $table->unsignedBigInteger('categories_id');
-            $table->foreign('brands_id')->references('id')->on('brands');
-            $table->foreign('categories_id')->references('id')->on('categories');
+            $table->unsignedBigInteger('brand_id');
+            $table->unsignedBigInteger('category_id');
+            $table->foreign('brand_id')->references('id')->on('brands');
+            $table->foreign('category_id')->references('id')->on('categories');
             $table->timestamps();
         });
     }

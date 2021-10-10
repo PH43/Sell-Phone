@@ -13,6 +13,7 @@ href="{{ URL::asset('/fontawesome-free-5.15.4-web/css/all.min.css') }}">
  }
  .enter1 i{
  margin-right: 10px;
+
  }
  .card-header{
      display: block;
@@ -77,17 +78,18 @@ href="{{ URL::asset('/fontawesome-free-5.15.4-web/css/all.min.css') }}">
                                
     
                                 <div class="enter">
+                                    @error('email')
+                                    <span style="display: block;" class="invalid-feedback" role="alert">
+                                      {{ $message }}
+                                    </span>
+                                @enderror
                               <div class="enter1">
                                 <i class="fas fa-user-alt"></i>
                                     
                                   
                                 <input id="email" placeholder="Email" type="email" class="form-control @error('email') is-invalid @enderror" name="email" value="{{ old('email') }}" required autocomplete="email" autofocus>
 
-                                @error('email')
-                                    <span class="invalid-feedback" role="alert">
-                                        <strong>{{ $message }}</strong>
-                                    </span>
-                                @enderror
+                              
                               </div>
                                 </div>
                             </div>
@@ -95,15 +97,16 @@ href="{{ URL::asset('/fontawesome-free-5.15.4-web/css/all.min.css') }}">
                             <div class="form-group row">
                               
                                 <div class="enter">
+                                    @error('password')
+                                    <span class="invalid-feedback" role="alert">
+                                        {{ $message }}
+                                    </span>
+                                @enderror
                                   <div class="enter1">
                                   <i class="fas fa-lock"></i>
                                     <input id="password" placeholder="Password" type="password" class="form-control @error('password') is-invalid @enderror" name="password" required autocomplete="current-password">
     
-                                    @error('password')
-                                        <span class="invalid-feedback" role="alert">
-                                            <strong>{{ $message }}</strong>
-                                        </span>
-                                    @enderror
+                            
                                   </div>
                                 </div>
                             </div>
