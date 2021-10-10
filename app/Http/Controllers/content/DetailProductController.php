@@ -33,8 +33,8 @@ class DetailProductController extends Controller
 
         $data['relatedProduct'] = $this->productRepo->relatedProduct($data['product'][0]['name'], $data['product'][0]['id']);
 
-        $data['comment'] = $this->commentRepo->listComment('product_id', $data['product'][0]['id'],1,5);
-//dd($data);
+        $data['comment'] = $this->commentRepo->listComment('product_id', $data['product'][0]['id'], 1, 5);
+        //dd($data);
 
 
         if ($data['product'][0]['quantity'] >= 1) {
@@ -48,28 +48,30 @@ class DetailProductController extends Controller
 
     public function insertComment(Request $rq)
     {
-    
+
 
         if ($rq->has('parents_id')) {
             $parents_id = $rq->has('parents_id');
-        }else {
+        } else {
             $parents_id = null;
         }
-        $this->commentRepo->insertComment($rq->user_id,  $rq->product_id, $rq->content, $parents_id);
+        $this->commentRepo->insertComment($rq->user_id,  $rq->product_id, $rq->content);
         return  response()->json();
     }
 
 
-    public function loadMoreComments($productId ,$page){
+    public function loadMoreComments($productId, $page)
+    {
 
-        $comments = $this->commentRepo->listComment('product_id', $productId,null ,($page*5));
-        
+        $comments = $this->commentRepo->listComment('product_id', $productId, null, ($page * 5));
+
         return response()->json($comments);
     }
-   public function replyComment($cmtId){
+    public function replyComment($cmtId)
+    {
 
-    $comments = $this->commentRepo->listComment('parents_id', $cmtId,null, null);
-        
-    return response()->json($comments);
-   }
+        $comments = $this->commentRepo->listComment('parents_id', $cmtId, null, null);
+
+        return response()->json($comments);
+    }
 }

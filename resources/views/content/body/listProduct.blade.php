@@ -19,7 +19,7 @@
         .buy-product {
             display: inline-block;
             width: 80%;
-
+            padding: 20px 0px ;
             background-color: #f8f9fa;
         }
 
@@ -27,97 +27,78 @@
 
         .product-info {
 
-            margin-bottom: 20px;
-            --columns: 4;
-            width: calc(calc(100% / var(--columns)) - 10px);
-            display: inline-block;
-            margin-left: 5px;
-            padding: 10px 0px;
+--columns: 5;
+width: calc(calc(100% / var(--columns)) - 10px);
 
-            text-align: center;
+display: inline-block;
+margin-top: 50px;
 
-            transition: all 0.5s;
-        }
-
-        .product-all {
-            border: 1px solid rgb(194, 194, 194);
-            width: 100%;
+text-align: center;
 
 
-        }
+}
 
-        .product-action {
-            transform: translateY(-50px)
-        }
-
-        .product-info:hover .product-action a {
-            opacity: 1;
-        }
-
-        .product-action a:hover {
-            background-color: #c27b43;
-        }
-
-        .product-action a {
-            padding: 12px 15px;
-            background-color: #bdab98;
-            color: black;
-            opacity: 0;
-            transition: all 0.5s;
-        }
-
-        .product-info img {
-
-            width: 90%;
-            margin-top: 2%;
-
-            height: cover;
+.product-info img {
+width: 84%;
+margin-left: 8%;
+height: 210px;
+height: cover;
 
 
-        }
+}
 
-        .product-name {}
-
-        .product-name span {
-            text-align: center;
-            margin-top: 20px;
-
-            line-height: 21px;
-            font-weight: 600;
-            word-break: all;
-            display: -webkit-box;
-            -webkit-line-clamp: 2;
-            -webkit-box-orient: vertical;
-            overflow: hidden;
-            text-overflow: ellipsis;
-            word-break: break-word;
-            font-size: 17px;
-            letter-spacing: 0.24px;
-            margin-bottom: 20px;
-        }
-
-        .product-price {
-            text-align: center;
-        }
-
-        .product-price span {
-            text-align: center;
-            font-size: 26px;
-
-            color: #3b3b3b;
-            font-weight: 700;
-        }
+.product-name span {
+font-size: 16px;
+letter-spacing: 0.24px;
+-webkit-line-clamp: 1;
+-webkit-box-orient: vertical;
+overflow: hidden;
+display: -webkit-box;
 
 
+}
+
+.product-price span {
+display: inline;
+line-height:20px;
+
+font-weight: 700;
+}
+
+.add {
+background-color: black;
+width: 100%;
+position: absolute;
+
+opacity: 0;
+transition: all 0.5s;
+transform: translateY(-10px);
+height: 40px;;
+}
+.add-cart{
+position: relative;
+width: 100%;
+height: auto;
+text-align: center;
+}
+
+.add a {
+
+color: white;
+font-weight: 500;
+
+}
 
 
+.product-info:hover .add {
+transform: translateY(-40px);
+opacity: 1;
+}
 
+.product-info:hover {
+border: 1px solid black;
+}
 
-
-        .product-info:hover .product-info img {
-            box-shadow: rgba(153, 153, 153, 0.2) 0px 7px 29px 0px;
-            transform: translateY(-20px);
-        }
 
         .change-product {
 
@@ -303,6 +284,8 @@
         .take-product {
             width: 100%;
             text-align: center;
+            margin-top: 100px;
+            padding: 20px;
         }
 
         .take-product a:hover {
@@ -382,8 +365,11 @@
             height: 8px;
             border-radius: 50%;
             background: white;
+           
         }
-
+.sort-1{
+    background-color:red;
+}
     </style>
 
     <div class="showproduct">
@@ -393,9 +379,22 @@
                 <div class="info-category">
                     <span class="name-category">{{ $category['name'] }} <span class="name-factory"></span></span>
                     <span><span class="count-product"> </span>
-                        devices found</span>
+                       {{ $data['count'] }} devices found</span>
                     <div class="images-category">
-                        <img src="https://ruouthuonghieu.com/wp-content/uploads/2019/04/ballentines.jpg" alt="">
+                        <div class="owl-carousel owl-theme">
+
+                            <a href=""> <img src="https://s3n.cashify.in/cashify/brand/img/xhdpi/2e7cdc22-5a5f.jpg" alt=""></a>
+                            <a href=""><img src="https://cshprod.s3.amazonaws.com/imageLibrary/samsung_200x200_a17632a44caa.png"
+                                    alt=""></a>
+                            <a href=""> <img src="https://cshprod.s3.amazonaws.com/imageLibrary/oneplus_200x200_a89743874574.png"
+                                    alt=""></a>
+                            <a href=""><img src="https://cdn.shopify.com/s/files/1/0083/6380/2720/files/gionee-logo.svg" alt=""></a>
+                            <a href=""> <img src="https://cdn.shopify.com/s/files/1/0083/6380/2720/files/motorola-logo.png" alt=""></a>
+                            <a href=""><img src="https://cdn.shopify.com/s/files/1/0083/6380/2720/files/mi-logo.png" alt=""></a>
+                            <a href=""><img src="https://cshprod.s3.amazonaws.com/imageLibrary/oppo_200x200_8456cca0cb1d.png"
+                                    alt=""></a>
+            
+                        </div>
                     </div>
                 </div>
 
@@ -405,15 +404,37 @@
                 <div class="select-product">
                     <div class="select-product-left">
                         <span>Ưu tiên xem:</span>
+                     
+                        <a class="filter-product"  
+                        @if (isset($_GET['colum']) && isset($_GET['type']))
+                        @if($_GET['colum'] == 'id' && $_GET['type'] == 'desc')  
+                        style="background-color: #cb1c22;  color: white; "  @endif 
+                        @endif
+                        href="Javascript:0" onclick="changecolor(1)"  id="sort-1"  data-colum="id" data-type="desc">Sản phẩm mới nhất</a>
 
-                        <a class="filter-product" href="Javascript:0" data-colum="id" data-type="desc">Sản phẩm mới nhất</a>
+                        <a class="filter-product"  
+                        @if (isset($_GET['colum']) && isset($_GET['type']))
+                        @if($_GET['colum'] == 'id' && $_GET['type'] == 'asc')  
+                        style="background-color: #cb1c22;  color: white; "  @endif 
+                        @endif
+                        href="Javascript:0"  onclick="changecolor(2)" id="sort-2"   data-colum="id" data-type="asc">Sản phẩm cũ nhất </a>
 
-                        <a class="filter-product" href="Javascript:0" data-colum="id" data-type="asc">Sản phẩm cũ nhất </a>
 
-                        <a class="filter-product" href="Javascript:0" data-colum="price" data-type="desc">Giá từ cao đến
+                        <a class="filter-product"
+                        @if (isset($_GET['colum']) && isset($_GET['type']))
+                        @if($_GET['colum'] == 'price' && $_GET['type'] == 'desc')  
+                        style="background-color: #cb1c22;  color: white; "  @endif 
+                        @endif
+                        href="Javascript:0"  onclick="changecolor(3)" id="sort-3"  data-colum="price" data-type="desc">Giá từ cao đến
                             thấp</a>
 
-                        <a class="filter-product" href="Javascript:0" data-colum="price" data-type="asc">Giá Từ thấp đến
+                        <a class="filter-product"
+                        
+                        @if (isset($_GET['colum']) && isset($_GET['type']))
+                        @if($_GET['colum'] == 'price' && $_GET['type'] == 'asc')  
+                        style="background-color: #cb1c22;  color: white; "  @endif 
+                        @endif
+                        href="Javascript:0"  onclick="changecolor(4)" id="sort-4"  data-colum="price" data-type="asc">Giá Từ thấp đến
                             cao</a>
 
 
@@ -426,36 +447,29 @@
 
                     @foreach ($data['products'] as $product)
 
-                        <div class="product-info">
-                            <div class="product-all">
-                                <a href="{{ route('detail-product', $product['id']) }}"> <img
-                                        src="{{ asset('/images/productImages/' . $product['image']['url']) }}"
-                                        alt=""></a>
-                                <div class="product-action">
-
-                                    <a href="" class="test"> <i class="fas fa-search-plus"></i></a>
-                                    <a href=""><i class="fas fa-heart"></i></a>
-                                    <a href=""><i class="fas fa-shopping-cart"></i></a>
-                                </div>
-                            </div>
-                            <div class="product-details">
-                                <span>{{ $product['name'] }}</span>
-                                <span>
-                                    @for ($i = 1; $i <= 5; $i++)
-                                        <i id="stars-{{ $i }}" data-stars="{{ $i }}"
-                                            class="stars fas fa-star"></i>
-                                    @endfor
-                                </span>
-                                <span>{{ number_format($product['price'], 0, ',') }} $ </span></span>
+                    <div class="product-info">
+                        <a href="{{ route('detail-product', $product['id']) }}"> <img src="{{ asset('/images/productImages/'. $product['image']['url'] ) }}" alt=""></a>
+                      <div class="add-cart">
+                        <div class="add" >
+                            <div style="width: 100%;margin-top: 5px;">
+                                <a class="addToCart" href="" data-url="{{ route('addToCart', $product['id']) }}" ><span>Add To Cart</span></a>
                             </div>
                         </div>
-
+                      </div>
+                        <div class="product-name">
+                            <span>{{ $product['name'] }} </span>
+                        </div>
+                        <div class="product-price">
+                            <span>{{ $product['price'] }}$</span>
+                        </div>
+                        
+                    </div>
                     @endforeach
 
                 </div>
 
                 <div class="take-product">
-                    @for ($i = 1; $i <= ceil($data['count']/4); $i++) 
+                    @for ($i = 1; $i <= ceil($data['count']/10); $i++) 
                     <a href="Javascript:0" style="margin-right:5px;"  class="filter-product" data-page="{{$i}}"  id="take-{{$i}}"> {{$i}} </a>             
                         
                     @endfor
@@ -543,13 +557,20 @@
 
     </div>
 
-
+    <script>
+        function changecolor(id) {
+               $('.filter-product').css("background-color", "white");
+               $('.filter-product').css("color", "#8392a5");
+               $('#sort-'+id).css("background-color", "#cb1c22") ;
+               $('#sort-'+id).css("color", "white") ;
+           };
+       </script>
     <script>
         //categoty
         $(document).on('click', '.filter-product', function(e) {
 
 
-            var url = new URL(window.location.href);
+            var url = new URL(window.location);
 
             url.searchParams.set('page', 1);
             //  brand    ---------------------------------------------
@@ -610,26 +631,27 @@
                     $.each(data.products, function(key, product) {
 
                         html +=
-
-                        '<div class="product-info">'+
-            '<div class="product-all">'+
-                 '<a href="http://localhost/sell-phone/public/product/'+ product.id + '"> <img src="http://localhost/sell-phone/public/images/productImages/'+product.image.url+' " alt=""></a>'+
-            '<div class="product-action">'+
-                '<a style="margin-right: 7px;"   href="" class="test" > <i  class="fas fa-search-plus"></i></a>'+
-                '<a style="margin-right: 7px;" href=""><i class="fas fa-heart"></i></a>'+
-                '<a style="margin-right: 7px;" href=""><i class="fas fa-shopping-cart"></i></a></div></div>'+
-                 '<div class="product-details">'+
-                '<span>'+ product.name +'</span><span>'+
-                '@for ($i = 1; $i <= 5; $i++)'+
-                   ' <i id="stars-{{ $i }}" data-stars="{{ $i }}"'+
-                      '  class="stars fas fa-star"></i>'+
-               ' @endfor</span>'+
-                '<span> ' + product.price + ' $ </span></span></div></div>'
+                      '  <div class="product-info">'+
+                       ' <a href="http://localhost/sell-phone/public/product/'+product.id + ' "> <img src="http://localhost/sell-phone/public/images/productImages/'+ product.image.url + ' " alt=""></a>' +
+                     ' <div class="add-cart">' +
+                      '  <div class="add" >' +
+                         '   <div style="width: 100%;margin-top: 5px;">' +
+                             '   <a href="http://localhost/sell-phone/public/cart/'+product.id + ' "  ><span  >Add To Cart</span></a>' +
+                            '</div>' +
+                      '  </div>' +
+                    '  </div>' +
+                        '<div class="product-name">' +
+                          '  <span> '+ product.name +'  </span>' + 
+                     '   </div>' +
+                     '   <div class="product-price">' +
+                           ' <span>' + product.price + '$</span>' +
+                       ' </div>' +
+                  '  </div>' 
 
                     });
 
-                    var count = Math.ceil(data.count / 4);
-                    console.log(count);
+                    var count = Math.ceil(data.count / 10);
+           
                     var page = '';
                     //------------------------------------------------------------------
                     for (var i = 1; i <= count; i++) {
@@ -656,5 +678,25 @@
 
 
 
+<script>
+    $('.owl-carousel').owlCarousel({
+
+        loop: true,
+        margin: 10,
+        nav: true,
+
+        responsive: {
+            0: {
+                items: 1
+            },
+            600: {
+                items: 3
+            },
+            1024: {
+                items: 7
+            }
+        }
+    });
+</script>
 
 @endsection

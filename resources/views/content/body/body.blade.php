@@ -336,7 +336,7 @@
                     <a href="{{ route('detail-product', $product['id']) }}"> <img src="{{ asset('/images/productImages/'. $product['image']['url'] ) }}" alt=""></a>
                   <div class="add-cart">
                     <div class="add">
-                        <a href="Javascript:0" ><span>Add To Cart</span></a>
+                        <a class="addToCart" href="" data-url="{{ route('addToCart', $product['id']) }}" ><span>Add To Cart</span></a>
                     </div>
                   </div>
                     <div class="product-name">
@@ -604,7 +604,7 @@
                ' <a href="http://localhost/sell-phone/public/product/'+ data.id + '" > <img src="http://localhost/sell-phone/public/images/productImages/'+data.image.url+'" alt=""></a>'+
                '<div class="add-cart">' +
                    ' <div class="add">' +
-                       ' <a href="Javascript:0" ><span>Add To Cart</span></a>' +
+                       ' <a href="" ><span>Add To Cart</span></a>' +
                   '  </div></div>' +
                 '<div class="product-name">'+
                 '<span> ' + data.name + ' </span></div>'+

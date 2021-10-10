@@ -1,3 +1,4 @@
+
 <style>
     * {
         padding: 0px;
@@ -134,39 +135,14 @@
         color: black;
     }
 
-    .show-cart-product1 li a {
-        color: white;
-        font-weight: 400;
-    }
-
-    .show-cart-product1 li {
-        padding: 5px 10px;
-        list-style: none;
-
-        font-weight: 500;
-        color: black;
-    }
-
-    .show-cart-product1 li img {
-        margin-right: 5px;
-        width: 40px;
-        height: 40px;
-        background-position: 50% 50%;
-    }
-
-    .show-cart-product1 span {
-        margin-left: 80px;
-        color: orangered;
-        font-weight: 700;
-    }
-
+    
     .show-cart-product1 {
         box-shadow: rgba(111, 111, 114, 0.2) 0px 7px 29px 0px;
-
+   
         transform: translateX(-150px);
         background-color: white;
         position: absolute;
-        width: 400px;
+        width: 450px;
         border-radius: 5px;
         opacity: 1;
         height: auto;
@@ -221,19 +197,16 @@
         opacity: 0.7;
     }
 
-    .add-product-cart li a {
-        float: left;
-        clear: both;
-    }
-
-    .add-product-cart li span {
-        float: right;
-    }
+    
+    
 
     .header-image img {
 
         width: 100%;
 
+    }
+    .add-product-cart{
+        width: 100%;
     }
 
     .acction-users {
@@ -302,8 +275,26 @@
         display: block;
         background-color: rgb(245, 245, 245);
     }
+.cart-show:hover .show-cart-product1{
+display: block;
+}
+.addproduct{
+    width: 90%;
+    margin-top: 10px;
+
+}
+.addproduct li{
+    display: inline-block;
+    margin-left: 10px;
+}
+.addproduct li img{
+    width: 60px ;
+    height: 60px;
+}
+
 
 </style>
+<?php  $cart = Session::all(); ?>
 <header class="fixed-top">
     <div class="header-top ">
         <div class="header-top1">
@@ -330,19 +321,27 @@
                 <span>Mua online giảm 10%</span>
             </div>
             <div class="header-cart">
-                <span class="cart-show"><i class=" fas fa-shopping-cart"></i> <a href="">Giỏ hàng</a><br>
-                    <div class="show-cart-product1" style="display: none">
+                <span class="cart-show"><i class=" fas fa-shopping-cart"></i> <a href="{{ route('show-cart') }}">Giỏ hàng</a><br>
+                    <div class="show-cart-product1" style="display: none;">
                         <h5>Sản phẩm mới được thêm</h5>
+                       
                         <div class="add-product-cart">
-                            <div class="addproduct">
-                                <li><a href=""> <img src="" alt="">name</a> <span>$500</span> </li>
-                            </div>
-
+                            @if(isset($cart['cart']))
+                            @foreach ($cart['cart'] as $cart )
+                            <div class="addproduct" id="cart-{{$cart['id'] }}">
+                                <li> <img src="http://localhost/sell-phone/public/images/productImages/{{ $cart['image'] }}" alt=""> </li>
+                                <li style="width:40%;  "> <span> {{ $cart['name'] }}</span> </li>
+                                <li style="width:15%;" > <span style="color: orange ; "> <span  > {{ $cart['price'] }}$</span> </li>
+                              
+                               </div>
+                            @endforeach 
+                            @endif
+                                 
                         </div>
 
                         <div style="float: right;margin-right: 10px;margin-top: 5px;">
-                            <a href="" style="color:black;padding: 5px 10px;background-color: orangered;opacity: 1;"
-                                href="">Xem
+                            <a href="{{ route('show-cart') }}" style="color:black;padding: 5px 10px;background-color: orangered;opacity: 1;"
+                                href="{{ route('show-cart') }}">Xem
                                 Giỏ hàng</a>
                         </div>
                     </div>
@@ -410,10 +409,13 @@
 
     </div>
     <div class="header-image">
-        <img src="{{ asset('../public/images/slider.png') }}" alt="">
+        <img src="{{ asset('/images/slider.png') }}" alt="">
     </div>
 </header>
 <div style="width: 100%; height:140px;clear: both;"></div>
+
+
+
 
 <script>
     $('.users').click(function() {
@@ -421,12 +423,21 @@
         $('.acction-users').show(300);
     });
 </script>
+<script>
+    $('.cart-show').hover(function(e){
 
+      $('.show-cart-product1').show();  
+    },function(){
+        $('.show-cart-product1').hide();  
+    } 
+    );
+</script>
 
 <script>
     $(document).click(function() {
         $('.search-product').hide();
         $('.acction-users').hide();
+    
     });
 
 
@@ -456,5 +467,35 @@
                 }
             })
         }
+    });
+</script>
+
+<script>
+    $(document).on('click', '.addToCart',  function(e){
+e.preventDefault();
+var url = $(this).data("url");
+console.log(url);
+$.ajax({
+    type: "get",
+    url:  url,
+    success: function(data){
+     console.log(data);
+      var cart = ''
+      $.each(data, function (key, data){
+        cart +=  
+       ' <div class="addproduct" id="cart-'+ data.id +'">' + 
+         ' <li> <img src="http://localhost/sell-phone/public/images/productImages/'+data.image+' " alt=""> </li>' + 
+          ' <li style="width:40%;  "> <span> '+data.name+'</span> </li>' +
+        ' <li style="width:15%;" > <span style="color: orange ; "> <span  > '+data.price +' $</span> </li>' +
+   
+        ' </div>' 
+
+        
+      });
+      $('.add-product-cart').html(cart);
+     
+    }
+})
+
     });
 </script>

@@ -1,9 +1,11 @@
 <?php
 
 use App\Http\Controllers\Admin\ManageProductController;
+use App\Http\Controllers\content\CartController;
 use App\Http\Controllers\content\DetailProductController;
 use App\Http\Controllers\content\HomeController;
 use App\Http\Controllers\content\ListProductController;
+use App\Http\Controllers\content\orderController;
 use Illuminate\Support\Facades\Route;
 
 /*
@@ -42,9 +44,20 @@ Route::post('product/comment',[DetailProductController::class,'insertComment'])-
 Route::get('product/comment/loadmore/{productId}/{page}',[DetailProductController::class,'loadMoreComments'])->name('load-comment');
 Route::get('product/comment/reply/{cmtId}',[DetailProductController::class, 'replyComment'])->name('reply-comment');
 
+// Cart
+Route::get('cart/show',[CartController::class, 'showCart'])->name('show-cart');
+Route::get('cart/{id}',[CartController::class, 'addToCart'])->name('addToCart');
+Route::get('cart/{id}/update/{qty}',[CartController::class, 'updateCart'])->name('updateCart');
+Route::get('cart/delete/{id}',[CartController::class, 'deleteCart'])->name('deleteCart');
+// order
+Route::get('cart/address/dictrict/{id}',[orderController::class, 'dictrict'])->name('dictrict');
+Route::get('cart/address/ward/{id}',[orderController::class, 'ward'])->name('ward');
+Route::post('order/product',[orderController::class, 'order'])->name('order');
+
+
 // admin
 Route::get('admin/statistical',[ManageProductController::class, 'statistical'])->name('admin-Statistical');
 Route::get('admin/form-Product',[ManageProductController::class, 'showform'])->name('admin-form-product');
 Route::post('admin/insert-product',[ManageProductController::class, 'insertProduct'])->name('admin-insert-product');
-
-
+Route::get('admin/discount',[ManageProductController::class, 'discount'])->name('admin-discount');
+Route::post('admin/insert/discount',[ManageProductController::class, 'insertDiscount'])->name('insert-discount');

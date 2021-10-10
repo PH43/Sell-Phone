@@ -396,8 +396,12 @@
             <div class="card-product">
                 <div class="card-quantity"><a href="">-</a><a href="">1</a><a href="">+</a>
 
-                    <a href="" style="color:white;   padding-left: 100px;
-            padding-right: 100px;" class="card-add">ADD TO CART</a>
+                    <a href="" style="color:white;background-color: #2c2c2c;   padding-left: 100px;
+            padding-right: 100px;" 
+            class="addToCart"
+            
+            data-url="{{ route('addToCart', $data['product'][0]['id']) }}"
+            >ADD TO CART</a>
                     <a href="" class="card-heart"><i class="far fa-heart"></i></a>
                 </div>
 
@@ -507,7 +511,7 @@
                                 </div>
                           
                             </div>
-                       
+                         
                          
                         @endforeach
                             
@@ -517,8 +521,39 @@
                     </div>
 
 
+                    <script>
+            
+                        $(document).on('click','#reply-comment', function(e){
+                            e.preventDefault();
+               
+               var id =     $(this).data('reply');
+                          
+                $('#reply-comment-'+ id).toggle(500);
+
+                       $.ajax({
+                        type: "get",
+                        url:   $(this).data('url'),
+                        success: function(data) {
+                        
+                var reply = '';
+                           
+                            if(data.count !== 0) {
+                reply +=           ' <h5> ' + data.data[0].user.name + '</h5>' +
+                ' <span><i class="fas fa-clock"></i> ' + data.data[0].updated_at + '   </span> <span><i></i></span>' +
+                   '  <label >' + data.data[0].content + ' </label>'
+                   
+                           
+                $('#reply-comment-'+id).css("border-left", "5px solid black");
+                }
 
 
+                 
+                 
+                    $('#reply-'+ id).html(reply);
+                        }   
+                       });
+                        });
+                    </script>
                     <div class="loadMore">
                         @for ($i = 2; $i <= ceil($data['comment']['count']/5); $i++ )
                        
@@ -580,11 +615,10 @@
                               ' </div>' +
                                '<div class="impact-comment" style="float:right">' +
                                   '  <a href=""><i class="fas fa-thumbs-up"></i> 0</a>' +
-                                   ' <a href="" id="reply-comment" data-reply="{{ $comment['id'] }}" data-url="{{ route('reply-comment', $comment['id'] ) }}"><i class="fas fa-reply"></i> Trả lời</a>' +
+                                   ' <a href="" ><i class="fas fa-reply"></i> Trả lời</a>' +
                                    ' <a href=""><i class="fas fa-flag"></i> Báo xấu</a>' +
-                              '  </div></div>' +
-                              '<div class="reply-comment" id="reply-comment-{{ $comment['id'] }}"  style="  margin-bottom: 80px; margin-top: 35px;margin-left: 5%;">' +
-                          '  <div class="user-reply" data-class="reply" id="reply-{{ $comment['id'] }}" style="padding-bottom: 50px;"></div></div>'
+                              '  </div></div>' 
+                           
                   
 
                     
@@ -618,7 +652,7 @@ $(document).on('click','.addProduct', function(e){
         success: function(data) {
             var comment = '';
             $.each(data.data, function(key, data){
-
+                console.log(data);
                 comment += '<div class="get-comment">' +
                         
                     '  <img src="{{ asset('/images/avatar-profile.png') }}" alt="">' +
@@ -629,7 +663,7 @@ $(document).on('click','.addProduct', function(e){
                          ' </div>' +
                           '<div class="impact-comment" style="float:right">' +
                      '  <a href=""><i class="fas fa-thumbs-up"></i> 0</a>' +
-                            ' <a href="" id="reply-comment" data-reply="'+ data.id +'" data-url="http://localhost/sell-phone/public/product/comment/reply/' + data.id + '"><i class="fas fa-reply"></i> Trả lời</a>' +
+                            ' <a href=""><i class="fas fa-reply"></i> Trả lời</a>' +
                                    ' <a href=""><i class="fas fa-flag"></i> Báo xấu</a>' +
                       '  </div></div>' 
             });

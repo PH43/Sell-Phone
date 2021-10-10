@@ -3,10 +3,14 @@
 namespace App\Http\Controllers\Admin;
 
 use App\Http\Controllers\Controller;
+use App\Http\Requests\discountRequest;
 use App\Models\brand_category;
 use App\Models\category;
+use App\Models\discount;
 use App\Models\product;
+use Carbon\Carbon;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\DB;
 
 class ManageProductController extends Controller
 {
@@ -32,11 +36,6 @@ class ManageProductController extends Controller
     public function insertProduct(Request $rq)
     {
       
-    
-
-       
-     
- 
         $product = product::create([
         'name' => "$rq->name",
         'price' => $rq->price,
@@ -56,5 +55,27 @@ class ManageProductController extends Controller
         ]);
         $image->move(public_path('images/productImages'), $ImageName);
         return response()->json();
+    }
+    public function discount(){
+       $day = Carbon::now()->toDateString();
+        
+        return view('admin/body/discount', compact('day'));
+    }
+
+    public function insertDiscount(Request $rq){
+   //  $validated = $rq->validated();
+       
+        discount::create(
+            ['name' => $rq->name,
+             'init' => $rq->init,
+             'value' => $rq->value,
+             'start_date' => $rq->start_date,
+             'end_date' => $rq->end_date,
+            ]
+        );
+        return redirect()->route('admin-discount')->with(['success' =>  'Thêm thành công']);
+
+        
+        
     }
 }
