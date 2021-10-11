@@ -3,13 +3,25 @@
 namespace App\Repositories;
 
 use App\Models\product;
+use Illuminate\Support\Facades\DB;
 
 class HomeRepository implements HomeRepositoryInterface{
 
     public function productCategory($id){
 
-     return   product::with('image')->where('category_id', $id)->take(6)->get()->toArray();
+     return   product::with('image')->where('category_id', $id)->orderBy('id', 'desc')->take(6)->get()->toArray();
 
+    }
+  
+
+    public function topProduct($id,$table){
+        return   $product = DB::table($table)
+        ->selectRaw('products.*, images.*,count(*) as count, '.$table.'.product_id'  )
+        ->join('products','products.id','=',   "$table".'.product_id')
+        ->join('images','images.imageable_id', '=' ,'products.id')
+        ->where('products.category_id', $id)
+        ->groupBy('product_id')
+        ->orderBy('count' , 'desc')->take(6)->get()->toArray();
     }
     public function search($search)
 
