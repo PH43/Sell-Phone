@@ -19,20 +19,17 @@ use Illuminate\Support\Facades\Route;
 |
 */
 
-Route::get('/', function () {
-    return view('welcome');
-});
+
 
 Auth::routes();
-
-
-
 
 //Home
 Route::get('home',[HomeController::class ,'home'])->name('home');
 Route::get('home/product-category/{id}',[HomeController::class, 'productCategory'])->name('home-product-category');
+Route::get('home/product-buylot/{id}',[HomeController::class, 'productBuyLot'])->name('home-product-buyLot');
 Route::post('search-product',[HomeController::class ,'search'])->name('search-product');
-Route::get('test',[HomeController::class ,'test']);
+
+Route::get('test',[HomeController::class, 'test']);
 
 // Show Product 
 Route::get('list-product/category',[ListProductController::class, 'filterProduct'])->name('list-product-category');
@@ -43,6 +40,7 @@ Route::get('product/{id}',[DetailProductController::class, 'detailProduct'])->na
 Route::post('product/comment',[DetailProductController::class,'insertComment'])->name('product-comment');
 Route::get('product/comment/loadmore/{productId}/{page}',[DetailProductController::class,'loadMoreComments'])->name('load-comment');
 Route::get('product/comment/reply/{cmtId}',[DetailProductController::class, 'replyComment'])->name('reply-comment');
+Route::post('product/rate',[DetailProductController::class, 'rate'])->name('rate');
 
 // Cart
 Route::get('cart/show',[CartController::class, 'showCart'])->name('show-cart');

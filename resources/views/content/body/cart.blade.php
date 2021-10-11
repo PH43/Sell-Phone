@@ -283,10 +283,10 @@
                     <div class="name-info">
 
 
-                        <span>SUBTOTAL <div class="total">
+                        <span>TỔNG THANH TOÁN <div class="total">
                                 <h5>{{ $total }}$</h5>
                             </div></span>
-                        <span>Shipping & taxes caculated at checkout</span>
+                        <span>Giao hàng & thuế được tính khi thanh toán</span>
                     </div>
 
                     <div class="payment-cart">

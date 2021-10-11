@@ -71,10 +71,7 @@
             display: block;
         }
 
-        .avaluate i {
-            color: yellow;
-        }
-
+   
         .avaluate {
             color: darkgray;
         }
@@ -225,7 +222,7 @@
 
         .comment {
             clear: both;
-            margin-top: 100px;
+            transform: translateY(-120px);
             width: 96%;
             margin-left: 2%;
             background-color: white;
@@ -377,7 +374,80 @@
 .reply-comment{
     display: none;
 }
+.rate-product{
+                width: 96%;
+                margin-left: 2%;
+                margin-top: 3%;
+                height: auto;
+                background-color:white;
+                border-radius: 10px;
+                padding: 100px
+
+            }
+            .rate-product div{
+
+                width: 32%;
+                text-align: center;
+             display: inline-block;;
+           
+            }
+            .rate-info label{
+                display: block;
+            }
+            .rate-product div h5{
+                font-weight: bold;
+                font-size: 20px;
+           color:#212529;
+           padding: 16px 0px;
+                line-height: 28px;
+                font-family: roboto, arial, helvetica;
+            }
+            .rate-info p{
+                color: #495057;
+
+            } .rate-info h1{
+                font-size: 44px;
+                color: #cb1c22;
+                font-weight: 600;
+                line-height: 60px;
+            }
+            .rate-info span{
+                color:#99a2aa;
+            }
+.rate-chart {
+    float: right;
+   
+}
+.rate-chart   i{
+    font-size: 25px;
+    line-height: 60px;
+
+}
+
+
+.rate-chart input{
+
+margin-bottom: 2%;
+    display: block;
+    margin-left: 5%;
+    width: 90%;
+    height: 40px;
+    margin-top: 1%;
+}
+.rate-request{
+    float: right;
+    
+}
+.rating div{
+        float: left;
+        
+    }
     </style>
+    @if(isset($data['rating']['biggest']->star))
+    @php $star = $data['rating']['biggest']->star @endphp
+    @else
+    @php $star = 1 @endphp
+    @endif
     <div class="body">
         <div class="display-product">
             <img src="{{ asset('/images/productImages/' . $data['product'][0]['image']['url']) }}" alt="">
@@ -386,15 +456,14 @@
             <span class="categories-product"> {{ $data['categoryBrand'][0]['name'] }} /
                 {{ $data['categoryBrand'][0]['brands'][0]['name'] }} </span>
             <span class="name-product">{{ $data['product']['0']['name'] }}</span>
-            <span class="avaluate"> <i class="fas fa-star"></i> <i class="fas fa-star"></i> <i
-                    class="fas fa-star"></i> <i class="fas fa-star"></i> <i class="fas fa-star"></i> <span> 1 bài
+            <span class="avaluate"> @for($i = 1; $i <= 5; $i++) <i  @if( $i <= $star ) style="color:#ea9d02 ;" @endif class="fas fa-star"></i> @endfor  <span> {{$data['rating']['count']}} bài
                     đánh giá</span></span>
             <span class="price-product">
                 {{ $data['product']['0']['price'] }} $
             </span>
 
             <div class="card-product">
-                <div class="card-quantity"><a href="">-</a><a href="">1</a><a href="">+</a>
+                <div class="card-quantity">
 
                     <a href="" style="color:white;background-color: #2c2c2c;   padding-left: 100px;
             padding-right: 100px;" 
@@ -402,16 +471,16 @@
             
             data-url="{{ route('addToCart', $data['product'][0]['id']) }}"
             >ADD TO CART</a>
-                    <a href="" class="card-heart"><i class="far fa-heart"></i></a>
+                
                 </div>
 
                 <div class="card-infoDetail">
-                    <span>Availability: {{ $data['status'] }}</span>
+                    <span>Tình trạng: {{ $data['status'] }}</span>
                     <div class="card-info">
-                        <h5>Details</h5>
-                        <span>
+                        <h5>Mô tả sản phẩm</h5>
+                        <p>
                             {{ $data['product']['0']['description'] }}
-                        </span>
+                        </p>
                     </div>
                 </div>
 
@@ -457,15 +526,66 @@
                     </div>
                 </div>
             @endforeach
-
-
-
-
-
-
-
-
         </div>
+     
+
+<div class="rate-product" >
+<div class="rate-info">
+<h5>Đánh giá & Nhận xét {{ $product['name'] }}</h5>
+<p>Đánh Giá Trung Bình</p>
+
+<h1>{{$star}} /5</h1>
+<label for=""> @for($i=1;$i<=5;$i++) <i @if( $i <= $star ) style="color:#ea9d02 ;" @endif class="fas fa-star"></i> @endfor </label>
+<span>{{$data['rating']['count']}} đánh giá</span>
+
+</div>
+
+<div class="rate-request">
+    <h5>Đánh giá của khách hàng</h5>
+   <div class="rating" style="width: 90%;;height: 400px;margin-top: 20px;text-align: left;margin-left: 5%">
+ @foreach ($data['rating']['rating']  as $rating )
+   
+    
+  <div style="width: 100%;margin-bottom: 1%;">
+    <div style="width:15%">
+        <label for="">{{$rating['name']}}  Sao</label>
+       </div>
+       <div style="width: 85%">
+        <div style="width:@if(isset($rating['ratio'])) {{$rating['ratio']}}% @else 1%  @endif ;height: 20px;background-color: red;"></div>
+       </div>
+  </div>
+  @endforeach  
+   </div>
+    </div>
+  
+<div class="rate-chart">
+
+    <span style="position: absolute;transform: translateX(-190px);color: red;padding-top: 50px ">
+        @if(isset($message)) {{$message}} @endif</span>
+   
+    <h5 >Bạn chấm sản phẩm này bao nhiêu sao?</h5>
+
+    
+
+    <form action="{{ route('rate') }}" method="post" id="rate-user">
+        @csrf
+        @for($i=1;$i<=5;$i++) <i id="star-{{$i}}" @if($i < 2) style="color:#ea9d02;" @endif  data-star="{{$i}}" class="star fas fa-star"></i> @endfor 
+        <input type="hidden" name="star" id="star" value="1">
+        <input type="hidden" name="product_id" value="{{$data['product']['0']['id']}}">
+        <input  type="text" placeholder="Họ Và Tên" name="name">
+        @error('name')
+        <span style="text-align: center;color: red;">{{$message}}</span>
+    @enderror
+        <input   type="text" placeholder="Email"  name="email">
+        @error('email')
+        <span style="transform: translateY();text-align: center;color: red;">{{$message}}</span>
+    @enderror
+        <input type="submit" href="" id="rate-product" class="btn btn-danger">
+    </form>
+</div>
+
+</div>
+
 
         <div class="comment">
 
@@ -521,39 +641,8 @@
                     </div>
 
 
-                    <script>
+     
             
-                        $(document).on('click','#reply-comment', function(e){
-                            e.preventDefault();
-               
-               var id =     $(this).data('reply');
-                          
-                $('#reply-comment-'+ id).toggle(500);
-
-                       $.ajax({
-                        type: "get",
-                        url:   $(this).data('url'),
-                        success: function(data) {
-                        
-                var reply = '';
-                           
-                            if(data.count !== 0) {
-                reply +=           ' <h5> ' + data.data[0].user.name + '</h5>' +
-                ' <span><i class="fas fa-clock"></i> ' + data.data[0].updated_at + '   </span> <span><i></i></span>' +
-                   '  <label >' + data.data[0].content + ' </label>'
-                   
-                           
-                $('#reply-comment-'+id).css("border-left", "5px solid black");
-                }
-
-
-                 
-                 
-                    $('#reply-'+ id).html(reply);
-                        }   
-                       });
-                        });
-                    </script>
                     <div class="loadMore">
                         @for ($i = 2; $i <= ceil($data['comment']['count']/5); $i++ )
                        
@@ -573,6 +662,36 @@
             </div>
         </div>
     </div>
+
+
+    <script>
+
+
+
+        $(".star").hover(function(){
+            var star =    $(this).data('star');
+    
+            for(let i = 2; i <= star ; i++  ){
+            
+               $("#star-"+i).css("color","#ea9d02");    
+            }
+        },function(){
+            var star =    $(this).data('star');
+            for(let i = 2; i <= star ; i++  ){
+            
+                $("#star-"+i).css("color","#212529");    
+            }
+        });
+        $(".star").click(function(){
+            var star =    $(this).data('star');
+            $("#star").val(star);
+            for(let i = 2; i <= star ; i++  ){
+            
+               $("#star-"+i).css("color","#ea9d02");    
+            }
+        });
+       
+    </script>
     <script>
         $(document).on('click', '#commentproduct', function(e) {
 

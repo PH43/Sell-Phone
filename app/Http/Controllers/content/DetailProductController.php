@@ -3,7 +3,7 @@
 namespace App\Http\Controllers\content;
 
 use App\Http\Controllers\Controller;
-
+use App\Http\Requests\ratingRequest;
 use App\Models\category;
 
 use App\Repositories\CommentRepositoryInterface;
@@ -34,16 +34,18 @@ class DetailProductController extends Controller
         $data['relatedProduct'] = $this->productRepo->relatedProduct($data['product'][0]['name'], $data['product'][0]['id']);
 
         $data['comment'] = $this->commentRepo->listComment('product_id', $data['product'][0]['id'], 1, 5);
-        //dd($data);
-
+      
+        $data['rating'] =   $this->commentRepo->liststar($id);
 
         if ($data['product'][0]['quantity'] >= 1) {
-            $data['status'] = 'stocking';
+            $data['status'] = 'Còn hàng';
         } else {
-            $data['status'] = 'Out of stock';
+            $data['status'] = 'Hết hàng';
         }
 
+        
         return  view('content/body/detailproduct', compact('data'));
+    
     }
 
     public function insertComment(Request $rq)
@@ -74,4 +76,13 @@ class DetailProductController extends Controller
 
         return response()->json($comments);
     }
+
+    public function rate(Request $rq){
+        $this->validate($rq,[ 'name' => 'required|min:6|max:24',
+                                 'email' => 'required|email']);
+        $this->commentRepo->rate($rq->all());
+        return redirect()->back()->with(['message' => 'Đánh giá thành công']);
+    }
+
+   
 }

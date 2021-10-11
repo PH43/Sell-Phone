@@ -318,7 +318,7 @@
         });
     </script>
     <div class="show-product">
-        <a>You want it? We got it</a>
+        <a>Sản phẩm mới nhất</a>
         @foreach ($categories as $b)
             <span><a href="Javascript:0" 
                 class="change-product" 
@@ -330,7 +330,7 @@
 
         <div class="buy-product">
 
-            @foreach ($products as $product)
+            @foreach ($products['new'] as $product)
            
                 <div class="product-info">
                     <a href="{{ route('detail-product', $product['id']) }}"> <img src="{{ asset('/images/productImages/'. $product['image']['url'] ) }}" alt=""></a>
@@ -353,6 +353,85 @@
 
         </div>
     </div>
+
+
+
+    <div class="show-product">
+        <a>Sản phẩm mua nhiều nhất</a>
+        @foreach ($categories as $b)
+            <span><a href="Javascript:0" 
+                class="change-product" 
+                id="category-{{ $b['id'] }}"
+                data-url="{{ route('home-product-category', $b['id']  ) }}">
+                
+                {{ $b['name'] }}</a></span>
+        @endforeach
+
+        <div class="buy-product">
+
+            @foreach ($products['buyLot'] as $product)
+           
+                <div class="product-info">
+                    <a href="{{ route('detail-product', $product->id) }}"> <img src="{{ asset('/images/productImages/'. $product->url ) }}" alt=""></a>
+                  <div class="add-cart">
+                    <div class="add">
+                        <a class="addToCart" href="" data-url="{{ route('addToCart', $product->id) }}" ><span>Add To Cart</span></a>
+                    </div>
+                  </div>
+                    <div class="product-name">
+                        <span>{{ $product->name }} </span>
+                    </div>
+                    <div class="product-price">
+                        <span>{{ $product->price }}$</span>
+                    </div>
+                    
+                </div>
+
+           
+            @endforeach
+
+        </div>
+    </div>
+
+
+
+    <div class="show-product">
+        <a>Sản phẩm mua đánh giá cao nhất</a>
+        @foreach ($categories as $b)
+            <span><a href="Javascript:0" 
+                class="change-product" 
+                id="category-{{ $b['id'] }}"
+                data-url="{{ route('home-product-category', $b['id']  ) }}">
+                
+                {{ $b['name'] }}</a></span>
+        @endforeach
+
+        <div class="buy-product">
+
+            @foreach ($products['rating'] as $product)
+           
+                <div class="product-info">
+                    <a href="{{ route('detail-product', $product->id) }}"> <img src="{{ asset('/images/productImages/'. $product->url ) }}" alt=""></a>
+                  <div class="add-cart">
+                    <div class="add">
+                        <a class="addToCart" href="" data-url="{{ route('addToCart', $product->id) }}" ><span>Add To Cart</span></a>
+                    </div>
+                  </div>
+                    <div class="product-name">
+                        <span>{{ $product->name }} </span>
+                    </div>
+                    <div class="product-price">
+                        <span>{{ $product->price }}$</span>
+                    </div>
+                    
+                </div>
+
+           
+            @endforeach
+
+        </div>
+    </div>
+   
    
     <hr style="clear: both;  transform: translateY(70px);width: 100%;height: 1px;">
 
@@ -588,7 +667,7 @@
 
 
 <script>
-    $('.change-product').click(function() {
+    $(document).on( 'click','.change-product', function() {
         let getid = $(this).attr('id');
      
         let changeProduct = $(this).data("url");
@@ -603,9 +682,9 @@
                 html += '<div class="product-info">' +
                ' <a href="http://localhost/sell-phone/public/product/'+ data.id + '" > <img src="http://localhost/sell-phone/public/images/productImages/'+data.image.url+'" alt=""></a>'+
                '<div class="add-cart">' +
-                   ' <div class="add">' +
-                       ' <a href="" ><span>Add To Cart</span></a>' +
-                  '  </div></div>' +
+               ' <div class="add">'+
+                       ' <a class="addToCart" href="" data-url="http://localhost/sell-phone/public/cart/'+data.id+'" ><span>Add To Cart</span></a>' +
+                    '</div> </div>' +
                 '<div class="product-name">'+
                 '<span> ' + data.name + ' </span></div>'+
                 '<div class="product-price">'+

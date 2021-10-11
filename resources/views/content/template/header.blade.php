@@ -474,7 +474,6 @@ display: block;
     $(document).on('click', '.addToCart',  function(e){
 e.preventDefault();
 var url = $(this).data("url");
-console.log(url);
 $.ajax({
     type: "get",
     url:  url,

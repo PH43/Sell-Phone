@@ -7,13 +7,13 @@ use Illuminate\Database\Eloquent\Model;
 
 class product extends Model
 {
-    protected $fillable = ['name', 'price', 'quantity', 'description', 'category_id','brand_id'];
+    protected $fillable = ['name', 'price', 'quantity', 'description', 'category_id', 'brand_id'];
     const TABLE = 'products';
     protected $table = self::TABLE;
     use HasFactory;
     public function categories()
     {
-        return $this->belongsTo(category::class);
+        return $this->belongsTo(category::class,'category_id');
     }
     public function brands()
     {
@@ -28,7 +28,13 @@ class product extends Model
     {
         return $this->morphOne(image::class, 'imageable');
     }
+    public function order_details()
+    {
 
-
-   
+        return $this->hasMany(order_detail::class, 'product_id','id');
+    }
+    public function ratings()
+    {
+        return $this->hasMany(rating::class);
+    }
 }
