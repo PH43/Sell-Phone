@@ -25,17 +25,33 @@ class ListProductController extends Controller
     {
 
         $param = $rq->all();
-    
-          $data =  $this->productRepo->filterProduct($param);
-       
+        DB::enableQueryLog();
+ 
+        $data =  $this->productRepo->filterProduct($param);
+     //  dd( DB::getQueryLog());
         if ($rq->ajax()) {
+      
            
+            if ($rq->cate) {
+                $brands = category::with('brands')->where('id', $rq->cate)->get()->toArray();
+            } else {
+                $brands =  category::with('brands')->get()->toArray();
+            }
+            $data['brands'] = $brands;
+            $data['products'] = $data;
+
             return response()->json($data);
         } else {
-
-            $category = category::BrandCategory($rq->cate);
-
-            return view('content/body/listProduct', compact('data', 'category',));
+        
+            if ($rq->has('search')) {
+                $category['category'] = category::get()->toArray();
+                $category[0]['brands'] = brand::get();
+            } else {
+                $category = category::with('brands')->where('id', $rq->cate)->get()->toArray();
+            }
+       
+            //return $category;
+            return view('content/body/listProduct', compact('data', 'category'));
         }
     }
 }

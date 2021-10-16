@@ -26,14 +26,13 @@ Auth::routes();
 //Home
 Route::get('home',[HomeController::class ,'home'])->name('home');
 Route::get('home/product-category/{id}',[HomeController::class, 'productCategory'])->name('home-product-category');
-Route::get('home/product-buylot/{id}',[HomeController::class, 'productBuyLot'])->name('home-product-buyLot');
+Route::get('home/product-buylot/{id}/{table}',[HomeController::class, 'topProduct'])->name('top-product');
 Route::post('search-product',[HomeController::class ,'search'])->name('search-product');
 
 Route::get('test',[HomeController::class, 'test']);
 
 // Show Product 
 Route::get('list-product/category',[ListProductController::class, 'filterProduct'])->name('list-product-category');
-Route::get('list-product/category/{cate}/brand/{brand}',[ListProductController::class, 'productBrands'])->name('list-product-brand');
 
 // product Detail
 Route::get('product/{id}',[DetailProductController::class, 'detailProduct'])->name('detail-product');

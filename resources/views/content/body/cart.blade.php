@@ -136,12 +136,20 @@
 
         .order-product {
 
-            width: 100%;
+            width: 40%;
+            overflow-Y:scroll;
+            height: 520px;
             text-align: center;
+            margin-top: 2%;
+            margin-left: 32%;
             display: none;
+            box-shadow: rgba(100, 100, 111, 0.2) 0px 7px 29px 0px;
 
         }
-
+        .order-product::-webkit-scrollbar{
+            width: 2px;
+    background-color: #F5F5F5;
+        }
         .enter-info label {
             text-shadow: 5px 5px 10px white;
             color: greenyellow;
@@ -163,9 +171,10 @@
         }
 
         .enter-info {
-            width: 35%;
-            box-shadow: rgba(100, 100, 111, 0.2) 0px 7px 29px 0px;
 
+            box-shadow: rgba(100, 100, 111, 0.2) 0px 7px 29px 0px;
+        
+            width: 100%;
             opacity: 1;
             margin-top: 1%;
             display: inline-block;
@@ -225,12 +234,12 @@
                 <table class="table  table-hover">
                     <thead>
                         <tr>
-                            <th scope="col-2">Image</th>
-                            <th scope="col-4">Product</th>
-                            <th scope="col">Quantity</th>
-                            <th scope="col">Price</th>
-                            <th scope="col">Total Price</th>
-                            <th scope="col">Action</th>
+                            <th scope="col-2">Ảnh</th>
+                            <th scope="col-4">Sản phẩm</th>
+                            <th scope="col">Số lượng</th>
+                            <th scope="col">Gía sản phẩm</th>
+                            <th scope="col">Tổng giá tiền</th>
+                            <th scope="col">Xóa</th>
                         </tr>
                     </thead>
 
@@ -247,9 +256,9 @@
                                 <td><input class="qty" data-cartid="{{ $cart['id'] }}"
                                         data-price="{{ $cart['price'] }}" style="width: 40px" type="number"
                                         value="{{ $cart['qty'] }}" id="qty-{{$cart['id']}}" min="1" max="10"></td>
-                                <td> {{ $cart['price'] }}$</td>
+                                <td> ${{ number_format($cart['price'],0,',') }}</td>
                                 <td class="total-price-{{ $cart['id'] }}">
-                                    <span>{{ $cart['qty'] * $cart['price'] }}$ </span>
+                                    <span>${{number_format($cart['qty'] * $cart['price'],0,',') }} </span>
                                 </td>
                                 <td><a href="" onclick="deleteCart({{ $cart['id'] }})">Delete</a></td>
                             </tr>
@@ -276,7 +285,7 @@
                         <li> <span>Thanh toán bằng thẻ Visa,Master Card</span> </li>
                     </div>
                     <div class="buy-product">
-                        <a href="">Tiếp tục mua hàng</a>
+                        <a href="{{ route('home') }}">Tiếp tục mua hàng</a>
                     </div>
                 </div>
                 <div class="payment-details">
@@ -284,7 +293,7 @@
 
 
                         <span>TỔNG THANH TOÁN <div class="total">
-                                <h5>{{ $total }}$</h5>
+                                <h5>{{ number_format ($total,0,',') }}$</h5>
                             </div></span>
                         <span>Giao hàng & thuế được tính khi thanh toán</span>
                     </div>
@@ -297,12 +306,16 @@
         @else
             <span style="margin-left: 2%;">Không có sản phẩm trong giỏ hàng của bạn</span>
         @endif
+        <div class="message" style="display: none;">
+            <span style="margin-left: 2%;"> Kiểm tra email để xem giỏ hàng của bạn </span>
+        </div>
     </div>
 
 
 
 
-    <div class="order-product fixed-top">
+   <div class="fixed-top form-order" >
+    <div class="order-product">
         <div class="enter-info  ">
             <a href="javascript:0"
                 style="float:right;font-size: 20px;;color: black;margin-right: 10px;transform: translateY(-20px)"
@@ -310,13 +323,16 @@
             <h5>ORDERS PRODUCT</h5>
 
             <span style="line-height: 40px;">Để đặt hàng, vui lòng thêm địa chỉ nhận hàng</span>
-            <form method="post"  id="order-form" style="text-align: center;">
+            <form method="post" action="{{ route('order') }}" id="order-form" style="text-align: center;">
              @csrf
 
                 <div id="toggle">
 
                     <div class="input">
-                        <input type="text" name="customer_name" id="name" placeholder="Vui lòng nhập họ">
+                        
+                        <input type="text" name="customer_name" id="name" placeholder="Vui lòng nhập họ"
+                        value="@if(isset(Auth::user()->id)) {{ Auth::user()->name }}  @endif"
+                        >
  
                     </div>
 
@@ -340,16 +356,20 @@
 
                     </div>
                     <div class="input">
+                        <input type="text" name="email" id="email" placeholder="Email" value="@if(isset(Auth::user()->id)) {{ Auth::user()->email }}  @endif" >
+                    </div>
+                    <div class="input">
                         <input type="text" name="numberphone" id="numberphone" placeholder="Number Phone">
                     </div>
                     <div class="input">
                         <input type="text" name="message" id="message" placeholder="Message">
                     </div>
                 </div>
-                <input style="margin-top: 20px" type="submit" class="requestorder" value="hoàn thành"  class="btn btn-danger">
+                <input style="margin-top: 20px" type="submit" class="requestorder btn btn-primary" value="hoàn thành"  class="btn btn-danger">
             </form>
         </div>
     </div>
+   </div>
 
 
 
@@ -362,12 +382,18 @@
                 rules: {
                     customer_name: {
                         required: true,
+                        minlength:6,
+                        maxlength:24,
                     },
                     numberphone: {
                         required: true,
+                        minlength:9,
+                        maxlength:12,
+                        number:true,
                     },
                     email: {
                         required: true,
+                       // email:true,
                     },
                     address: {
                         required: true,
@@ -398,6 +424,7 @@
         var addressDetails = $(".addressDetails").val();
         var numberphone = $("#numberphone").val();
         var message = $("#message").val();
+        var email = $("#email").val();
             $.ajax({
                 type: "POST",
                 url: "{{ route('order') }}",
@@ -409,13 +436,16 @@
                 numberphone:numberphone,
                 addressDetails:addressDetails,
                 message:message,
+                email:email,
                 _token:$('input[name=_token]').val()
                 },
                 success: function(data) {
+                    console.log(data);
                  if(data == 1){
                      alert('Mua hành thành công');
                      $('.show-cart').remove();
                      $('.payment').remove();
+                     $('.message').show();
                      $('.order-product').hide(500);
                   //   document.getElementById('order-form').reset();
                  }else{
@@ -446,7 +476,7 @@
                             'aria-label="Default select example" name="dictricts" placeholder="Address">' +
                             '<option value="" selected>Quận,Huyện</option>'  
                         $.each(data[0].districts , function(key, data){
-                            console.log(data.name);
+                         
                       address +=  '<option  value="'+data.name+'"> ' + data.name + ' </option>' 
                         })
                       address += '</select>' +
@@ -500,12 +530,6 @@
    });
 </script>
 
-
-
-
-
-
-
     <script>
         $(document).on('click', '.order-products', function(e) {
             e.preventDefault();
@@ -522,8 +546,22 @@
                 type: "get",
                 url: "http://localhost/sell-phone/public/cart/delete/" + id,
                 success: function(data) {
+                    console.log(data);
                     $("#cart-" +id).remove();
                     $('.cart-' + id).remove();
+                    var totalPrice = 0;
+
+                    $.each(data.cart, function(key, data) {
+                    totalPrice += (data.qty * data.price);
+                    });
+
+                    var html = '';
+                    console.log(totalPrice);
+                    html += '<h5> $' + formatNumber(totalPrice)  + ' </h5>'
+                    $('.total').html(html);
+
+
+
                     if (data.cart.length <= 0) {
                         $('.show-cart').remove();
                         $('.payment').remove();
@@ -554,7 +592,7 @@
                 deleteCart(cartId);
             } else {
               
-                    requestCart(cartId,qty,price);
+                requestCart(cartId,qty,price);
             }
         });
     </script>
@@ -568,17 +606,17 @@
                     success: function(data) {
 
                         var total = '';
-                        total += '<span> ' + (qty * price) + '$</span> '
+                        total += '<span> $' + formatNumber(qty * price) + '</span> '
                         $('.total-price-' + cartId).html(total);
 
                         var totalPrice = 0;
-
                         $.each(data.cart, function(key, data) {
                             totalPrice += (data.qty * data.price);
                         });
 
                         var html = '';
-                        html += '<h5> ' + totalPrice + '$ </h5>'
+                
+                        html += '<h5> $' + formatNumber(totalPrice)  + ' </h5>'
                         $('.total').html(html);
                     }
                 })

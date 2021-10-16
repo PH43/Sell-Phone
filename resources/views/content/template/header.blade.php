@@ -272,8 +272,13 @@
 
     .show-search-product span {
         color: black;
-        display: block;
+            display: block;
+            width: 100%;
         background-color: rgb(245, 245, 245);
+    }
+    .show-search-product span:hover{
+    color: rgb(54, 54, 54);
+    opacity: 0.7;
     }
 .cart-show:hover .show-cart-product1{
 display: block;
@@ -295,17 +300,21 @@ display: block;
 
 </style>
 <?php  $cart = Session::all(); ?>
+<meta name="csrf-token" content="{{ csrf_token() }}">
 <header class="fixed-top">
+    
     <div class="header-top ">
         <div class="header-top1">
             <div class="header-name">
                 <a href="{{ route('home') }}"><img src="{{ asset('/images/IconPage.png') }}" alt=""></a>
             </div>
             <div class="header-search">
-                <form action="">
-                    @csrf
+                <form action="{{ route('list-product-category', ) }}" method="get">
+     
                     <i class="fas fa-search"></i>
-                    <input type="search" placeholder="Search" class="search">
+                    <input type="search" placeholder="Search" name="search" class="search" @if (isset($_GET['search']))
+                        value="{{ $_GET['search'] }}"
+                    @endif>
                 </form>
 
                 <div class="search-product" style="display: none;">
@@ -331,7 +340,7 @@ display: block;
                             <div class="addproduct" id="cart-{{$cart['id'] }}">
                                 <li> <img src="http://localhost/sell-phone/public/images/productImages/{{ $cart['image'] }}" alt=""> </li>
                                 <li style="width:40%;  "> <span> {{ $cart['name'] }}</span> </li>
-                                <li style="width:15%;" > <span style="color: orange ; "> <span  > {{ $cart['price'] }}$</span> </li>
+                                <li style="width:15%;" > <span style="color: orange ; "> <span  > ${{ number_format($cart['price'],0,',') }}</span> </li>
                               
                                </div>
                             @endforeach 
@@ -370,8 +379,6 @@ display: block;
                         <a href="">Change Password</a>
                     </li>
                     </li>
-
-
 
                 </div>
 
@@ -439,36 +446,54 @@ display: block;
         $('.acction-users').hide();
     
     });
+    function searchProduct(search,token){
+       $.ajax({
+           type: "POST",
+           url: "{{ route('search-product') }}",
+           data: {
+               search: search,
+               _token: token
 
+           },
+           success: function(data) {
+               var html = '';
+               $.each(data, function(key, data) {
+                   html += '<a style="text-decoration:none" href="http://localhost/sell-phone/public/product/' + data.id + '"><span>' + data.name + '</span></a>'
+
+               });
+               $('.search-product').show();
+               if (search.length <= 2) {
+                   $('.search-product').hide();
+               }
+               $('.show-search-product').html(html);
+
+           }
+       })
+   
+}
+$(document).on('click', '.search', function() {
+    var search = $(this).val();
+    var token = $('meta[name="csrf-token"]').attr('content');
+    if (search.trim().length >= 2) {
+   
+       
+        searchProduct(search,token);
+    }
+    });
 
     $(document).on('keyup', '.search', function() {
         var search = $(this).val();
-        if (search.trim().length >= 2) {
-            $.ajax({
-                type: "POST",
-                url: "{{ route('search-product') }}",
-                data: {
-                    search: search,
-                    _token: $('input[name="_token"]').val(),
-
-                },
-                success: function(data) {
-                    var html = '';
-                    $.each(data, function(key, data) {
-                        html += '<a href=""><span>' + data.name + '</span></a>'
-
-                    });
-                    $('.search-product').show();
-                    if (search.length <= 2) {
-                        $('.search-product').hide();
-                    }
-                    $('.show-search-product').html(html);
-
-                }
-            })
-        }
+    var token = $('meta[name="csrf-token"]').attr('content');
+    if (search.trim().length >= 2) {       
+        searchProduct(search,token);
+    }
     });
+
+
+   
 </script>
+
+
 
 <script>
     $(document).on('click', '.addToCart',  function(e){
@@ -485,7 +510,7 @@ $.ajax({
        ' <div class="addproduct" id="cart-'+ data.id +'">' + 
          ' <li> <img src="http://localhost/sell-phone/public/images/productImages/'+data.image+' " alt=""> </li>' + 
           ' <li style="width:40%;  "> <span> '+data.name+'</span> </li>' +
-        ' <li style="width:15%;" > <span style="color: orange ; "> <span  > '+data.price +' $</span> </li>' +
+        ' <li style="width:15%;" > <span style="color: orange ; "> <span  > '+formatNumber(data.price) +' $</span> </li>' +
    
         ' </div>' 
 
@@ -497,4 +522,8 @@ $.ajax({
 })
 
     });
+
+    function formatNumber (num) {
+    return num.toString().replace(/(\d)(?=(\d{3})+(?!\d))/g, "$1,")
+}
 </script>

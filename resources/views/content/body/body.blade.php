@@ -322,28 +322,30 @@
         @foreach ($categories as $b)
             <span><a href="Javascript:0" 
                 class="change-product" 
-                id="category-{{ $b['id'] }}"
-                data-url="{{ route('home-product-category', $b['id']  ) }}">
+                id="new-{{ $b['id'] }}"
+                data-url="{{ route('home-product-category', $b['id']  ) }}"
+                data-product="product-new"
+                >
                 
                 {{ $b['name'] }}</a></span>
         @endforeach
 
-        <div class="buy-product">
+        <div class="buy-product" id="product-new">
 
             @foreach ($products['new'] as $product)
            
                 <div class="product-info">
-                    <a href="{{ route('detail-product', $product['id']) }}"> <img src="{{ asset('/images/productImages/'. $product['image']['url'] ) }}" alt=""></a>
+                    <a href="{{ route('detail-product', $product->id) }}"> <img src="{{ asset('/images/productImages/'. $product->url ) }}" alt=""></a>
                   <div class="add-cart">
                     <div class="add">
-                        <a class="addToCart" href="" data-url="{{ route('addToCart', $product['id']) }}" ><span>Add To Cart</span></a>
+                        <a class="addToCart" href="" data-url="{{ route('addToCart', $product->id) }}" ><span>Add To Cart</span></a>
                     </div>
                   </div>
                     <div class="product-name">
-                        <span>{{ $product['name'] }} </span>
+                        <span>{{ $product->name }} </span>
                     </div>
                     <div class="product-price">
-                        <span>{{ $product['price'] }}$</span>
+                        <span>${{ number_format($product->price,0,',') }}</span>
                     </div>
                     
                 </div>
@@ -361,13 +363,15 @@
         @foreach ($categories as $b)
             <span><a href="Javascript:0" 
                 class="change-product" 
-                id="category-{{ $b['id'] }}"
-                data-url="{{ route('home-product-category', $b['id']  ) }}">
+                id="buylot-{{ $b['id'] }}"
+                data-url="{{ route('top-product', ['id' => $b['id'],'table' => 'order_details']) }}"
+                data-product="product-buylot"
+                >
                 
                 {{ $b['name'] }}</a></span>
         @endforeach
 
-        <div class="buy-product">
+        <div class="buy-product" id="product-buylot">
 
             @foreach ($products['buyLot'] as $product)
            
@@ -382,7 +386,7 @@
                         <span>{{ $product->name }} </span>
                     </div>
                     <div class="product-price">
-                        <span>{{ $product->price }}$</span>
+                        <span>${{ number_format($product->price,0,',') }}</span>
                     </div>
                     
                 </div>
@@ -396,17 +400,18 @@
 
 
     <div class="show-product">
-        <a>Sản phẩm mua đánh giá cao nhất</a>
+        <a>Sản phẩm nhiều  đánh giá  nhất</a>
         @foreach ($categories as $b)
             <span><a href="Javascript:0" 
                 class="change-product" 
-                id="category-{{ $b['id'] }}"
-                data-url="{{ route('home-product-category', $b['id']  ) }}">
+                id="rating-{{ $b['id'] }}"
+                data-url="{{ route('top-product', ['id' => $b['id'],'table' => 'ratings']) }}"
+                data-product="product-rating">
                 
                 {{ $b['name'] }}</a></span>
         @endforeach
 
-        <div class="buy-product">
+        <div class="buy-product" id="product-rating">
 
             @foreach ($products['rating'] as $product)
            
@@ -421,7 +426,7 @@
                         <span>{{ $product->name }} </span>
                     </div>
                     <div class="product-price">
-                        <span>{{ $product->price }}$</span>
+                        <span>${{ number_format($product->price,0,',') }}</span>
                     </div>
                     
                 </div>
@@ -669,9 +674,10 @@
 <script>
     $(document).on( 'click','.change-product', function() {
         let getid = $(this).attr('id');
-     
+        var addproduct = $(this).data("product");
         let changeProduct = $(this).data("url");
 
+        
         $.ajax({
             type: "get",
             url: changeProduct,
@@ -680,7 +686,7 @@
                 $.each(data, function(key, data) {
         
                 html += '<div class="product-info">' +
-               ' <a href="http://localhost/sell-phone/public/product/'+ data.id + '" > <img src="http://localhost/sell-phone/public/images/productImages/'+data.image.url+'" alt=""></a>'+
+               ' <a href="http://localhost/sell-phone/public/product/'+ data.id + '" > <img src="http://localhost/sell-phone/public/images/productImages/'+data.url+'" alt=""></a>'+
                '<div class="add-cart">' +
                ' <div class="add">'+
                        ' <a class="addToCart" href="" data-url="http://localhost/sell-phone/public/cart/'+data.id+'" ><span>Add To Cart</span></a>' +
@@ -688,12 +694,12 @@
                 '<div class="product-name">'+
                 '<span> ' + data.name + ' </span></div>'+
                 '<div class="product-price">'+
-                '<span>' + data.price + '$</span></div></div>'
+                '<span>$' + formatNumber(data.price) + '</span></div></div>'
 
                 });
-                $('.buy-product').html(html);
-                $('.change-product').css('color', '#757575')
-                $('#' + getid).css('color', '#c27b43');
+                $('#'+addproduct).html(html);
+                $('[data-product='+ addproduct + ']' ).css('color', '#757575');
+                $('#'+getid).css('color', '#c27b43');
 
             }
         });

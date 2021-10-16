@@ -7,6 +7,7 @@ use App\Models\product;
 use App\Repositories\AddressRepositoryInterface;
 use App\Repositories\OrderRepositoryInterface;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Mail;
 
 class orderController extends Controller
 {
@@ -20,20 +21,21 @@ class orderController extends Controller
     public function order(Request $rq)
 
     {
-     
-      
+
+  
 
         if ($this->orderRepo->checkQtyProduct() > 0) {
             $product = product::find($this->orderRepo->checkQtyProduct());
-
             $message = $product['name'] . 'Không đủ số lượng sản phẩm';
         } else {
             $this->orderRepo->updateQtyProduct();
-            $this->orderRepo->order($rq->all());
-            $message = 1;
+            $info =  $this->orderRepo->order($rq->all());
+            $this->orderRepo->sendMail($info);
+            session()->pull('cart', 'default');
+            return $message = 1;
         }
-   
-       return response()->json($message);
+
+        return response()->json($message);
     }
 
     public function dictrict($id)

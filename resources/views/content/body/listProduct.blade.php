@@ -86,6 +86,8 @@ text-align: center;
 
 color: white;
 font-weight: 500;
+font-size: 20px;
+font-weight: bold;
 
 }
 
@@ -140,7 +142,9 @@ border: 1px solid black;
         .count-product {
             font-weight: 700;
         }
-
+        .count-product span{
+            font-weight: 400;
+        }
         .product-details span {
             text-align: left;
             display: block;
@@ -294,13 +298,15 @@ border: 1px solid black;
         }
 
         .take-product a {
+            font-weight: bold;
             text-decoration: none;
             color: rgb(128, 126, 126);
             display: inline-block;
             text-align: center;
             font-size: 17px;
-            padding: 5px 20px;
-            border: 1px solid rgb(167, 167, 167);
+            padding: 8px 13px;
+            margin-right: 5px;
+            border: 2px solid rgb(167, 167, 167);
 
         }
 
@@ -309,6 +315,8 @@ border: 1px solid black;
             position: relative;
             padding-left: 35px;
             margin-bottom: 12px;
+            
+      
             cursor: pointer;
             font-size: 15px;
             -webkit-user-select: none;
@@ -377,9 +385,20 @@ border: 1px solid black;
         <div class="buy-product">
             <div class="info-category-page">
                 <div class="info-category">
-                    <span class="name-category">{{ $category['name'] }} <span class="name-factory"></span></span>
-                    <span><span class="count-product"> </span>
-                       {{ $data['count'] }} devices found</span>
+                    <span class="name-category">
+                        @if(isset($_GET['search']))
+                        Từ khóa tìm kiếm: {{$_GET['search']}}
+                        @else
+                        @if(isset( $data['products'][0]['categories']['name'] ))
+                        {{ $data['products'][0]['categories']['name'] }}
+                        @else
+                        Không có sản phẩm này
+                        @endif
+                     
+                        @endif
+                        
+                        <span class="name-factory"></span></span>
+                    <span class="count-product"><span >({{ $data['count'] }} Sản phẩm)</span></span>
                     <div class="images-category">
                         <div class="owl-carousel owl-theme">
 
@@ -405,36 +424,37 @@ border: 1px solid black;
                     <div class="select-product-left">
                         <span>Ưu tiên xem:</span>
                      
-                        <a class="filter-product"  
+                        <a class="sortProduct"  
                         @if (isset($_GET['colum']) && isset($_GET['type']))
                         @if($_GET['colum'] == 'id' && $_GET['type'] == 'desc')  
                         style="background-color: #cb1c22;  color: white; "  @endif 
                         @endif
-                        href="Javascript:0" onclick="changecolor(1)"  id="sort-1"  data-colum="id" data-type="desc">Sản phẩm mới nhất</a>
+                
+                        href="Javascript:0" data-color="1"  id="sort-1"  data-colum="id" data-type="desc">Sản phẩm mới nhất</a>
 
-                        <a class="filter-product"  
+                        <a class="sortProduct"  
                         @if (isset($_GET['colum']) && isset($_GET['type']))
                         @if($_GET['colum'] == 'id' && $_GET['type'] == 'asc')  
                         style="background-color: #cb1c22;  color: white; "  @endif 
                         @endif
-                        href="Javascript:0"  onclick="changecolor(2)" id="sort-2"   data-colum="id" data-type="asc">Sản phẩm cũ nhất </a>
+                        href="Javascript:0"  data-color="2" id="sort-2"   data-colum="id" data-type="asc">Sản phẩm cũ nhất </a>
 
 
-                        <a class="filter-product"
+                        <a class="sortProduct"
                         @if (isset($_GET['colum']) && isset($_GET['type']))
                         @if($_GET['colum'] == 'price' && $_GET['type'] == 'desc')  
                         style="background-color: #cb1c22;  color: white; "  @endif 
                         @endif
-                        href="Javascript:0"  onclick="changecolor(3)" id="sort-3"  data-colum="price" data-type="desc">Giá từ cao đến
+                        href="Javascript:0"  data-color="3" id="sort-3"  data-colum="price" data-type="desc">Giá từ cao đến
                             thấp</a>
 
-                        <a class="filter-product"
+                        <a class="sortProduct"
                         
                         @if (isset($_GET['colum']) && isset($_GET['type']))
                         @if($_GET['colum'] == 'price' && $_GET['type'] == 'asc')  
                         style="background-color: #cb1c22;  color: white; "  @endif 
                         @endif
-                        href="Javascript:0"  onclick="changecolor(4)" id="sort-4"  data-colum="price" data-type="asc">Giá Từ thấp đến
+                        href="Javascript:0"  data-color="4" id="sort-4"  data-colum="price" data-type="asc">Giá Từ thấp đến
                             cao</a>
 
 
@@ -460,7 +480,7 @@ border: 1px solid black;
                             <span>{{ $product['name'] }} </span>
                         </div>
                         <div class="product-price">
-                            <span>{{ $product['price'] }}$</span>
+                            <span>$  {{ number_format($product['price'],0,',') }} </span>
                         </div>
                         
                     </div>
@@ -470,7 +490,17 @@ border: 1px solid black;
 
                 <div class="take-product">
                     @for ($i = 1; $i <= ceil($data['count']/10); $i++) 
-                    <a href="Javascript:0" style="margin-right:5px;"  class="filter-product" data-page="{{$i}}"  id="take-{{$i}}"> {{$i}} </a>             
+                    <a href="Javascript:0" 
+                    @if(isset($_GET['page']) && $_GET['page'] == $i) 
+        
+                    style="background-color:black;color:white;;"
+                    @else
+                    @if(!isset($_GET['page']) && $i == 1)
+                    style="background-color:black;color:white;"
+                    @endif
+                    @endif
+                    
+                    class="pagingProducts" data-page="{{$i}}"  id="page-{{$i}}"> {{$i}} </a>             
                         
                     @endfor
 
@@ -479,46 +509,64 @@ border: 1px solid black;
 
             </div>
         </div>
-        <div class="menu-categories" style="margin-bottom: 200px;">
-            <h3>Filter Product</h3>
+        <div class="menu-categories" style="margin-bottom: 400px;margin-top: 35px;">
+            <h3 style="color: orange;font-weight: bold">Lọc Sản Phẩm</h3>
 
 
             <div class="redirect-categories">
+                @if(isset($category['category']))
+                <div class="filter-price" style="margin-top:20px;">
+                    <a href="">Lọc Sản phẩm</a>
+                    <label class="container" style="font-weight: bold">Tất cả
+                        <input type="radio" class="categoryProducts"
+                    
+                        name="radio1" data-cate="all" checked>
+                        <span class="checkmark"></span>
 
+                    </label>
+                    @foreach ($category['category'] as $cate)
+                        
+                    <label class="container">{{$cate['name']}}
+                        <input type="radio" class="categoryProducts"
+                        @if(isset($_GET['cate']) && $_GET['cate'] == $cate['id'] )
+                        checked
+                        @endif
+                        
+                        name="radio1" data-cate="{{$cate['id']}}" >
+                        <span class="checkmark"></span>
+
+                    </label>
+                    @endforeach
+                </div>
+                @endif
                 <div class="add-product-checkbox">
 
-
-
-                    <a onclick="showbrands(1)" href="Javascript:0">Hãng sản xuất</a>
-
-
-            
-
+                    <a  href="Javascript:0">Hãng sản xuất</a>
 
                     @if (isset($_GET['brands']))
                         <?php $br = explode(',', $_GET['brands']); ?>
-
                     @endif
-                    @foreach ($category['brands'] as $brand)
-
-                        <label class="container"> <label for="">{{ $brand['name'] }}</label>
-                            <input type="checkbox" class="filter-product" id="brand" @if (isset($br))
-                            @if (in_array($brand['id'], $br))
-                                checked
-                            @endif
+                    <div class="add-brands">
+                    @foreach ($category[0]['brands'] as $brand)
+                  
+                    <label class="container"> <label for="">{{ $brand['name'] }}</label>
+                    <input type="checkbox" class="brandProducts" id="brand" 
+                    @if (isset($br))
+                    @if (in_array($brand['id'], $br))
+                        checked
                     @endif
-
+                    @endif
                     value="{{ $brand['id'] }}">
-
                     <span class="checkmark"></span>
                     </label>
-
+            
                     @endforeach
+                </div>
 
                     <div class="filter-price" style="margin-top:20px;">
                         <a href="">Lọc giá</a>
                         <label class="container">Tất cả
-                            <input type="radio" class="filter-product" name="radio" data-min="1" data-max="2" @if (!isset($_GET['min']))
+                            <input type="radio" class="filterPrice" name="radio" data-min="1" data-max="2" @if (!isset($_GET['min']))
                             checked
                             @endif
                             >
@@ -527,7 +575,7 @@ border: 1px solid black;
                         </label>
                         @for ($i = 1; $i <= 9; $i++)
                             <label class="container">Từ {{ ($i -1) * 500 + 1 }} - {{ $i * 500 }}
-                                <input type="radio" class="filter-product" name="radio" data-min="{{ ($i -1 ) * 500  + 1}}"
+                                <input type="radio" class="filterPrice" name="radio" data-min="{{ ($i -1 ) * 500  + 1}}"
                                     data-max="{{ $i * 500 }}" @if (isset($_GET['min']) && isset($_GET['max']))
                                 @if ($_GET['min'] == ($i - 1) * 500 + 1 && $_GET['max'] == $i * 500)
                                     checked
@@ -556,123 +604,239 @@ border: 1px solid black;
     <div style="width: 100%;border-bottom: 2px solid black;margin-top: 20px;;clear: both;">
 
     </div>
+<script>
+    $(document).on('click','.brandProducts', function(e){
+        var url = new URL(window.location);
 
-    <script>
-        function changecolor(id) {
-               $('.filter-product').css("background-color", "white");
-               $('.filter-product').css("color", "#8392a5");
-               $('#sort-'+id).css("background-color", "#cb1c22") ;
-               $('#sort-'+id).css("color", "white") ;
-           };
-       </script>
-    <script>
-        //categoty
-        $(document).on('click', '.filter-product', function(e) {
-
-
-            var url = new URL(window.location);
-
-            url.searchParams.set('page', 1);
-            //  brand    ---------------------------------------------
-            var brands = Array.from(document.querySelectorAll("#brand"))
+        var brands = Array.from(document.querySelectorAll("#brand"))
                 .filter(checkbox => checkbox.checked)
                 .map(checkbox => checkbox.value);
 
             
-            if (brands !== '') {
+        
                 url.searchParams.set('brands', brands.toString());
-            }
-
-       
-
+              var page =  url.searchParams.get('page');
+                if(page !== 'null'){
+                    url.searchParams.delete('page');
+                }
+              
             if (url.searchParams.get('brands') == '') {
                 url.searchParams.delete('brands');
             }
+            window.history.pushState({}, '', url);
+            $.ajax({
+                type: 'get',
+                url:url,
+                success: function(data) {
+                    LoadProduct(data);
+                    paging(data);
+                }
+            });
 
+    });
+</script>
 
-            //phan loai   ------------------------------------------
+<script>
+    $(document).on('click' ,'.filterPrice' ,function(){
+        var url = new URL(window.location);
+            var min = $('input[name="radio"]:checked').data("min");
+            var max = $('input[name="radio"]:checked').data("max");
+
+                url.searchParams.set('min', min, );
+                url.searchParams.set('max', max, );
+                url.searchParams.delete('take');
+                var page =  url.searchParams.get('page');
+                if(page !== 'null'){
+                    url.searchParams.delete('page');
+                }
+            if (min == 1 && max == 2) {
+                url.searchParams.delete('min');
+                url.searchParams.delete('max');
+            }
+            window.history.pushState({}, '', url);
+            $.ajax({
+                type: 'get',
+                url:url,
+                success: function(data) {
+                    LoadProduct(data);
+                    paging(data);
+                }
+            });
+    });
+</script>
+<script>
+    $(document).on('click', '.sortProduct', function(e){
+            var url = new URL(window.location);
             var colum = $(this).data("colum");
             var type = $(this).data("type");
+            var color = $(this).data("color");
+            $('.sortProduct').css({"background-color": "white" ,"color": "#8392a5"});
+            $('#sort-'+color).css({
+            "background-color": "#cb1c22","color": "white"});
+
             if (typeof colum !== 'undefined' && typeof type !== 'undefined') {
                 url.searchParams.set('colum', colum, );
                 url.searchParams.set('type', type, );
 
             }
-            //loc gia ------------------------------------------
-            var min = $('input[name="radio"]:checked').data("min");
-            var max = $('input[name="radio"]:checked').data("max");
-            if (typeof min !== 'undefined' && typeof max !== 'undefined') {
-                url.searchParams.set('min', min, );
-                url.searchParams.set('max', max, );
-                url.searchParams.delete('take');
-            }
-            if (min == 1 && max == 2) {
-                url.searchParams.delete('min');
-                url.searchParams.delete('max');
-            }
-
-            // phan trang
-            var page = $(this).data("page");
-            if (typeof page !== 'undefined') {
-
-
-                url.searchParams.set('page', (page));
-
-            }
-
             window.history.pushState({}, '', url);
-
             $.ajax({
                 type: 'get',
-                url: url,
+                url:url,
                 success: function(data) {
+                    LoadProduct(data);
+                    paging(data);
+                }
+            });
+    });
+</script>
 
-                    var html = ''
-                    $.each(data.products, function(key, product) {
-
-                        html +=
-                      '  <div class="product-info">'+
-                       ' <a href="http://localhost/sell-phone/public/product/'+product.id + ' "> <img src="http://localhost/sell-phone/public/images/productImages/'+ product.image.url + ' " alt=""></a>' +
-                     ' <div class="add-cart">' +
-                      '  <div class="add" >' +
-                         '   <div style="width: 100%;margin-top: 5px;">' +
-                             '   <a href="http://localhost/sell-phone/public/cart/'+product.id + ' "  ><span  >Add To Cart</span></a>' +
-                            '</div>' +
-                      '  </div>' +
-                    '  </div>' +
-                        '<div class="product-name">' +
-                          '  <span> '+ product.name +'  </span>' + 
-                     '   </div>' +
-                     '   <div class="product-price">' +
-                           ' <span>' + product.price + '$</span>' +
-                       ' </div>' +
-                  '  </div>' 
-
-                    });
-
-                    var count = Math.ceil(data.count / 10);
-           
-                    var page = '';
-                    //------------------------------------------------------------------
-                    for (var i = 1; i <= count; i++) {
-                        page +=
-         '<a href="Javascript:0" style="margin-right:5px;"  class="filter-product" data-page="' + i + '"  id="take-' + i + '">' + i + '</a>'
-                    }
-                    //-----------------------------------------------------------------------
-
-                    $('.take-product').html(page);
-
-
-
-                    //-------------------------------------------------------------------------------
-
-                    $('.show-list-product').html(html);
+<script>
+    $(document).on('click', '.pagingProducts',function(){
+        var id = $(this).attr('id');
+        $('.pagingProducts').css({
+            "background-color":"white",
+            "color":"rgb(128, 126, 126)"
+        });
+ 
+         $("#"+id).css({
+            "background-color":"black",
+            "color":"white"
+        });
+ 
+        var url = new URL(window.location);
+        var page = $(this).data("page");
+            url.searchParams.set('page', (page));
+            window.history.pushState({}, '', url);
+            $.ajax({
+                type: 'get',
+                url:url,
+                success: function(data) {
+                    LoadProduct(data);
 
                 }
             });
+    });
+</script>
 
-        });
-    </script>
+<script>
+    $(document).on('click','.categoryProducts', function(e){
+        var url = new URL(window.location);
+        var cate = $(this).data('cate');
+        var brands =  url.searchParams.get('brands');
+        var page =  url.searchParams.get('page');
+        url.searchParams.set('cate', cate);
+        if(cate === 'all'){
+        url.searchParams.delete('cate' );
+            }
+            if(brands !== 'null'){
+                    url.searchParams.delete('brands');
+                }
+            if(page !== 'null'){
+                    url.searchParams.delete('page');
+                }
+            window.history.pushState({}, '', url);
+            $.ajax({
+                type: 'get',
+                url:url,
+                success: function(data) {
+                    LoadProduct(data);
+                    paging(data);
+                    //load brands
+                    var brands = '';
+                    $.each(data.products.brands, function(key,brand){
+                        $.each(brand.brands, function(key,brand){
+                     brands +=   '<div class="add-brands">' +
+                    '<label class="container"> <label for="">'+ brand.name + '</label>' +
+                    '<input type="checkbox" class="brandProducts" id="brand" value="'+ brand.id +'">' +
+                    '<span class="checkmark"></span></label></div>'              
+                
+                    });
+                    });
+                    $('.add-brands').html(brands);
+
+                }
+            });
+    });
+</script>
+   
+
+
+<script>
+    function LoadProduct(data){
+        console.log(data);
+                    var html = ''
+                    $.each(data.products.products, function(key, product) {
+
+                        html +=
+                      
+                    '<div class="product-info">' +
+                       ' <a href="http://localhost/sell-phone/public/product/'+product.id+' "> <img src="http://localhost/sell-phone/public/images/productImages/' + product.image.url + '" alt=""></a>' +
+                      '<div class="add-cart">'+
+                        '<div class="add" >'+
+                            '<div style="width: 100%;margin-top: 5px;">' +
+                                '<a class="addToCart" href="" data-url="http://localhost/sell-phone/public/cart/'+ product.id +'" ><span>Add To Cart</span></a>' +
+                           ' </div></div> </div>' +
+                        '<div class="product-name">' +
+                        ' <span> '+product.name+' </span></div>' +
+                        '<div class="product-price">' +
+                            '<span>$  '+ formatNumber(product.price) +' </span>' +
+                        '</div></div>'
+
+                    });
+                    $('.show-list-product').html(html);
+                    // ---------------------- load count ----------------------------------------------------
+                    var countHtml ='';
+                    countHtml += ' <span>(' + data.count + ' sản phẩm )</span>' 
+                    $('.count-product').html(countHtml);
+
+                   
+                   
+
+   
+    }
+    function paging(data){
+        var count = Math.ceil(data.count / 10);
+                    var page = '';
+
+        page +=  '<a href="Javascript:0" style="background-color:black;color:white;" class="pagingProducts" data-page="1"  id="take-1">1</a>'
+                    for (var i = 2; i <= count; i++) {
+                        page +=
+         '<a href="Javascript:0" class="pagingProducts" data-page="' + i + '"  id="take-' + i + '">' + i + '</a>'
+                    }
+                    $('.take-product').html(page);
+    }
+</script>
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
 
 
 

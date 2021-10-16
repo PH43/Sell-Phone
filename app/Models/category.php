@@ -30,7 +30,7 @@ class category extends Model
 
   public function scopeBrandCategory($query, $id)
   {
-    return  $query->with(['brands'])->find(1);
+    return  $query->with(['brands'])->find($id);
   }
 
   public function scopecategoryBrand($query, $brand_id, $category_id)
