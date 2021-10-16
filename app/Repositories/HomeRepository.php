@@ -9,7 +9,10 @@ class HomeRepository implements HomeRepositoryInterface{
 
     public function productCategory($id){
 
-     return   product::with('image')->where('category_id', $id)->orderBy('id', 'desc')->take(6)->get()->toArray();
+     return $product = DB::table('products')
+     ->selectRaw('products.*,images.*')
+     ->join('images','products.id' ,'=', 'images.imageable_id')
+     ->where('products.category_id' ,$id)->orderBy('products.id', 'desc')->take(6)->get()->toArray();
 
     }
   
@@ -26,7 +29,7 @@ class HomeRepository implements HomeRepositoryInterface{
     public function search($search)
 
     {
-        return   product::where('name', 'LIKE', "%{$search}%")
-        ->orWhere('price', 'LIKE', "%{$search}%")->get();
+        return   product::Where('name', 'LIKE', "%{$search}%")->orWhere('price', 'LIKE', "%{$search}%")
+        ->get()->toArray();
     }
 }

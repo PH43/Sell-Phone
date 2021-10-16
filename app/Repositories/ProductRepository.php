@@ -9,31 +9,42 @@ use App\Models\product;
 class ProductRepository implements ProductRepositoryInterface
 {
 
-    public function categoryProduct($category_id, $brand_id)
-    {
-        return category::with(['brands' => function ($q) use ($brand_id) {
-            $q->where('brand_id', $brand_id);
-        }])->where('id', $category_id)->get()->toArray();
-    }
+  
 
     public function detailProduct($id)
     {
-        return    product::with('image')->where('id', $id)->get()->toArray();
+        return    product::with('image', 'brands', 'categories')->where('id', $id)->get()->toArray();
     }
 
-    public function relatedProduct($name, $id)
+    public function relatedProduct($name, $id, $category_id)
     {
         $relatedName  =  substr("$name", 0, 3);
-        return  $product['related'] = product::with('image')->where('name', 'LIKE', "%{$relatedName}%")->whereNotIn('id', [$id])->take(5)->get()->toArray();
+
+        return  $product['related'] = category::with(['products' => function ($q) use ($relatedName, $id) {
+            $q->with('image')->where('name', 'like', "%$relatedName%")->whereNotIn('id', [$id]);
+        }])->where('id', $category_id)->get()->toArray();
     }
 
     public function filterProduct($param)
     {
 
+        $product = product::with('image');
+        if (!empty($param['search'])) {
+            $products = $product->where('name', 'LIKE', "%{$param['search']}%")
 
+            ->orWhere('price', 'LIKE', "%{$param['search']}%")
+
+            ->orWhereHas('categories', function($q) use($param) {
+
+             $q->where('name','LIKE',"%{$param['search']}%");
+            
+            });
+         
+        }
+       
         if (!empty($param['cate'])) {
 
-            $products = product::with('image')->where('category_id', $param['cate']);
+            $products = $product->where('category_id', $param['cate']);
         }
         if (!empty($param['brands'])) {
             $brands = explode(',', $param['brands']);
@@ -52,6 +63,7 @@ class ProductRepository implements ProductRepositoryInterface
 
             $products =   $products->whereBetween('price',  [$min, $max]);
         }
+       
 
         $count = $products->count();
 

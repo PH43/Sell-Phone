@@ -159,59 +159,7 @@
 
         }
 
-        .showdetails-product {
-            width: calc(20% - 20px);
-            margin-left: 15px;
-            height: auto;
-            position: relative;
-            display: inline-block;
-            text-align: center;
-        }
-
-        .showdetails-product img {
-            width: 100%;
-        }
-
-        .show-product {
-            width: 100%;
-            padding-top: 25px;
-            height: 330px;
-
-            border: 1px solid rgb(204, 204, 204);
-        }
-
-        .show-product:hover .acctionWith-product {
-            opacity: 1;
-        }
-
-        .acctionWith-product {
-
-            width: 100%;
-            transition: all 0.7s;
-            opacity: 0;
-            position: absolute;
-            transform: translateY(-50px);
-
-
-        }
-
-        .acctionWith-product i {
-            margin-left: 5px;
-            padding: 13px 13px;
-            background-color: #bdab98;
-
-        }
-
-        .acctionWith-product i:hover {
-            background-color: #c27b43;
-        }
-
-        .info-product span {
-            text-align: left;
-            margin-top: 5px;
-            display: block;
-        }
-
+     
         .relatedProduct h5 {
             text-align: center;
             font-size: 26px;
@@ -442,6 +390,78 @@ margin-bottom: 2%;
         float: left;
         
     }
+    .product-info {
+
+--columns: 6;
+width: calc(calc(100% / var(--columns)) - 10px);
+
+display: inline-block;
+margin-top: 50px;
+
+
+
+}
+
+.product-info img {
+width: 84%;
+margin-left: 8%;
+height: 210px;
+height: cover;
+
+
+}
+
+.product-name span {
+font-size: 16px;
+letter-spacing: 0.24px;
+-webkit-line-clamp: 1;
+-webkit-box-orient: vertical;
+overflow: hidden;
+display: -webkit-box;
+
+
+}
+
+.product-price span {
+display: inline;
+
+font-weight: 700;
+}
+
+.add {
+background-color: black;
+width: 100%;
+position: absolute;
+
+opacity: 0;
+transition: all 0.5s;
+}
+.add-cart{
+position: relative;
+width: 100%;
+height: auto;
+}
+
+.add a {
+color: white;
+transform: translateY(-10px);
+}
+
+.product-info:hover .add {
+transform: translateY(-40px);
+opacity: 1;
+}
+
+.product-info:hover {
+border: 1px solid black;
+}
+
+.categories-show h5 {
+font-size: 20px;
+font-weight: 600;
+letter-spacing: 1px;
+font-family: Montserrat;
+}
     </style>
     @if(isset($data['rating']['biggest']->star))
     @php $star = $data['rating']['biggest']->star @endphp
@@ -453,13 +473,16 @@ margin-bottom: 2%;
             <img src="{{ asset('/images/productImages/' . $data['product'][0]['image']['url']) }}" alt="">
         </div>
         <div class="detail-product">
-            <span class="categories-product"> {{ $data['categoryBrand'][0]['name'] }} /
-                {{ $data['categoryBrand'][0]['brands'][0]['name'] }} </span>
-            <span class="name-product">{{ $data['product']['0']['name'] }}</span>
+            <span class="categories-product"> {{ $data['product'][0]['categories']['name'] }} /
+                {{ $data['product'][0]['brands']['name'] }} </span>
+
+            <span class="name-product">{{ $data['product'][0]['name'] }}</span>
+
             <span class="avaluate"> @for($i = 1; $i <= 5; $i++) <i  @if( $i <= $star ) style="color:#ea9d02 ;" @endif class="fas fa-star"></i> @endfor  <span> {{$data['rating']['count']}} bài
                     đánh giá</span></span>
+                    
             <span class="price-product">
-                {{ $data['product']['0']['price'] }} $
+                {{ $data['product'][0]['price'] }} $
             </span>
 
             <div class="card-product">
@@ -503,35 +526,30 @@ margin-bottom: 2%;
 
         <div class="relatedProduct">
             <h5>Related Products!</h5>
-            @foreach ($data['relatedProduct'] as $product)
-                <div class="showdetails-product">
-                    <div class="show-product">
-                        <div class="image-product">
-                            <img src="{{ asset('/images/productImages/' . $product['image']['url']) }}" alt="">
-                        </div>
-
-                        <div class="acctionWith-product">
-                            <i class="fas fa-shopping-cart"></i>
-                            <i class="fas fa-search-plus"></i>
-                            <i class="far fa-heart"></i>
-                        </div>
-                    </div>
-                    .
-                    <div class="info-product">
-                        <span> {{ $product['name'] }}</span>
-                        </span>
-                        <span> <i class="fas fa-star"></i> <i class="fas fa-star"></i> <i class="fas fa-star"></i>
-                            <i class="fas fa-star"></i> <i class="fas fa-star"></i> </span>
-                        <span>$ 500</span>
-                    </div>
+            @foreach ($data['relatedProduct'][0]['products'] as $product)
+            <div class="product-info">
+                <a href="{{ route('detail-product', $product['id']) }}"> <img src="{{ asset('/images/productImages/'. $product['image']['url'] ) }}" alt=""></a>
+              <div class="add-cart">
+                <div class="add" style="text-align: center;height: 40px;padding: 3px;">
+                    <a style="font-size: 20px;font-weight: bold;" class="addToCart" href="" data-url="{{ route('addToCart', $product['id']) }}" ><span>Add To Cart</span></a>
                 </div>
+              </div>
+                <div class="product-name">
+                    <span>{{ $product['name'] }} </span>
+                </div>
+                <div class="product-price">
+                    <span>${{ number_format($product['price'],0,',') }}</span>
+                </div>
+                
+            </div>
+
             @endforeach
         </div>
      
 
 <div class="rate-product" >
 <div class="rate-info">
-<h5>Đánh giá & Nhận xét {{ $product['name'] }}</h5>
+<h5>Đánh giá & Nhận xét {{$data['product'][0]['name'] }}</h5>
 <p>Đánh Giá Trung Bình</p>
 
 <h1>{{$star}} /5</h1>
@@ -550,9 +568,10 @@ margin-bottom: 2%;
     <div style="width:15%">
         <label for="">{{$rating['name']}}  Sao</label>
        </div>
-       <div style="width: 85%">
+       <div style="width: 70%">
         <div style="width:@if(isset($rating['ratio'])) {{$rating['ratio']}}% @else 1%  @endif ;height: 20px;background-color: red;"></div>
        </div>
+<label for="">@if(isset($rating['ratio'])) {{number_format($rating['ratio'])}}% @else 0% @endif</label>
   </div>
   @endforeach  
    </div>
@@ -560,8 +579,12 @@ margin-bottom: 2%;
   
 <div class="rate-chart">
 
+    @if(session()->has('message'))
     <span style="position: absolute;transform: translateX(-190px);color: red;padding-top: 50px ">
-        @if(isset($message)) {{$message}} @endif</span>
+       {{ session()->get('message') }}
+
+    </span>
+    @endif
    
     <h5 >Bạn chấm sản phẩm này bao nhiêu sao?</h5>
 
@@ -668,24 +691,12 @@ margin-bottom: 2%;
 
 
 
-        $(".star").hover(function(){
-            var star =    $(this).data('star');
-    
-            for(let i = 2; i <= star ; i++  ){
-            
-               $("#star-"+i).css("color","#ea9d02");    
-            }
-        },function(){
-            var star =    $(this).data('star');
-            for(let i = 2; i <= star ; i++  ){
-            
-                $("#star-"+i).css("color","#212529");    
-            }
-        });
+      
         $(".star").click(function(){
             var star =    $(this).data('star');
-            $("#star").val(star);
-            for(let i = 2; i <= star ; i++  ){
+            $('#star').val(star);
+            $(".star").css("color","#212529"); 
+            for(let i = 1; i <= star ; i++  ){
             
                $("#star-"+i).css("color","#ea9d02");    
             }
@@ -708,7 +719,7 @@ margin-bottom: 2%;
                 alert('Bạn chưa đăng nhập');
             }
 
-            if (content == '') {
+           else if (content == '') {
                 alert('not null');
             } else {
                 $.ajax({
@@ -792,7 +803,7 @@ $(document).on('click','.addProduct', function(e){
           
                   $('#page-'+ (page_id + 1)).show();
                   
-                              $('.show-comment').html(comment);
+                $('.show-comment').html(comment);
                             }
     });
 });
