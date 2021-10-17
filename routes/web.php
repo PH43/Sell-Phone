@@ -56,5 +56,4 @@ Route::post('order/product',[orderController::class, 'order'])->name('order');
 Route::get('admin/statistical',[ManageProductController::class, 'statistical'])->name('admin-Statistical');
 Route::get('admin/form-Product',[ManageProductController::class, 'showform'])->name('admin-form-product');
 Route::post('admin/insert-product',[ManageProductController::class, 'insertProduct'])->name('admin-insert-product');
-Route::get('admin/discount',[ManageProductController::class, 'discount'])->name('admin-discount');
-Route::post('admin/insert/discount',[ManageProductController::class, 'insertDiscount'])->name('insert-discount');
+Route::post('admin/insert-brand',[ManageProductController::class, 'insertBrand'])->name('admin-insert-brand');

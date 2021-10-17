@@ -4,6 +4,7 @@ namespace App\Http\Controllers\Admin;
 
 use App\Http\Controllers\Controller;
 use App\Http\Requests\discountRequest;
+use App\Models\brand;
 use App\Models\brand_category;
 use App\Models\category;
 use App\Models\discount;
@@ -19,7 +20,7 @@ class ManageProductController extends Controller
         return view('admin/body/body');
     }
     public function showform(Request $rq)
-    {
+    {   
         $category = category::with(['brands' => function ($q) use ($rq) {
             if ($rq->has('category')) {
                 $q->where('category_id', $rq->category);
@@ -56,26 +57,21 @@ class ManageProductController extends Controller
         $image->move(public_path('images/productImages'), $ImageName);
         return response()->json();
     }
-    public function discount(){
-       $day = Carbon::now()->toDateString();
-        
-        return view('admin/body/discount', compact('day'));
+public function insertBrand(Request $rq){
+   $product = brand::where('name' ,"$rq->brand")->get()->toArray();
+   
+    if($product != ''){
+        $brand =   brand::create(['name' => $rq->brand]);
+        foreach ($rq->categories as $cate){
+                brand_category::create([
+                    'brand_id' => $brand->id,
+                    'category_id' => $cate
+                ]);
+        }
+        $message = "insert thành công";
+    }else{
+        $message = " fails";
     }
-
-    public function insertDiscount(Request $rq){
-   //  $validated = $rq->validated();
-       
-        discount::create(
-            ['name' => $rq->name,
-             'init' => $rq->init,
-             'value' => $rq->value,
-             'start_date' => $rq->start_date,
-             'end_date' => $rq->end_date,
-            ]
-        );
-        return redirect()->route('admin-discount')->with(['success' =>  'Thêm thành công']);
-
-        
-        
-    }
+   return response()->json($message);
+}
 }

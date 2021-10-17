@@ -23,7 +23,9 @@ class orderRepository implements OrderRepositoryInterface
             if (!isset($info['user_id'])) {
                 $info['user_id'] = null;
             }
-
+            if(!isset($info['message'])){
+                $info['message'] = null;
+            }
 
             $order =  order::create([
                 'time' =>   Carbon::now(),
