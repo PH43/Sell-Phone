@@ -153,75 +153,32 @@ function isNumeric(value) {
                   <div class="card shadow-none bg-light border">
                     <div class="card-body">
                       <h5>Discount</h5>
-                        <div class="row g-3">
-                          <div class="col-12">
-                            <label class="form-label">Name</label>
-                            <input type="text" class="form-control" placeholder="Name">
+                   <form action="" method="post">
+             @csrf
+                    <div class="row g-3">
+                      <div class="col-12">
+                        <label class="form-label">Name</label>
+                        <input type="text" class="form-control" placeholder="Name"  id="brand">
+                      </div>
+                    
+                      <div class="col-12">
+                        <h5>Categories</h5>
+                        @foreach ($category as $cate )
+                        <div class="category-list">
+                          <div class="form-check">
+                            <input  type="checkbox" value="{{ $cate['id'] }}"  id="category">
+                            <label class="form-check-label" for="Jeans">
+                          {{ $cate['name'] }}
+                            </label>
                           </div>
-                          <div class="col-12">
-                            <label class="form-label">Init</label>
-                            <input type="text" class="form-control" placeholder="Init">
-                          </div>
-                          <div class="col-12">
-                            <label class="form-label">Value</label>
-                            <input type="text" class="form-control" placeholder="Value">
-                          </div>
-                     
-                          <div class="col-12">
-                            <label class="form-label">Tags</label>
-                            <input type="text" class="form-control" placeholder="Tags">
-                          </div>
-                          <div class="col-12">
-                            <div class="d-flex align-items-center gap-2">
-                              <a href="javascript:;" class="btn btn-sm btn-light border shadow-sm bg-white">Woman <i class="bi bi-x"></i></a>
-                              <a href="javascript:;" class="btn btn-sm btn-light border shadow-sm bg-white">Fashion <i class="bi bi-x"></i></a>
-                              <a href="javascript:;" class="btn btn-sm btn-light border shadow-sm bg-white">Furniture <i class="bi bi-x"></i></a>
-                            </div>
-                          </div>
-                          <div class="col-12">
-                            <h5>Categories</h5>
-                            <div class="category-list">
-                              <div class="form-check">
-                                <input class="form-check-input" type="checkbox" value="" id="Jeans">
-                                <label class="form-check-label" for="Jeans">
-                                  Jeans
-                                </label>
-                              </div>
-                              <div class="form-check">
-                                <input class="form-check-input" type="checkbox" value="" id="FormalShirts">
-                                <label class="form-check-label" for="FormalShirts">
-                                  Formal Shirts
-                                </label>
-                              </div>
-                              <div class="form-check">
-                                <input class="form-check-input" type="checkbox" value="" id="WomenShirts">
-                                <label class="form-check-label" for="WomenShirts">
-                                  Women Shirts
-                                </label>
-                              </div>
-                              <div class="form-check">
-                                <input class="form-check-input" type="checkbox" value="" id="Electronics">
-                                <label class="form-check-label" for="Electronics">
-                                  Electronics
-                                </label>
-                              </div>
-                              <div class="form-check">
-                                <input class="form-check-input" type="checkbox" value="" id="SportsShoes">
-                                <label class="form-check-label" for="SportsShoes">
-                                  Sports Shoes
-                                </label>
-                              </div>
-                              <div class="form-check">
-                                <input class="form-check-input" type="checkbox" value="" id="Mobiles">
-                                <label class="form-check-label" for="Mobiles">
-                                  Mobiles
-                                </label>
-                              </div>
-                            </div>
-                           
-                          </div>
+                        </div>    
+                        @endforeach
+        
+                      </div>
 
-                        </div><!--end row-->
+                    </div>
+                    <input type="submit" id="insertBrand">
+                   </form>
                     </div>
                   </div>  
               </div>
@@ -233,7 +190,32 @@ function isNumeric(value) {
     </div><!--end row-->
 
 </main>
+<script>
+  $('#insertBrand').click(function(e){
+    e.preventDefault();
+    var categories = Array.from(document.querySelectorAll("#category"))
+                .filter(checkbox => checkbox.checked)
+                .map(checkbox => checkbox.value);
+    var brand = $("#brand").val();
+    var token = $("input[name=_token]").val();
+    console.log(token);
+   $.ajax({
+      type:"post",
+      url: " {{route('admin-insert-brand')}} ",
+      data:{
+        categories:categories,
+        brand:brand,
+        _token:token,
+        
+      },
+      success: function(data) {
+        console.log(data);
+      }
+   });
 
+   
+  });
+</script>
 <script>
   $('.info-product').hide();
   $('.form-check-input').click(function(){

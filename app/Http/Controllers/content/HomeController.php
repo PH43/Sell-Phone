@@ -61,12 +61,12 @@ class HomeController extends Controller
         $id = $rq->id;
         DB::enableQueryLog();
 
-        return    product::where('name', 'LIKE', "%{$param}%")
+            product::orWhere('name', 'LIKE', "%{$param}%")
             ->orWhere('price', 'LIKE', "%{$param}%")
             ->orWhereHas('categories', function ($q) use ($param) {
                 $q->where('name', 'LIKE', "%{$param}%");
             })->where('category_id', $id)
-        ->get()->toArray();
-        dd( DB::getQueryLog());
+            ->get()->toArray();
+        dd(DB::getQueryLog());
     }
 }

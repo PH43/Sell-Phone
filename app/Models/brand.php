@@ -12,7 +12,7 @@ class brand extends Model
 
     const TABLE = 'brands';
     protected $table = self::TABLE;
-   
+   protected $fillable = ['name'];
     public function categories(){
         return $this->belongsToMany(category::class ,'brands_categories');
       }
