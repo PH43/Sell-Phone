@@ -1,4 +1,7 @@
 @extends('content/template/template')
+@section('tittle')
+    Chi tiết sản phẩm
+@endsection
 @section('body')
     <style>
         body {
@@ -170,7 +173,7 @@
 
         .comment {
             clear: both;
-            transform: translateY(-120px);
+            transform: translateY(-40px);
             width: 96%;
             margin-left: 2%;
             background-color: white;
@@ -302,9 +305,9 @@
         }
 
         .mid {
-            padding: 50px 0px;
+            padding: 100px 0px;
             width: 100%;
-            height: #f8f9fa;
+         
         }
 .loadMore {
     width: 100%;
@@ -323,10 +326,11 @@
     display: none;
 }
 .rate-product{
+    border: 1px solid #eeeeee;
                 width: 96%;
                 margin-left: 2%;
                 margin-top: 3%;
-                height: auto;
+                height: 500px;
                 background-color:white;
                 border-radius: 10px;
                 padding: 100px
@@ -462,6 +466,12 @@ font-weight: 600;
 letter-spacing: 1px;
 font-family: Montserrat;
 }
+.show-ratio{
+    height: 20px;background-color: red;
+}
+label.error{
+    color: red;
+}
     </style>
     @if(isset($data['rating']['biggest']->star))
     @php $star = $data['rating']['biggest']->star @endphp
@@ -478,8 +488,8 @@ font-family: Montserrat;
 
             <span class="name-product">{{ $data['product'][0]['name'] }}</span>
 
-            <span class="avaluate"> @for($i = 1; $i <= 5; $i++) <i  @if( $i <= $star ) style="color:#ea9d02 ;" @endif class="fas fa-star"></i> @endfor  <span> {{$data['rating']['count']}} bài
-                    đánh giá</span></span>
+            <span class="avaluate" id="qty-stars"> @for($i = 1; $i <= 5; $i++) <i  @if( $i <= $star ) style="color:#ea9d02 ;" @endif class="fas fa-star"></i> @endfor  </span>
+            <span id="qty-ratings"><span> {{$data['rating']['count']}} bài đánh giá</span></span>
                     
             <span class="price-product">
                 {{ $data['product'][0]['price'] }} $
@@ -552,9 +562,9 @@ font-family: Montserrat;
 <h5>Đánh giá & Nhận xét {{$data['product'][0]['name'] }}</h5>
 <p>Đánh Giá Trung Bình</p>
 
-<h1>{{$star}} /5</h1>
-<label for=""> @for($i=1;$i<=5;$i++) <i @if( $i <= $star ) style="color:#ea9d02 ;" @endif class="fas fa-star"></i> @endfor </label>
-<span>{{$data['rating']['count']}} đánh giá</span>
+<h1>{{$star}}/5</h1>
+<label for="" class="qty-stars" > @for($i=1;$i<=5;$i++) <i @if( $i <= $star ) style="color:#ea9d02 ;" @endif class="fas fa-star"></i> @endfor </label>
+<span class="qty-ratings"><span>{{$data['rating']['count']}} bài đánh giá</span></span>
 
 </div>
 
@@ -562,17 +572,15 @@ font-family: Montserrat;
     <h5>Đánh giá của khách hàng</h5>
    <div class="rating" style="width: 90%;;height: 400px;margin-top: 20px;text-align: left;margin-left: 5%">
  @foreach ($data['rating']['rating']  as $rating )
-   
-    
   <div style="width: 100%;margin-bottom: 1%;">
     <div style="width:15%">
         <label for="">{{$rating['name']}}  Sao</label>
        </div>
        <div style="width: 70%">
-        <div style="width:@if(isset($rating['ratio'])) {{$rating['ratio']}}% @else 1%  @endif ;height: 20px;background-color: red;"></div>
+        <div  class="show-ratio" id="show-ratio-{{$rating['name']}}" style="width: {{$rating['ratio']}}%  "></div>
        </div>
-<label for="">@if(isset($rating['ratio'])) {{number_format($rating['ratio'])}}% @else 0% @endif</label>
-  </div>
+        <label for="" class="ratio-{{$rating['name']}}"><span> {{number_format($rating['ratio'])}}% </span></label>
+    </div>
   @endforeach  
    </div>
     </div>
@@ -588,27 +596,115 @@ font-family: Montserrat;
    
     <h5 >Bạn chấm sản phẩm này bao nhiêu sao?</h5>
 
-    
+    <span class="message-rating" style="opacity: 0;color: #95c746;">Đánh giá thành công !!!</span>
 
     <form action="{{ route('rate') }}" method="post" id="rate-user">
         @csrf
         @for($i=1;$i<=5;$i++) <i id="star-{{$i}}" @if($i < 2) style="color:#ea9d02;" @endif  data-star="{{$i}}" class="star fas fa-star"></i> @endfor 
         <input type="hidden" name="star" id="star" value="1">
-        <input type="hidden" name="product_id" value="{{$data['product']['0']['id']}}">
-        <input  type="text" placeholder="Họ Và Tên" name="name">
+        <input type="hidden" name="product_id" id="product_id" value="{{$data['product']['0']['id']}}">
+        <input  type="text" placeholder="Họ Và Tên" id="name"  name="name">
         @error('name')
         <span style="text-align: center;color: red;">{{$message}}</span>
-    @enderror
-        <input   type="text" placeholder="Email"  name="email">
+        @enderror
+        <input   type="text" placeholder="Email" id="email"   name="email">
         @error('email')
         <span style="transform: translateY();text-align: center;color: red;">{{$message}}</span>
-    @enderror
-        <input type="submit" href="" id="rate-product" class="btn btn-danger">
+         @enderror
+        <input type="submit" href="" id="rating" class="btn btn-danger">
     </form>
 </div>
 
 </div>
 
+
+<script>
+    $(document).ready(function(){
+    $('#rate-user').validate({
+        rules: {
+            name: {
+                required: true,
+
+            },
+            email: {
+                email:true,
+                required: true,
+            
+            },
+          
+        },
+        messages: {
+            name: {
+                required: "Không được để trống",
+
+            },
+            email: {
+                required: "Không được để trống",
+                "email": "Email không hợp lệ",
+            
+            },
+        }
+
+    });
+});
+</script>
+
+<script>
+    $(document).on('click', '#rating', function(e){
+        e.preventDefault();
+        if($("#rate-user").valid()){
+            var star =   $("#star").val();
+      var name =   $("#name").val();
+      var email =   $("#email").val();
+      var token = $('input[name=_token]').val();
+      var product_id =  $("#product_id").val();
+      $.ajax({
+        type: "post",
+         url: "{{ route('rate') }}",
+         data:{
+             star:star,
+             name:name,
+             email:email,
+             product_id: product_id,
+             _token:token,
+         },
+         success:function(data) {
+             console.log(data);
+             var rating ={};
+// load chart
+             $.each(data.rating, function(key,data){
+                 rating[data.name] = '' ;
+                $('#show-ratio-'+ data.name).css('width', data.ratio + '%');
+                rating[data.name] += '<span> ' + Math.round(data.ratio) + ' % </span>'
+                $('.ratio-'+ data.name).html(rating[data.name]);
+             });
+// load qty
+             var qtyRatings = '<span>'+data.count+' bài đánh giá</span>'
+              $('#qty-ratings').html(qtyRatings);
+              $('.qty-ratings').html(qtyRatings);
+// load star
+              var qtyStars = ''
+              for(var i = 1; i <= data.biggest.star; i++){
+
+         qtyStars +=   '<i style="color:#ea9d02 ;" class="fas fa-star">  </i>'
+                }
+                for(var i = data.biggest.star; i < 5; i++){
+         qtyStars +=   '<i  class="fas fa-star"></i>'
+                }
+                $('.qty-stars').html(qtyStars);
+                $('#qty-stars').html(qtyStars);
+    // send message
+    $(".message-rating").css('opacity', 1);         
+        
+    // re-load input 
+    $("#name").val('');
+    $("#email").val('');    
+         }
+      });
+        }
+  
+    });
+</script>
 
         <div class="comment">
 

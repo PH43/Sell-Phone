@@ -1,4 +1,7 @@
 @extends('content/template/template')
+@section('tittle')
+    Lọc sản phẩm
+@endsection
 @section('body')
     <style>
         body {
@@ -27,9 +30,9 @@
 
         .product-info {
 
---columns: 5;
+--columns: 4;
 width: calc(calc(100% / var(--columns)) - 10px);
-
+margin-bottom: 5rem;
 display: inline-block;
 margin-top: 50px;
 
@@ -41,7 +44,7 @@ text-align: center;
 .product-info img {
 width: 84%;
 margin-left: 8%;
-height: 210px;
+height: 260px;
 height: cover;
 
 
@@ -73,7 +76,7 @@ position: absolute;
 opacity: 0;
 transition: all 0.5s;
 transform: translateY(-10px);
-height: 40px;;
+height: 43px;;
 }
 .add-cart{
 position: relative;
@@ -391,8 +394,7 @@ border: 1px solid black;
                         @else
                         @if(isset( $data['products'][0]['categories']['name'] ))
                         {{ $data['products'][0]['categories']['name'] }}
-                        @else
-                        Không có sản phẩm này
+             
                         @endif
                      
                         @endif
@@ -425,34 +427,38 @@ border: 1px solid black;
                         <span>Ưu tiên xem:</span>
                      
                         <a class="sortProduct"  
-                        @if (isset($_GET['colum']) && isset($_GET['type']))
-                        @if($_GET['colum'] == 'id' && $_GET['type'] == 'desc')  
-                        style="background-color: #cb1c22;  color: white; "  @endif 
+                        @if (isset($_GET['colum']) && $_GET['colum'] == 'id' && $_GET['type'] == 'desc')
+                      
+                        style="background-color: #cb1c22;  color: white; "  
+                        @endif
+                        @if (!isset($_GET['colum']))
+                      
+                        style="background-color: #cb1c22;  color: white; "  
                         @endif
                 
                         href="Javascript:0" data-color="1"  id="sort-1"  data-colum="id" data-type="desc">Sản phẩm mới nhất</a>
 
                         <a class="sortProduct"  
-                        @if (isset($_GET['colum']) && isset($_GET['type']))
-                        @if($_GET['colum'] == 'id' && $_GET['type'] == 'asc')  
-                        style="background-color: #cb1c22;  color: white; "  @endif 
+                        @if (isset($_GET['colum']) && $_GET['colum'] == 'id' && $_GET['type'] == 'asc')
+                          
+                        style="background-color: #cb1c22;  color: white; "  
                         @endif
                         href="Javascript:0"  data-color="2" id="sort-2"   data-colum="id" data-type="asc">Sản phẩm cũ nhất </a>
 
 
                         <a class="sortProduct"
-                        @if (isset($_GET['colum']) && isset($_GET['type']))
-                        @if($_GET['colum'] == 'price' && $_GET['type'] == 'desc')  
-                        style="background-color: #cb1c22;  color: white; "  @endif 
+                        @if (isset($_GET['colum']) && $_GET['colum'] == 'price' && $_GET['type'] == 'desc')
+                          
+                        style="background-color: #cb1c22;  color: white; "   
                         @endif
                         href="Javascript:0"  data-color="3" id="sort-3"  data-colum="price" data-type="desc">Giá từ cao đến
                             thấp</a>
 
                         <a class="sortProduct"
                         
-                        @if (isset($_GET['colum']) && isset($_GET['type']))
-                        @if($_GET['colum'] == 'price' && $_GET['type'] == 'asc')  
-                        style="background-color: #cb1c22;  color: white; "  @endif 
+                        @if (isset($_GET['colum']) && $_GET['colum'] == 'price' && $_GET['type'] == 'asc')
+                    
+                        style="background-color: #cb1c22;  color: white; "  
                         @endif
                         href="Javascript:0"  data-color="4" id="sort-4"  data-colum="price" data-type="asc">Giá Từ thấp đến
                             cao</a>
@@ -461,7 +467,6 @@ border: 1px solid black;
 
 
                     </div>
-
                 </div>
                 <div class="show-list-product">
 
@@ -489,7 +494,7 @@ border: 1px solid black;
                 </div>
 
                 <div class="take-product">
-                    @for ($i = 1; $i <= ceil($data['count']/10); $i++) 
+                    @for ($i = 1; $i <= ceil($data['count']/12); $i++) 
                     <a href="Javascript:0" 
                     @if(isset($_GET['page']) && $_GET['page'] == $i) 
         
@@ -574,10 +579,10 @@ border: 1px solid black;
 
                         </label>
                         @for ($i = 1; $i <= 9; $i++)
-                            <label class="container">Từ {{ ($i -1) * 500 + 1 }} - {{ $i * 500 }}
-                                <input type="radio" class="filterPrice" name="radio" data-min="{{ ($i -1 ) * 500  + 1}}"
-                                    data-max="{{ $i * 500 }}" @if (isset($_GET['min']) && isset($_GET['max']))
-                                @if ($_GET['min'] == ($i - 1) * 500 + 1 && $_GET['max'] == $i * 500)
+                            <label class="container">Từ {{ ($i -1) * 2000 + 1 }} - {{ $i * 2000 }}
+                                <input type="radio" class="filterPrice" name="radio" data-min="{{ ($i -1 ) * 2000  + 1}}"
+                                    data-max="{{ $i * 2000 }}" @if (isset($_GET['min']) && isset($_GET['max']))
+                                @if ($_GET['min'] == ($i - 1) * 2000 + 1 && $_GET['max'] == $i * 2000)
                                     checked
                                 @endif
                         @endif
@@ -587,8 +592,8 @@ border: 1px solid black;
 
                         </label>
                         @endfor
-                        <label class="container">Trên 4500
-                            <input type="radio" class="filter-product" name="radio" data-min="4500" data-max="999999999">
+                        <label class="container">Trên 18001
+                            <input type="radio" class="filterPrice" name="radio" data-min="18001" data-max="999999999">
                             <span class="checkmark"></span>
 
                         </label>
@@ -764,7 +769,7 @@ border: 1px solid black;
 
 <script>
     function LoadProduct(data){
-        console.log(data);
+
                     var html = ''
                     $.each(data.products.products, function(key, product) {
 
@@ -796,7 +801,7 @@ border: 1px solid black;
    
     }
     function paging(data){
-        var count = Math.ceil(data.count / 10);
+        var count = Math.ceil(data.count / 12);
                     var page = '';
 
         page +=  '<a href="Javascript:0" style="background-color:black;color:white;" class="pagingProducts" data-page="1"  id="take-1">1</a>'

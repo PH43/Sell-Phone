@@ -279,11 +279,15 @@
             line-height: 20px;
             font-family: Montserrat;
         }
-
-        #category-1 {
-            color: #c27b43;
-        }
-    
+    #new-1{
+        color: #c27b43;
+    }
+    #buylot-1{
+        color: #c27b43;
+    }
+    #rating-1{
+        color: #c27b43;
+    }
     </style>
 
     <div class="body owl-carousel ">

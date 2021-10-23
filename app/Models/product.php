@@ -10,6 +10,7 @@ class product extends Model
     protected $fillable = ['name', 'price', 'quantity', 'description', 'category_id', 'brand_id'];
     const TABLE = 'products';
     protected $table = self::TABLE;
+    protected $dates = [ 'deleted_at' ];
     use HasFactory;
     public function categories()
     {

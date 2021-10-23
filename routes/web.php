@@ -1,6 +1,7 @@
 <?php
 
 use App\Http\Controllers\Admin\ManageProductController;
+use App\Http\Controllers\auth\UserController;
 use App\Http\Controllers\content\CartController;
 use App\Http\Controllers\content\DetailProductController;
 use App\Http\Controllers\content\HomeController;
@@ -20,8 +21,16 @@ use Illuminate\Support\Facades\Route;
 */
 
 
-
+//user
 Auth::routes();
+Route::group(['middleware' => 'checkLogin' ], function(){
+    Route::get('showform',[UserController::class ,'showForm'])->name('changeForm');
+    Route::post('changepassword',[UserController::class ,'changePassword'])->name('changePassword');
+    Route::get('account',[UserController::class ,'showInfo'])->name('showInfo');
+    Route::post('account/update',[UserController::class,'updateAccount'])->name('updateAccount'); 
+});
+
+
 
 //Home
 Route::get('home',[HomeController::class ,'home'])->name('home');
@@ -53,8 +62,8 @@ Route::post('order/product',[orderController::class, 'order'])->name('order');
 
 
 // admin
-Route::get('admin/statistical',[ManageProductController::class, 'statistical'])->name('admin-Statistical');
-Route::get('admin/form-Product',[ManageProductController::class, 'showform'])->name('admin-form-product');
+Route::get('admin/form-Product',[ManageProductController::class, 'Admin'])->name('admin-form-product');
 Route::post('admin/insert-product',[ManageProductController::class, 'insertProduct'])->name('admin-insert-product');
-Route::get('admin/discount',[ManageProductController::class, 'discount'])->name('admin-discount');
-Route::post('admin/insert/discount',[ManageProductController::class, 'insertDiscount'])->name('insert-discount');
+Route::get('product/delete-product/{id}',[ManageProductController::class, 'delete'])->name('admin-delete-product');
+Route::post('product/update-product/',[ManageProductController::class, 'update'])->name('admin-update-product');
+Route::post('admin/insert-brand',[ManageProductController::class, 'insertBrand'])->name('admin-insert-brand');

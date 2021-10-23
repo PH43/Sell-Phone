@@ -1,4 +1,7 @@
 @extends('content/template/template')
+@section('tittle')
+    Giỏ hàng
+@endsection
 @section('body')
     <style>
         .cart {
@@ -84,6 +87,7 @@
             text-decoration: none;
             border: 2.5px solid rgb(165, 165, 165);
             font-weight: 600;
+            background-color:
 
 
         }
@@ -137,7 +141,7 @@
         .order-product {
 
             width: 40%;
-            overflow-Y:scroll;
+            overflow-Y: scroll;
             height: 520px;
             text-align: center;
             margin-top: 2%;
@@ -146,18 +150,28 @@
             box-shadow: rgba(100, 100, 111, 0.2) 0px 7px 29px 0px;
 
         }
-        .order-product::-webkit-scrollbar{
+
+        .order-product::-webkit-scrollbar {
             width: 2px;
-    background-color: #F5F5F5;
+            background-color: #F5F5F5;
         }
-        .enter-info label {
+
+        .enter-info span {
+
             text-shadow: 5px 5px 10px white;
-            color: greenyellow;
-            ;
-            display: block;
-            text-align: left;
+            color: #8b8b8b;
+            background-color: white;
+            display: inline-block;
+            transform: translateY(10px);
+            font-size: 15px;
+            margin-left: 8%;
+
+            opacity: 0;
+
+
 
         }
+
 
         .enter-info h5 {
             margin-top: 10px;
@@ -173,7 +187,7 @@
         .enter-info {
 
             box-shadow: rgba(100, 100, 111, 0.2) 0px 7px 29px 0px;
-        
+
             width: 100%;
             opacity: 1;
             margin-top: 1%;
@@ -187,21 +201,29 @@
         .input {
             width: 100%;
             height: 70px;
+            text-align: left;
         }
+
         .input select {
             border: 2px solid black;
             height: 45px;
         }
-        .input input {
 
+        .input input {
+            margin-left: 5%;
+            background-color: white;
             border: 2px solid black;
             height: 45px;
 
-        
+
             width: 90%;
 
         }
-   
+
+        .input textarea {
+            margin-left: 5%;
+        }
+
 
 
 
@@ -209,11 +231,15 @@
         label.error {
             display: block;
             color: red;
-            margin-left: 5%;
+            text-align: center;
+
+            padding-bottom: 20px;
+
         }
 
         .address-order {
             width: 90%;
+
             margin-left: 5%;
         }
 
@@ -255,10 +281,10 @@
                                 <td>{{ $cart['name'] }}</td>
                                 <td><input class="qty" data-cartid="{{ $cart['id'] }}"
                                         data-price="{{ $cart['price'] }}" style="width: 40px" type="number"
-                                        value="{{ $cart['qty'] }}" id="qty-{{$cart['id']}}" min="1" max="10"></td>
-                                <td> ${{ number_format($cart['price'],0,',') }}</td>
+                                        value="{{ $cart['qty'] }}" id="qty-{{ $cart['id'] }}" min="1" max="10"></td>
+                                <td> ${{ number_format($cart['price'], 0, ',') }}</td>
                                 <td class="total-price-{{ $cart['id'] }}">
-                                    <span>${{number_format($cart['qty'] * $cart['price'],0,',') }} </span>
+                                    <span>${{ number_format($cart['qty'] * $cart['price'], 0, ',') }} </span>
                                 </td>
                                 <td><a href="" onclick="deleteCart({{ $cart['id'] }})">Delete</a></td>
                             </tr>
@@ -293,7 +319,7 @@
 
 
                         <span>TỔNG THANH TOÁN <div class="total">
-                                <h5>{{ number_format ($total,0,',') }}$</h5>
+                                <h5>{{ number_format($total, 0, ',') }}$</h5>
                             </div></span>
                         <span>Giao hàng & thuế được tính khi thanh toán</span>
                     </div>
@@ -312,252 +338,339 @@
     </div>
 
 
+    <div class="body fixed-top"
+        style="  display: none;;width: 100%;height: 100%;background-color: rgb(250, 250, 250);opacity: 0.6">
 
+    </div>
 
-   <div class="fixed-top form-order" >
-    <div class="order-product">
-        <div class="enter-info  ">
-            <a href="javascript:0"
-                style="float:right;font-size: 20px;;color: black;margin-right: 10px;transform: translateY(-20px)"
-                id="close-form-order"><i class="fas fa-times"></i></a>
-            <h5>ORDERS PRODUCT</h5>
+    <div class="fixed-top form-order">
+        <div class="order-product">
+            <div class="enter-info  ">
+                <a href="javascript:0"
+                    style="float:right;font-size: 20px;;color: black;margin-right: 10px;transform: translateY(-20px)"
+                    id="close-form-order"><i class="fas fa-times"></i></a>
+                <h5>ORDERS PRODUCT</h5>
 
-            <span style="line-height: 40px;">Để đặt hàng, vui lòng thêm địa chỉ nhận hàng</span>
-            <form method="post" action="{{ route('order') }}" id="order-form" style="text-align: center;">
-             @csrf
+                <h6 style="line-height: 40px;">Để đặt hàng, vui lòng thêm địa chỉ nhận hàng</h6>
+                <form method="post" action="{{ route('order') }}" id="order-form" style="text-align: center;">
+                    @csrf
 
-                <div id="toggle">
+                    <div id="toggle">
 
-                    <div class="input">
-                        
-                        <input type="text" name="customer_name" id="name" placeholder="Vui lòng nhập họ"
-                        value="@if(isset(Auth::user()->id)) {{ Auth::user()->name }}  @endif"
-                        >
- 
+                        <div class="input">
+                            <span for="" class="name" @if (Auth::check())  style="opacity: 1;"    @endif>Nhập họ và tên</span>
+                            <input type="text" name="customer_name" class="info" id="name"
+                                placeholder="Vui lòng nhập họ" @if (Auth::check()) value="{{ Auth::user()->name }}"@endif>
+
+                        </div>
+                        <div class="input">
+                            <span class="email" @if (Auth::check())  style="opacity: 1;"    @endif>Email</span>
+                            <input type="text" class="info" name="email" id="email" placeholder="Email"
+                                @if (Auth::check())value="{{ Auth::user()->email }}"@endif>
+                        </div>
+                        <div class="input">
+                            <span class="numberphone">Số điện thoại</span>
+                            <input type="text" class="info" name="numberphone" id="numberphone"
+                                @if (Auth::check())value="0{{ Auth::user()->number_phone }}"@endif placeholder="Số điện thoại">
+                        </div>
+                        <div class="input">
+                            <span class="provinces">Thành phố</span>
+                            <select style="width: 90%;margin-left: 5%;" id="provinces" class="form-select"
+                                aria-label="Default select example" name="provinces" placeholder="Address">
+                                <option value="" selected>Thành Phố</option>
+                                @foreach ($province as $province)
+                                    <option value="{{ $province['name'] }}">
+
+                                        {{ $province['name'] }}</option>
+                                @endforeach
+                            </select>
+                        </div>
+                        <div class="districts">
+
+                        </div>
+                        <div class="wards">
+
+                        </div>
+                        <div class="address-details">
+
+                        </div>
+                        <div class="input" id="detail" style="display: none;">
+                            <span for="" class="addressDetails">Địa chỉ</span>
+                            <input type="text" class="info" name="addressDetails" id="addressDetails"
+                                placeholder="Địa chỉ chi tiết">
+                        </div>
+
+                        @if (isset(Auth::user()->id))  <input type="hidden" name="user_id" id="user_id" placeholder="Password" value="{{ Auth::user()->id }}">  @endif
+
+                        <div class="input">
+                            <span for="" class="message">Lời nhắn</span>
+                            <textarea class="info" name="message" id="message" placeholder="Lời nhắn" rows="3.5"
+                                cols="67"></textarea>
+                        </div>
                     </div>
-
-                    <div class="input">
-                        <select style="width: 90%;margin-left: 5%;"  id="districts" class="form-select"
-                            aria-label="Default select example" name="provinces" placeholder="Address">
-                            <option value="" selected>Thành Phố</option>
-                            @foreach ($province as $province)
-                                <option  value="{{  $province['name'] }}">
-                                    {{ $province['name'] }}</option>
-                            @endforeach
-                        </select>
-                    </div>
-                    <div class="districts">
-
-                    </div>
-                    <div class="wards">
-
-                    </div>
-                    <div class="address-details">
-
-                    </div>
-                    <div class="input">
-                        <input type="text" name="email" id="email" placeholder="Email" value="@if(isset(Auth::user()->id)) {{ Auth::user()->email }}  @endif" >
-                    </div>
-                    <div class="input">
-                        <input type="text" name="numberphone" id="numberphone" placeholder="Number Phone">
-                    </div>
-                    <div class="input">
-                        <input type="text" name="message" id="message" placeholder="Message">
-                    </div>
-                </div>
-                <input style="margin-top: 20px" type="submit" class="requestorder btn btn-primary" value="hoàn thành"  class="btn btn-danger">
-            </form>
+                    <input style="margin-top: 50px" type="submit" class="requestorder btn btn-primary" value="hoàn thành"
+                        class="btn btn-danger">
+                </form>
+            </div>
         </div>
     </div>
-   </div>
 
 
 
-
-    
     <script>
-    
-        $(document).ready(function() {
+        // ------------------------------Show Span-------------------------------------------------------------------
+        $('.info').keyup(function() {
+            var id = $(this).attr('id');
+            if ($(this).val().trim().length > 0) {
+                $('.' + id).css("opacity", 1);
+            } else {
+                $('.' + id).css("opacity", 0);
+            }
+
+        });
+    </script>
+
+    <script>
+        // ------------------------------Validation Cart--------------------------------------------------
             $("#order-form").validate({
                 rules: {
-                    customer_name: {
+                    "customer_name": {
                         required: true,
-                        minlength:6,
-                        maxlength:24,
+                        minlength: 3,
+                        maxlength: 24,
                     },
-                    numberphone: {
+                    "numberphone": {
                         required: true,
-                        minlength:9,
-                        maxlength:12,
-                        number:true,
+                        minlength: 9,
+                        maxlength: 12,
+                        number: true,
                     },
-                    email: {
+                    "email": {
                         required: true,
-                       // email:true,
+                        email: true,
                     },
-                    address: {
-                        required: true,
-                    },
-                    provinces:{
+                    "address": {
                         required: true,
                     },
-                    districts:{
+                    "provinces": {
                         required: true,
                     },
-                    wards:{
+                    "districts": {
                         required: true,
+                    },
+                    "wards": {
+                        required: true,
+                    },
+                    "message": {
+                        maxlength: 255
                     }
 
                 },
+                messages: {
+                    "customer_name": {
+                        required: "Không được để trống",
+                        minlength: "Họ và tên phải lớn hơn 3 ký tự",
+                        maxlength: "Họ và tên phải ít hơn 24 ký tự",
+                    },
+                    "numberphone": {
+                        required: "Không được để trống",
+                        minlength: "Số điện thoại không hợp lệ",
+                        maxlength: "Số điện thoại không hợp lệ",
+                        number: "Số điện thoại không hợp lệ",
+                    },
+                    "email": {
+                        required: "Không được để trống",
+                        email: "Email không hợp lệ",
+                    },
+                    "address": {
+                        required: "Không được để trống",
+                    },
+                    "provinces": {
+                        required: "Không được để trống",
+                    },
+                    "districts": {
+                        required: "Không được để trống",
+                    },
+                    "wards": {
+                        required: "Không được để trống",
+                    },
+                    "message": {
+                        maxlength: "Lời nhắn phải ít hơn 255 ký tự"
+                    },
 
-            });
-        });
-    </script>
-    <script>
-        $(document).on('click','.requestorder', function(e){
-            e.preventDefault();
-            if(  $("#order-form").valid()){
-                var name =  $("#name").val();
-        var province = $("#districts").val();
-        var district = $("#wards").val();
-        var wards = $("#address-details").val();
-        var addressDetails = $(".addressDetails").val();
-        var numberphone = $("#numberphone").val();
-        var message = $("#message").val();
-        var email = $("#email").val();
-            $.ajax({
-                type: "POST",
-                url: "{{ route('order') }}",
-                data:{
-                    customer_name:name,
-                provinces:province,
-                districts:district,
-                wards:wards,
-                numberphone:numberphone,
-                addressDetails:addressDetails,
-                message:message,
-                email:email,
-                _token:$('input[name=_token]').val()
-                },
-                success: function(data) {
-                    console.log(data);
-                 if(data == 1){
-                     alert('Mua hành thành công');
-                     $('.show-cart').remove();
-                     $('.payment').remove();
-                     $('.message').show();
-                     $('.order-product').hide(500);
-                  //   document.getElementById('order-form').reset();
-                 }else{
-                     alert(data);
-                 }
                 }
+
             });
+  
+    </script>
+    <script>
+        // ------------------------------Order Product--------------------------------------------------
+        $(document).on('click', '.requestorder', function(e) {
+            e.preventDefault();
+            if ($("#order-form").valid()) {
+                var name = $("#name").val();
+                var province = $("#provinces").val();
+                var district = $("#districts").val();
+                var wards = $("#wards").val();
+                var addressDetails = $("#addressDetails").val();
+                var numberphone = $("#numberphone").val();
+                var message = $("#message").val();
+                var email = $("#email").val();
+                var user_id = $("#user_id").val();
+                $.ajax({
+                    type: "POST",
+                    url: "{{ route('order') }}",
+                    data: {
+                        customer_name: name,
+                        provinces: province,
+                        districts: district,
+                        wards: wards,
+                        numberphone: numberphone,
+                        addressDetails: addressDetails,
+                        message: message,
+                        email: email,
+                        user_id: user_id,
+                        _token: $('input[name=_token]').val()
+                    },
+                    success: function(data) {
+
+                        $('.body').hide(500);
+                        if (data == 1) {
+                            alert('Mua hành thành công');
+                            $('.show-cart').remove();
+                            $('.payment').remove();
+                            $('.message').show();
+                            $('.order-product').hide(500);
+                            $('.add-product-cart').remove();
+                            //   document.getElementById('order-form').reset();
+                        } else {
+                            alert(data);
+                        }
+                    }
+                });
             }
-          
-     
+
+
 
 
         });
     </script>
 
     <script>
-        $(document).on('click', '#districts', function() {
+        // ------------------------------Quận huyện--------------------------------------------------
+        $(document).on('click', '#provinces', function() {
             var name = $(this).val();
+            var id = $(this).attr('id')
+
             if (name != '') {
+                $('.' + id).css("opacity", 1);
                 $.ajax({
                     type: "get",
-                    url: "http://localhost/sell-phone/public/cart/address/dictrict/"+name,
+                    url: "http://localhost/sell-phone/public/cart/address/dictrict/" + name,
                     success: function(data) {
-                        var address ='';
-                      
-                    address +=    '<div class="input">' +
-                        '<select style="width: 90%;margin-left: 5%;" name="districts" id="wards" class="form-select"' +
+                        var address = '';
+
+                        address += '<div class="input">' +
+                            '     <span class="districts" >Quận,huyện</span>' +
+                            '<select style="width: 90%;margin-left: 5%;" name="districts" id="districts" class="form-select"' +
                             'aria-label="Default select example" name="dictricts" placeholder="Address">' +
-                            '<option value="" selected>Quận,Huyện</option>'  
-                        $.each(data[0].districts , function(key, data){
-                         
-                      address +=  '<option  value="'+data.name+'"> ' + data.name + ' </option>' 
+                            '<option value="" selected>Quận,Huyện</option>'
+                        $.each(data[0].districts, function(key, data) {
+
+                            address += '<option  value="' + data.name + '"> ' + data.name +
+                                ' </option>'
                         })
-                      address += '</select>' +
-                    '</div>'
-                  
-                    $('.districts').html(address);
+                        address += '</select>' +
+                            '</div>'
+
+                        $('.districts').html(address);
+
                     }
                 });
             }
 
         });
     </script>
- <script>
-    $(document).on('click', '#wards', function() {
-        var name = $(this).val();
-        if (name != '') {
-            $.ajax({
-                type: "get",
-                url: "http://localhost/sell-phone/public/cart/address/ward/" + name,
-                success: function(data) {
-                    var address ='';
-        
-                address +=    '<div class="input">' +
-                    '<select style="width: 90%;margin-left: 5%;" name="wards" id="address-details" class="form-select"' +
-                        'aria-label="Default select example" name="dictricts" placeholder="Address">' +
-                        '<option value="" selected>Phường,Xã</option>'  
-                    $.each(data[0].wards , function(key, data){
-                      
-                  address +=  '<option  value="'+data.name+'"> ' + data.name + ' </option>' 
-                    })
-                  address += '</select>' +
-                '</div>'
-              
-                $('.wards').html(address);
-                }
-            });
-        }
+    <script>
+        $(document).on('click', '#districts', function() {
+            // ------------------------------Phường Xã--------------------------------------------------
+            var name = $(this).val();
+            var id = $(this).attr('id')
 
-    });
-</script>
+            if (name != '') {
+                $('.' + id).css("opacity", 1);
+                $.ajax({
+                    type: "get",
+                    url: "http://localhost/sell-phone/public/cart/address/ward/" + name,
+                    success: function(data) {
+                        var address = '';
 
-<script>
-    $(document).on('click','#address-details', function(){
-        if($(this).val() != ''){
-            var address = '';
-            address += '<div class="input">' +
-                '<input  type="text" name="addressDetails" class="addressDetails" placeholder="address-details"> </div>'
-            $('.address-details').html(address);
-        }
-           
-   });
-</script>
+                        address += '<div class="input">' +
+                            '     <span class="wards" >Phường,Xã</span>' +
+                            '<select style="width: 90%;margin-left: 5%;" name="wards" id="wards" class="form-select"' +
+                            'aria-label="Default select example"  placeholder="Address">' +
+                            '<option value="" selected>Phường,Xã</option>'
+                        $.each(data[0].wards, function(key, data) {
+
+                            address += '<option  value="' + data.name + '"> ' + data.name +
+                                ' </option>'
+                        })
+                        address += '</select>' +
+                            '</div>'
+
+                        $('.wards').html(address);
+                    }
+                });
+            }
+
+        });
+    </script>
 
     <script>
+        // ------------------------------Địa chỉ chi tiết--------------------------------------------------
+        $(document).on('click', '#wards', function() {
+            var id = $(this).attr('id')
+            if ($(this).val() != '') {
+                $('.' + id).css("opacity", 1);
+                $('#detail').show();
+            }
+
+        });
+    </script>
+
+    <script>
+        // ------------------------------Show form Order--------------------------------------------------
         $(document).on('click', '.order-products', function(e) {
             e.preventDefault();
             $('.order-product').show(500);
+            $('.body').show(300);
+
         });
         $('#close-form-order').click(function() {
             $('.order-product').hide(500);
+            $('.body').hide(200);
         });
     </script>
     <script>
         function deleteCart(id) {
+            // ------------------------------Delete cart--------------------------------------------------
             event.preventDefault();
             $.ajax({
                 type: "get",
                 url: "http://localhost/sell-phone/public/cart/delete/" + id,
                 success: function(data) {
                     console.log(data);
-                    $("#cart-" +id).remove();
+                    $("#cart-" + id).remove();
                     $('.cart-' + id).remove();
                     var totalPrice = 0;
 
                     $.each(data.cart, function(key, data) {
-                    totalPrice += (data.qty * data.price);
+                        totalPrice += (data.qty * data.price);
                     });
 
                     var html = '';
                     console.log(totalPrice);
-                    html += '<h5> $' + formatNumber(totalPrice)  + ' </h5>'
+                    html += '<h5> $' + formatNumber(totalPrice) + ' </h5>'
                     $('.total').html(html);
 
 
@@ -577,49 +690,52 @@
 
 
     <script>
+        // ------------------------------Update cart--------------------------------------------------
         $(document).on('change', '.qty', function(e) {
             var qty = $(this).val();
             var cartId = $(this).data("cartid");
             var price = $(this).data("price");
             if (qty > 10) {
                 alert("You can only buy less than 10 products");
-                $("#qty-"+cartId).val(10);
-             
-                requestCart(cartId,10,price);
+                $("#qty-" + cartId).val(10);
+
+                requestCart(cartId, 10, price);
 
 
             } else if (qty < 1) {
                 deleteCart(cartId);
             } else {
-              
-                requestCart(cartId,qty,price);
+
+                requestCart(cartId, qty, price);
             }
         });
     </script>
 
 
-<script>
-    function requestCart(cartId,qty,price) {
-        $.ajax({
-                    type: "get",
-                    url: "http://localhost/sell-phone/public/cart/" + cartId + "/update/" + qty,
-                    success: function(data) {
+    <script>
+        function requestCart(cartId, qty, price) {
 
-                        var total = '';
-                        total += '<span> $' + formatNumber(qty * price) + '</span> '
-                        $('.total-price-' + cartId).html(total);
+            // ------------------------------Request Update Cart--------------------------------------------------
+            $.ajax({
+                type: "get",
+                url: "http://localhost/sell-phone/public/cart/" + cartId + "/update/" + qty,
+                success: function(data) {
 
-                        var totalPrice = 0;
-                        $.each(data.cart, function(key, data) {
-                            totalPrice += (data.qty * data.price);
-                        });
+                    var total = '';
+                    total += '<span> $' + formatNumber(qty * price) + '</span> '
+                    $('.total-price-' + cartId).html(total);
 
-                        var html = '';
-                
-                        html += '<h5> $' + formatNumber(totalPrice)  + ' </h5>'
-                        $('.total').html(html);
-                    }
-                })
-    }
-</script>
+                    var totalPrice = 0;
+                    $.each(data.cart, function(key, data) {
+                        totalPrice += (data.qty * data.price);
+                    });
+
+                    var html = '';
+
+                    html += '<h5> $' + formatNumber(totalPrice) + ' </h5>'
+                    $('.total').html(html);
+                }
+            })
+        }
+    </script>
 @endsection

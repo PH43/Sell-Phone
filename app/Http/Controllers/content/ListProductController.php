@@ -49,7 +49,7 @@ class ListProductController extends Controller
             } else {
                 $category = category::with('brands')->where('id', $rq->cate)->get()->toArray();
             }
-       
+      // dd($data);
             //return $category;
             return view('content/body/listProduct', compact('data', 'category'));
         }

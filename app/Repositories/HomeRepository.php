@@ -18,8 +18,14 @@ class HomeRepository implements HomeRepositoryInterface{
   
 
     public function topProduct($id,$table){
+        if($table == 'order_details'){
+            $querry = 'sum(order_details.quantity)';
+        }else{
+            $querry = 'count(*)';
+        }
+
         return   $product = DB::table($table)
-        ->selectRaw('products.*, images.*,count(*) as count, '.$table.'.product_id'  )
+        ->selectRaw('products.*, images.*,  '.$querry.' as count, '.$table.'.product_id'  )
         ->join('products','products.id','=',   "$table".'.product_id')
         ->join('images','images.imageable_id', '=' ,'products.id')
         ->where('products.category_id', $id)
@@ -29,7 +35,7 @@ class HomeRepository implements HomeRepositoryInterface{
     public function search($search)
 
     {
-        return   product::Where('name', 'LIKE', "%{$search}%")->orWhere('price', 'LIKE', "%{$search}%")
+        return   product::Where('name', 'LIKE', "%{$search}%")->orWhere('price', 'LIKE', "%{$search}%")->take(6)->orderBy('id','desc')
         ->get()->toArray();
     }
 }

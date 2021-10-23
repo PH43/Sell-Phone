@@ -43,6 +43,12 @@ class BackendServiceProvider extends ServiceProvider
             'App\Repositories\AddressRepositoryInterface',
             'App\Repositories\AddressRepository',
         );
+
+        $this->app->bind(
+    
+            'App\Repositories\UserRepositoryInterface',
+            'App\Repositories\UserRepository',
+        );
     }
 }
 ?>

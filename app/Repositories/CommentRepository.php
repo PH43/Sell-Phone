@@ -43,15 +43,18 @@ class CommentRepository implements CommentRepositoryInterface
 
     }
     public function liststar($id){
-     $star['count'] =    rating::where('product_id', $id)->count();
+      $star['count'] =    rating::where('product_id', $id)->count();
    
         for($i=1; $i<= 5;$i++){
             $star[$i] = rating::where('product_id', $id)->where('star', $i)->count();
             if($star[$i] > 0){
-                $star['rating'][$i] = [ 'name' => $i ,
-                                'ratio' =>  $star[$i] /  $star['count']  * 100,];
+                $star['rating'][$i] = [
+                     'name' => $i ,
+                     'ratio' =>  $star[$i] /  $star['count']  * 100,];
             }else{
-                $star['rating'][$i] = [ 'name' => $i];
+                $star['rating'][$i] = [
+                    'name' => $i ,
+                    'ratio' =>  0,];
             }
            
         } 

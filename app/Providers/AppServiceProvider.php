@@ -3,7 +3,6 @@
 namespace App\Providers;
 
 use App\Models\category;
-use Illuminate\Support\Facades\Session;
 use Illuminate\Support\ServiceProvider;
 
 class AppServiceProvider extends ServiceProvider
@@ -24,7 +23,7 @@ class AppServiceProvider extends ServiceProvider
      * @return void
      */
     public function boot()
-    {   
+    { 
         $categories =  category::with('brands')->get();
         view()->share('categories', $categories);
 

@@ -9,7 +9,7 @@ use App\Models\product;
 class ProductRepository implements ProductRepositoryInterface
 {
 
-  
+
 
     public function detailProduct($id)
     {
@@ -21,27 +21,22 @@ class ProductRepository implements ProductRepositoryInterface
         $relatedName  =  substr("$name", 0, 3);
 
         return  $product['related'] = category::with(['products' => function ($q) use ($relatedName, $id) {
-            $q->with('image')->where('name', 'like', "%$relatedName%")->whereNotIn('id', [$id]);
+            $q->with('image')->where('name', 'like', "%$relatedName%")->whereNotIn('id', [$id])->take(6);
         }])->where('id', $category_id)->get()->toArray();
     }
 
     public function filterProduct($param)
     {
 
-        $product = product::with('image');
+        $product = product::with('image', 'categories');
         if (!empty($param['search'])) {
-            $products = $product->where('name', 'LIKE', "%{$param['search']}%")
-
-            ->orWhere('price', 'LIKE', "%{$param['search']}%")
-
-            ->orWhereHas('categories', function($q) use($param) {
-
-             $q->where('name','LIKE',"%{$param['search']}%");
-            
-            });
-         
+            $products = $product->whereRaw('(name like ? or price = ?  
+            or exists  
+            (select * from `categories` where 
+            `products`.`category_id` = `categories`.`id` and `name` like ?))',
+                 ["%{$param['search']}%", "{$param['search']}","%{$param['search']}%"]);
         }
-       
+
         if (!empty($param['cate'])) {
 
             $products = $product->where('category_id', $param['cate']);
@@ -55,6 +50,10 @@ class ProductRepository implements ProductRepositoryInterface
             $type = $param['type'];
             $products =   $products->orderBy("$colum", "$type");
         }
+        if (empty($param['colum']) && empty($param['type'])) {
+            
+            $products =   $products->orderBy("id", "desc");
+        }
         if (!empty($param['min']) && !empty($param['max'])) {
 
             $min = $param['min'];
@@ -63,17 +62,17 @@ class ProductRepository implements ProductRepositoryInterface
 
             $products =   $products->whereBetween('price',  [$min, $max]);
         }
-       
+
 
         $count = $products->count();
 
         if (!empty($param['page'])) {
             $page = $param['page'];
             $products = $products->offset(
-                ($page - 1) * 10
-            )->take(10);
+                ($page - 1) * 12
+            )->take(12);
         } else {
-            $products = $products->offset(0)->take(10);
+            $products = $products->offset(0)->take(12);
         }
 
         $products =  $products->get()->toArray();

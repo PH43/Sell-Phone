@@ -3,16 +3,14 @@
 namespace App\Http\Controllers\content;
 
 use App\Http\Controllers\Controller;
-use App\Models\category;
+use App\Models\order;
 use App\Models\order_detail;
+use App\Models\order_information;
 use App\Models\product;
-use App\Models\rating;
 use App\Repositories\HomeRepositoryInterface;
 
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\DB;
-use Illuminate\Support\Facades\Mail;
-
 
 class HomeController extends Controller
 {
@@ -55,18 +53,24 @@ class HomeController extends Controller
         return response()->json($products);
     }
     public function test(Request $rq)
+    
     {
+      
+       
+        $product = DB::table('order_details')
+        ->selectRaw('products.*, images.*,sum(order_details.quantity) as sum, order_details.product_id'  )
+        ->join('products','products.id','=',   'order_details.product_id')
+        ->join('images','images.imageable_id', '=' ,'products.id')
+        ->where('products.category_id', 1)
+        ->groupBy('product_id')
+        ->orderBy('sum' , 'desc')->take(6)->get()->toArray();
+        return $product;
 
-        $param = $rq->param;
-        $id = $rq->id;
-        DB::enableQueryLog();
 
-        return    product::where('name', 'LIKE', "%{$param}%")
-            ->orWhere('price', 'LIKE', "%{$param}%")
-            ->orWhereHas('categories', function ($q) use ($param) {
-                $q->where('name', 'LIKE', "%{$param}%");
-            })->where('category_id', $id)
-        ->get()->toArray();
-        dd( DB::getQueryLog());
+        order_detail::truncate();
+            order_information::truncate();
+            order::where('id','>' ,0)->forceDelete();
+            return 'success';
     }
+
 }

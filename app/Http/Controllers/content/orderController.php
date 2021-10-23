@@ -22,17 +22,18 @@ class orderController extends Controller
 
     {
 
-  
-
-        if ($this->orderRepo->checkQtyProduct() > 0) {
-            $product = product::find($this->orderRepo->checkQtyProduct());
-            $message = $product['name'] . 'Không đủ số lượng sản phẩm';
+        if ($this->orderRepo->checkQtyProduct() !== null) {
+            $message = $this->orderRepo->checkQtyProduct() . ' Không đủ số lượng sản phẩm';
         } else {
             $this->orderRepo->updateQtyProduct();
             $info =  $this->orderRepo->order($rq->all());
-            $this->orderRepo->sendMail($info);
-            session()->pull('cart', 'default');
-            return $message = 1;
+            if ($info  == 0) {
+                return $message = 'Lỗi sever';
+            } else {
+                $this->orderRepo->sendMail($info);
+                session()->pull('cart', 'default');
+                return $message = 1;
+            }
         }
 
         return response()->json($message);

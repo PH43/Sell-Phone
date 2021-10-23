@@ -2,6 +2,7 @@
 
 namespace App\Repositories;
 
+use App\Mail\WelcomeMail;
 use App\Models\order;
 use App\Models\order_detail;
 use App\Models\order_information;
@@ -9,9 +10,9 @@ use App\Models\product;
 use Carbon\Carbon;
 use Exception;
 use Illuminate\Support\Facades\DB;
-use Illuminate\Support\Facades\Log;
+
 use Illuminate\Support\Facades\Mail;
-use PhpParser\Node\Expr\Print_;
+
 
 class orderRepository implements OrderRepositoryInterface
 {
@@ -23,7 +24,9 @@ class orderRepository implements OrderRepositoryInterface
             if (!isset($info['user_id'])) {
                 $info['user_id'] = null;
             }
-
+            if (!isset($info['message'])) {
+                $info['message'] = null;
+            }
 
             $order =  order::create([
                 'time' =>   Carbon::now(),
@@ -54,22 +57,22 @@ class orderRepository implements OrderRepositoryInterface
                 ]);
             }
             DB::commit();
+            return $info;
         } catch (Exception $ex) {
             DB::rollback();
-            return redirect()->back();
+            return 0;
         }
-
-
-        return $info;
     }
 
     public function checkQtyProduct()
     {
         $cart = session()->all();
         foreach ($cart['cart'] as $cart) {
-            $product[$cart['id']] = product::where('id', $cart['id'])->get()->toArray();
-            if ($cart['qty'] > $product[$cart['id']][0]['quantity']) {
-                return $cart['id'];
+            $product = product::find($cart['id']);
+            if ($cart['qty'] > $product->quantity) {
+
+                return $cart['name'];
+           
             }
         }
     }
@@ -77,18 +80,23 @@ class orderRepository implements OrderRepositoryInterface
     {
         $cart = session()->all();
         foreach ($cart['cart'] as $cart) {
-            $product[$cart['id']] = product::find($cart['id']);
-            $product[$cart['id']]->quantity = $product[$cart['id']]->quantity - $cart['qty'];
-            $product[$cart['id']]->save();
+            $product = product::find($cart['id']);
+            $product->quantity = $product->quantity - $cart['qty'];
+            $product->save();
         }
     }
     public function sendMail($info)
     {
+        $address =  $info['provinces'] . ',' . $info['districts'] . ',' . $info['wards'] . ',' . $info['addressDetails'];
 
-        Mail::send('content/body/order', ['info' => $info], function ($message) use ($info) {
-            $message->from('duy0111111@gmail.com', 'Mua hàng1');
-            $message->to('duy654916@gmail.com', $info['customer_name']);
-            $message->subject('Thông tin mua hàng');
-        });
+        $mailInfo = [
+            'name' => $info['customer_name'],
+            'phone' =>  $info['numberphone'],
+            'email' =>  $info['email'],
+            'address' => $address,
+        ];
+        $email =  $info['email'];
+
+        Mail::to($email)->send(new WelcomeMail($mailInfo));
     }
 }

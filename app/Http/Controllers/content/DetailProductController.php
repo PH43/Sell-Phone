@@ -77,11 +77,9 @@ class DetailProductController extends Controller
 
     public function rate(Request $rq)
     {
-        $this->validate($rq, [
-            'name' => 'required|min:6|max:24',
-            'email' => 'required|email'
-        ]);
+        
         $this->commentRepo->rate($rq->all());
-        return redirect()->back()->with(['message' => 'Đánh giá thành công']);
+        $data =   $this->commentRepo->liststar($rq->product_id);
+        return response()->json($data);
     }
 }

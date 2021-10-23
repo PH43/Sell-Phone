@@ -93,8 +93,8 @@
 
     .header-login {
         border-right: 1px solid #adadad;
-        width: 8%;
-        ;
+        width: auto;;
+        padding-right: 10px;
     }
 
     .header-top1 div span {
@@ -212,14 +212,13 @@
     .acction-users {
         position: absolute;
         display: inline-block;
-
-        padding: 10px 20px;
+        text-align: left;
+        padding: 10px 10px;
         ;
         transform: translateX(-20px);
         background-color: black;
         color: white;
-        height: 100px;
-        ;
+    
         border-radius: 10px;
         margin-top: 10px;
     }
@@ -309,10 +308,11 @@ display: block;
                 <a href="{{ route('home') }}"><img src="{{ asset('/images/IconPage.png') }}" alt=""></a>
             </div>
             <div class="header-search">
-                <form action="{{ route('list-product-category', ) }}" method="get">
+                <form action="{{ route('list-product-category', ) }}" method="get" >
      
                     <i class="fas fa-search"></i>
-                    <input type="search" placeholder="Search" name="search" class="search" @if (isset($_GET['search']))
+                    
+                    <input type="search" placeholder="Search" autocomplete="off" name="search" class="search" @if (isset($_GET['search']))
                         value="{{ $_GET['search'] }}"
                     @endif>
                 </form>
@@ -364,19 +364,21 @@ display: block;
                     @endif
                 @else
 
-                    <li class="users"><a href=""> {{ Auth::user()->name }}</a>
+                    <li class="users"><a href=""> {{Auth::user()->name  }}</a>
                     <li class="acction-users" style="display: none;">
+                       
+                        <a href="{{ route('showInfo') }}">Tài khoản</a>
+                        <a href="{{ route('changeForm') }}">Đổi mật khẩu</a>
+                  
                         <a style="" href="{{ route('logout') }}" onclick="event.preventDefault();
-                                                              document.getElementById('logout-form').submit();">
-                            {{ __('Logout') }}
+                        document.getElementById('logout-form').submit();">
+                         Đăng xuất
 
-                            <form id="logout-form" action="{{ route('logout') }}" method="POST" class="d-none">
+                         <form id="logout-form" action="{{ route('logout') }}" method="POST" class="d-none">
 
-                                @csrf
-                            </form>
-                        </a>
-
-                        <a href="">Change Password</a>
+                      @csrf
+                      </form>
+                       </a>
                     </li>
                     </li>
 

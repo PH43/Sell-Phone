@@ -7,7 +7,8 @@
     <meta name="viewport" content="width=device-width, initial-scale=1">
     <link rel="icon" href="{{ URL::asset('/assets/images/favicon-32x32.png') }}" type="image/png" />
     <!--plugins-->
-
+    <link rel="stylesheet" type="text/css"
+    href="{{ URL::asset('/fontawesome-free-5.15.4-web/css/all.min.css') }}">
     {{ URL::asset('') }}
     <link href="{{ URL::asset('assets/plugins/vectormap/jquery-jvectormap-2.0.2.css') }}" rel="stylesheet" />
     <link href=" {{ URL::asset('assets/plugins/simplebar/css/simplebar.css') }} " rel="stylesheet" />
