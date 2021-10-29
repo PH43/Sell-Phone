@@ -9,20 +9,24 @@ use Illuminate\Support\Facades\DB;
 class CommentRepository implements CommentRepositoryInterface
 {
 
-    public function insertComment($user_id, $product_id, $content, )
-    {
+    public function insertComment($param)
+    {   
+    if(isset($param['user_id'])){
+        $user_id = $param['user_id'];
+    }else{
+        $user_id = null;
+    }
         comment::create([
             'user_id' => $user_id,
-            'product_id' => $product_id,
-            'content' => $content,
+            'product_id' => $param['product_id'],
+            'content' => $param['content'],
            
         ]);
     }
-    public function listComment($colum, $id, $type, $page,)
+    public function listComment( $id, $page,)
     {
-        $comment['data'] =  comment::with('user')->where("$colum", $id);
+        $comment['data'] =  comment::with('user')->where("product_id", $id);
 
-     
 
         $comment['count'] = $comment['data']->count();
 
@@ -35,12 +39,30 @@ class CommentRepository implements CommentRepositoryInterface
         return $comment;
     }
 
-    public function rate($param){
-        rating::create(['name' => $param['name'],
-                         'email' => $param['email'] ,
-                         'star' => $param['star'] ,
-                         'product_id' => $param['product_id'] ]);
+    public function evaluate($param){
+    
+      if(isset($param['user_id'])){
+          $user_id = $param['user_id'];
+      }else{
+          $user_id = null;
+      }
+        rating::insert( 
+        ['name' => $param['name'],
+        'email' => $param['email'] ,
+        'star' => $param['star'] ,
+        'product_id' => $param['product_id'] ,
+        'user_id' => $user_id
+    ]);
+   
+                         
 
+    }
+
+    public function check($email,$id){
+        $product =  rating::where('email', "$email")->where('product_id',"$id")->get()->toArray();
+        if($product == null) {
+            return 1;
+        }
     }
     public function liststar($id){
       $star['count'] =    rating::where('product_id', $id)->count();

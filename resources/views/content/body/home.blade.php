@@ -58,7 +58,7 @@
 
             --columns: 6;
             width: calc(calc(100% / var(--columns)) - 10px);
-
+            padding: 15px 0px;
             display: inline-block;
             margin-top: 50px;
 
@@ -280,13 +280,13 @@
             font-family: Montserrat;
         }
     #new-1{
-        color: #c27b43;
+        color: #cb1c22;
     }
     #buylot-1{
-        color: #c27b43;
+        color: #cb1c22;
     }
     #rating-1{
-        color: #c27b43;
+        color: #cb1c22;
     }
     </style>
 
@@ -342,7 +342,7 @@
                     <a href="{{ route('detail-product', $product->id) }}"> <img src="{{ asset('/images/productImages/'. $product->url ) }}" alt=""></a>
                   <div class="add-cart">
                     <div class="add">
-                        <a class="addToCart" href="" data-url="{{ route('addToCart', $product->id) }}" ><span>Add To Cart</span></a>
+                        <a class="addToCart" href="" data-url="{{ route('addToCart', $product->id) }}" ><span>Giỏ hàng <i class="fas fa-cart-plus"></i></span></a>
                     </div>
                   </div>
                     <div class="product-name">
@@ -383,7 +383,7 @@
                     <a href="{{ route('detail-product', $product->id) }}"> <img src="{{ asset('/images/productImages/'. $product->url ) }}" alt=""></a>
                   <div class="add-cart">
                     <div class="add">
-                        <a class="addToCart" href="" data-url="{{ route('addToCart', $product->id) }}" ><span>Add To Cart</span></a>
+                        <a class="addToCart" href="" data-url="{{ route('addToCart', $product->id) }}" ><span>Giỏ hàng <i class="fas fa-cart-plus"></i></span></a>
                     </div>
                   </div>
                     <div class="product-name">
@@ -404,7 +404,7 @@
 
 
     <div class="show-product">
-        <a>Sản phẩm nhiều  đánh giá  nhất</a>
+        <a>Sản phẩm được đánh giá cao</a>
         @foreach ($categories as $b)
             <span><a href="Javascript:0" 
                 class="change-product" 
@@ -423,7 +423,7 @@
                     <a href="{{ route('detail-product', $product->id) }}"> <img src="{{ asset('/images/productImages/'. $product->url ) }}" alt=""></a>
                   <div class="add-cart">
                     <div class="add">
-                        <a class="addToCart" href="" data-url="{{ route('addToCart', $product->id) }}" ><span>Add To Cart</span></a>
+                        <a class="addToCart" href="" data-url="{{ route('addToCart', $product->id) }}" ><span>Giỏ hàng <i class="fas fa-cart-plus"></i></span></a>
                     </div>
                   </div>
                     <div class="product-name">
@@ -693,7 +693,7 @@
                ' <a href="http://localhost/sell-phone/public/product/'+ data.id + '" > <img src="http://localhost/sell-phone/public/images/productImages/'+data.url+'" alt=""></a>'+
                '<div class="add-cart">' +
                ' <div class="add">'+
-                       ' <a class="addToCart" href="" data-url="http://localhost/sell-phone/public/cart/'+data.id+'" ><span>Add To Cart</span></a>' +
+                       ' <a class="addToCart" href="" data-url="http://localhost/sell-phone/public/cart/'+data.id+'" ><span>Giỏ hàng <i class="fas fa-cart-plus"></i></span></a>' +
                     '</div> </div>' +
                 '<div class="product-name">'+
                 '<span> ' + data.name + ' </span></div>'+
@@ -703,7 +703,7 @@
                 });
                 $('#'+addproduct).html(html);
                 $('[data-product='+ addproduct + ']' ).css('color', '#757575');
-                $('#'+getid).css('color', '#c27b43');
+                $('#'+getid).css('color', '#cb1c22');
 
             }
         });

@@ -18,7 +18,7 @@
         @endforeach
    
 
-Congratulations! Your account has been created.
+Mua hàng thành công !!!
 
 Thanks,<br>
 {{ config('app.name') }}

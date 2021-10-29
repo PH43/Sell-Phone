@@ -23,12 +23,9 @@ class ListProductController extends Controller
 
     public function filterProduct(Request $rq)
     {
-
-        $param = $rq->all();
-        DB::enableQueryLog();
  
-        $data =  $this->productRepo->filterProduct($param);
-     //  dd( DB::getQueryLog());
+        $data =  $this->productRepo->filterProduct($rq->all());
+
         if ($rq->ajax()) {
       
            
@@ -49,8 +46,6 @@ class ListProductController extends Controller
             } else {
                 $category = category::with('brands')->where('id', $rq->cate)->get()->toArray();
             }
-      // dd($data);
-            //return $category;
             return view('content/body/listProduct', compact('data', 'category'));
         }
     }

@@ -3,10 +3,12 @@
 namespace App\Http\Controllers\content;
 
 use App\Http\Controllers\Controller;
+use App\Models\comment;
 use App\Models\order;
 use App\Models\order_detail;
 use App\Models\order_information;
 use App\Models\product;
+use App\Models\rating;
 use App\Repositories\HomeRepositoryInterface;
 
 use Illuminate\Http\Request;
@@ -27,11 +29,9 @@ class HomeController extends Controller
 
 
         $products['new'] = $this->productRepo->productCategory(1);
-
         $products['buyLot'] = $this->productRepo->topProduct(1, 'order_details');
         $products['rating'] = $this->productRepo->topProduct(1, 'ratings');
-        //dd($products);
-        return view('content/body/body', compact('products'));
+        return view('content/body/home', compact('products'));
     }
     public function productCategory($id)
     {
@@ -55,8 +55,8 @@ class HomeController extends Controller
     public function test(Request $rq)
     
     {
-      
-       
+  
+   return 'success';
         $product = DB::table('order_details')
         ->selectRaw('products.*, images.*,sum(order_details.quantity) as sum, order_details.product_id'  )
         ->join('products','products.id','=',   'order_details.product_id')
@@ -67,10 +67,7 @@ class HomeController extends Controller
         return $product;
 
 
-        order_detail::truncate();
-            order_information::truncate();
-            order::where('id','>' ,0)->forceDelete();
-            return 'success';
+    
     }
 
 }

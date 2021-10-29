@@ -3,13 +3,12 @@
 namespace App\Http\Controllers\content;
 
 use App\Http\Controllers\Controller;
-use App\Http\Requests\ratingRequest;
 use App\Models\category;
 
 use App\Repositories\CommentRepositoryInterface;
 use App\Repositories\ProductRepositoryInterface;
 use Illuminate\Http\Request;
-
+use App\Models\rating;
 
 class DetailProductController extends Controller
 {
@@ -28,34 +27,28 @@ class DetailProductController extends Controller
 
 
         $data['product'] =    $this->productRepo->detailProduct($id);
-//dd($data);
-        
 
-        $data['relatedProduct'] = $this->productRepo->relatedProduct($data['product'][0]['name'], $data['product'][0]['id'],$data['product'][0]['category_id']);
+        $data['relatedProduct'] = $this->productRepo->relatedProduct($data['product'][0]['name'], $data['product'][0]['id'], $data['product'][0]['category_id']);
 
-        $data['comment'] = $this->commentRepo->listComment('product_id', $data['product'][0]['id'], 1, 5);
+        $data['comment'] = $this->commentRepo->listComment($data['product'][0]['id'],  5);
 
         $data['rating'] =   $this->commentRepo->liststar($id);
 
         if ($data['product'][0]['quantity'] >= 1) {
+            
             $data['status'] = 'Còn hàng';
         } else {
             $data['status'] = 'Hết hàng';
         }
-//dd($data);
+        //dd($data);
         return  view('content/body/detailproduct', compact('data'));
     }
 
     public function insertComment(Request $rq)
     {
-
-
-        if ($rq->has('parents_id')) {
-            $parents_id = $rq->has('parents_id');
-        } else {
-            $parents_id = null;
-        }
-        $this->commentRepo->insertComment($rq->user_id,  $rq->product_id, $rq->content);
+        
+        $this->commentRepo->insertComment($rq->all());
+  
         return  response()->json();
     }
 
@@ -77,9 +70,10 @@ class DetailProductController extends Controller
 
     public function rate(Request $rq)
     {
-        
-        $this->commentRepo->rate($rq->all());
+    
+         $this->commentRepo->evaluate($rq->all());      
         $data =   $this->commentRepo->liststar($rq->product_id);
+
         return response()->json($data);
     }
 }

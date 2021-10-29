@@ -69,10 +69,10 @@ class ProductRepository implements ProductRepositoryInterface
         if (!empty($param['page'])) {
             $page = $param['page'];
             $products = $products->offset(
-                ($page - 1) * 12
-            )->take(12);
+                ($page - 1) * 16
+            )->take(16);
         } else {
-            $products = $products->offset(0)->take(12);
+            $products = $products->offset(0)->take(16);
         }
 
         $products =  $products->get()->toArray();

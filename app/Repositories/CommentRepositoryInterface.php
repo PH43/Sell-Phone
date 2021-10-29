@@ -2,10 +2,11 @@
 namespace App\Repositories;
 interface CommentRepositoryInterface
 {
-    public function listComment($colum,$id ,$type,$page,);
-    public function insertComment($user_id,$product_id,$content,);
-    public function rate($param);
+    public function listComment($id ,$page,);
+    public function insertComment($param);
+    public function evaluate($param);
     public function liststar($id);
+    public function check($email,$id);
 }
 
 ?>

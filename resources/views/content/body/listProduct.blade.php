@@ -15,6 +15,7 @@
             background-color: #f8f9fa;
             margin-top: 30px;
             padding-bottom: 50px;
+            
 
 
         }
@@ -24,12 +25,13 @@
             width: 80%;
             padding: 20px 0px ;
             background-color: #f8f9fa;
+       
         }
 
 
 
         .product-info {
-
+            padding: 15px 0px;
 --columns: 4;
 width: calc(calc(100% / var(--columns)) - 10px);
 margin-bottom: 5rem;
@@ -90,7 +92,7 @@ text-align: center;
 color: white;
 font-weight: 500;
 font-size: 20px;
-font-weight: bold;
+
 
 }
 
@@ -235,12 +237,13 @@ border: 1px solid black;
         .list-product {
             border: 1px solid #ececec;
             width: 100%;
-            height: auto;
+            min-height: 300px;
             padding: 10px 0px;
             margin-top: 20px;
             background-color: white;
             text-align: left;
             border-radius: 10px;
+        
         }
 
         .select-product {
@@ -291,7 +294,7 @@ border: 1px solid black;
         .take-product {
             width: 100%;
             text-align: center;
-            margin-top: 100px;
+            margin-top: 10px;
             padding: 20px;
         }
 
@@ -389,16 +392,15 @@ border: 1px solid black;
             <div class="info-category-page">
                 <div class="info-category">
                     <span class="name-category">
-                        @if(isset($_GET['search']))
-                        Từ khóa tìm kiếm: {{$_GET['search']}}
+                        @if(Request::get('search'))
+                        Từ khóa tìm kiếm: {{Request::get('search')}}
                         @else
-                        @if(isset( $data['products'][0]['categories']['name'] ))
+                        @if($data['products'] != null) 
                         {{ $data['products'][0]['categories']['name'] }}
-             
+                        @else
+                        Không có sản phẩm này
                         @endif
-                     
                         @endif
-                        
                         <span class="name-factory"></span></span>
                     <span class="count-product"><span >({{ $data['count'] }} Sản phẩm)</span></span>
                     <div class="images-category">
@@ -420,18 +422,23 @@ border: 1px solid black;
                 </div>
 
             </div>
-            .
+            @if(Request::get('colum'))
+            @php $colum = Request::get('colum') @endphp
+            @else
+            @php $colum = 1 @endphp
+            @endif
+            @php $type = Request::get('type') @endphp
+
             <div class="list-product">
                 <div class="select-product">
                     <div class="select-product-left">
                         <span>Ưu tiên xem:</span>
                      
                         <a class="sortProduct"  
-                        @if (isset($_GET['colum']) && $_GET['colum'] == 'id' && $_GET['type'] == 'desc')
-                      
+                        @if ($colum == 'id' && $type == 'desc')
                         style="background-color: #cb1c22;  color: white; "  
                         @endif
-                        @if (!isset($_GET['colum']))
+                        @if ($colum == 1)
                       
                         style="background-color: #cb1c22;  color: white; "  
                         @endif
@@ -439,15 +446,14 @@ border: 1px solid black;
                         href="Javascript:0" data-color="1"  id="sort-1"  data-colum="id" data-type="desc">Sản phẩm mới nhất</a>
 
                         <a class="sortProduct"  
-                        @if (isset($_GET['colum']) && $_GET['colum'] == 'id' && $_GET['type'] == 'asc')
-                          
+                        @if ($colum == 'id' && $type == 'asc')
                         style="background-color: #cb1c22;  color: white; "  
                         @endif
                         href="Javascript:0"  data-color="2" id="sort-2"   data-colum="id" data-type="asc">Sản phẩm cũ nhất </a>
 
 
                         <a class="sortProduct"
-                        @if (isset($_GET['colum']) && $_GET['colum'] == 'price' && $_GET['type'] == 'desc')
+                        @if ( $colum == 'price' && $type == 'desc')
                           
                         style="background-color: #cb1c22;  color: white; "   
                         @endif
@@ -456,7 +462,7 @@ border: 1px solid black;
 
                         <a class="sortProduct"
                         
-                        @if (isset($_GET['colum']) && $_GET['colum'] == 'price' && $_GET['type'] == 'asc')
+                        @if ($colum == 'price' && $type == 'asc')
                     
                         style="background-color: #cb1c22;  color: white; "  
                         @endif
@@ -477,7 +483,7 @@ border: 1px solid black;
                       <div class="add-cart">
                         <div class="add" >
                             <div style="width: 100%;margin-top: 5px;">
-                                <a class="addToCart" href="" data-url="{{ route('addToCart', $product['id']) }}" ><span>Add To Cart</span></a>
+                                <a class="addToCart" href="" data-url="{{ route('addToCart', $product['id']) }}" ><span>Giỏ Hàng  <i class="fas fa-cart-plus"></i></span></a>
                             </div>
                         </div>
                       </div>
@@ -494,17 +500,15 @@ border: 1px solid black;
                 </div>
 
                 <div class="take-product">
-                    @for ($i = 1; $i <= ceil($data['count']/12); $i++) 
+                    @for ($i = 1; $i <= ceil($data['count']/16); $i++) 
                     <a href="Javascript:0" 
-                    @if(isset($_GET['page']) && $_GET['page'] == $i) 
-        
+                    @if(Request::get('page') == $i) 
                     style="background-color:black;color:white;;"
                     @else
-                    @if(!isset($_GET['page']) && $i == 1)
+                    @if(!Request::get('page') && $i == 1)
                     style="background-color:black;color:white;"
                     @endif
                     @endif
-                    
                     class="pagingProducts" data-page="{{$i}}"  id="page-{{$i}}"> {{$i}} </a>             
                         
                     @endfor
@@ -514,7 +518,7 @@ border: 1px solid black;
 
             </div>
         </div>
-        <div class="menu-categories" style="margin-bottom: 400px;margin-top: 35px;">
+        <div class="menu-categories" style="margin-bottom: 500px;margin-top: 35px;">
             <h3 style="color: orange;font-weight: bold">Lọc Sản Phẩm</h3>
 
 
@@ -533,7 +537,7 @@ border: 1px solid black;
                         
                     <label class="container">{{$cate['name']}}
                         <input type="radio" class="categoryProducts"
-                        @if(isset($_GET['cate']) && $_GET['cate'] == $cate['id'] )
+                        @if(Request::get('cate') == $cate['id'] )
                         checked
                         @endif
                         
@@ -546,20 +550,27 @@ border: 1px solid black;
                 @endif
                 <div class="add-product-checkbox">
 
-                    <a  href="Javascript:0">Hãng sản xuất</a>
+                    <a  href="Javascript:0">Lọc thương hiệu</a>
 
-                    @if (isset($_GET['brands']))
-                        <?php $br = explode(',', $_GET['brands']); ?>
-                    @endif
+    
+   <div class="brands-all">
+    <label class="container"> <label for="">Tất cả</label>
+    <input type="checkbox" class="brandProducts" id="all" 
+    @if (!Request::get('brands') )
+        checked
+    @endif >
+    <span class="checkmark"></span>
+    </label>
+   </div>
+
+                        <?php $br = explode(',', Request::get('brands')); ?>
                     <div class="add-brands">
                     @foreach ($category[0]['brands'] as $brand)
                   
                     <label class="container"> <label for="">{{ $brand['name'] }}</label>
-                    <input type="checkbox" class="brandProducts" id="brand" 
-                    @if (isset($br))
+                    <input type="checkbox" class="brandProducts" id="brand-{{ $brand['id']}}" 
                     @if (in_array($brand['id'], $br))
                         checked
-                    @endif
                     @endif
                     value="{{ $brand['id'] }}">
                     <span class="checkmark"></span>
@@ -571,7 +582,7 @@ border: 1px solid black;
                     <div class="filter-price" style="margin-top:20px;">
                         <a href="">Lọc giá</a>
                         <label class="container">Tất cả
-                            <input type="radio" class="filterPrice" name="radio" data-min="1" data-max="2" @if (!isset($_GET['min']))
+                            <input type="radio" class="filterPrice" name="radio" data-min="1" data-max="2" @if (!Request::get('max'))
                             checked
                             @endif
                             >
@@ -579,21 +590,22 @@ border: 1px solid black;
 
                         </label>
                         @for ($i = 1; $i <= 9; $i++)
-                            <label class="container">Từ {{ ($i -1) * 2000 + 1 }} - {{ $i * 2000 }}
-                                <input type="radio" class="filterPrice" name="radio" data-min="{{ ($i -1 ) * 2000  + 1}}"
-                                    data-max="{{ $i * 2000 }}" @if (isset($_GET['min']) && isset($_GET['max']))
-                                @if ($_GET['min'] == ($i - 1) * 2000 + 1 && $_GET['max'] == $i * 2000)
+                        @php $min = ($i -1) * 2000 + 1 ; $max = $i * 2000 @endphp
+                            <label class="container">Từ {{ $min }} - {{ $max }}
+                                <input type="radio" class="filterPrice" name="radio" data-min="{{ $min }}"
+                                    data-max="{{ $max  }}" 
+                                @if (Request::get('min') == $min && Request::get('max') == $max)
                                     checked
-                                @endif
-                        @endif
-
-                        >
+                                @endif >
                         <span class="checkmark"></span>
 
                         </label>
                         @endfor
                         <label class="container">Trên 18001
-                            <input type="radio" class="filterPrice" name="radio" data-min="18001" data-max="999999999">
+                            <input type="radio" class="filterPrice" name="radio" data-min="18001" data-max="999999999"
+                            @if (Request::get('min') == 18001 && Request::get('max') == 999999999)
+                            checked
+                            @endif  >
                             <span class="checkmark"></span>
 
                         </label>
@@ -609,25 +621,35 @@ border: 1px solid black;
     <div style="width: 100%;border-bottom: 2px solid black;margin-top: 20px;;clear: both;">
 
     </div>
+  <script>
+      
+  </script>
 <script>
     $(document).on('click','.brandProducts', function(e){
         var url = new URL(window.location);
-
-        var brands = Array.from(document.querySelectorAll("#brand"))
+        var id = $(this).attr('id')
+        var brands = Array.from(document.querySelectorAll(".brandProducts"))
                 .filter(checkbox => checkbox.checked)
                 .map(checkbox => checkbox.value);
-
-            
         
-                url.searchParams.set('brands', brands.toString());
-              var page =  url.searchParams.get('page');
-                if(page !== 'null'){
-                    url.searchParams.delete('page');
-                }
-              
-            if (url.searchParams.get('brands') == '') {
+        if( id == 'all'){
+            $(".brandProducts:checked").click();
+            url.searchParams.delete('brands');
+            $(".brands-all").html('<label class="container"> <label for="">Tất cả   </label><input type="checkbox" class="brandProducts" id="all" checked  ><span class="checkmark"></span></label>');
+
+        }else{
+            url.searchParams.set('brands', brands.toString());
+            $(".brands-all").html('<label class="container"> <label for="">Tất cả </label><input type="checkbox" class="brandProducts" id="all"  ><span class="checkmark"></span></label>');
+        }
+        if (url.searchParams.get('brands') == '') {
                 url.searchParams.delete('brands');
+                $("#all").click();
+                
+    
             }
+                    var page =  url.searchParams.get('page');
+                    url.searchParams.delete('page');
+
             window.history.pushState({}, '', url);
             $.ajax({
                 type: 'get',
@@ -635,6 +657,7 @@ border: 1px solid black;
                 success: function(data) {
                     LoadProduct(data);
                     paging(data);
+                   
                 }
             });
 
@@ -651,9 +674,7 @@ border: 1px solid black;
                 url.searchParams.set('max', max, );
                 url.searchParams.delete('take');
                 var page =  url.searchParams.get('page');
-                if(page !== 'null'){
-                    url.searchParams.delete('page');
-                }
+                url.searchParams.delete('page');
             if (min == 1 && max == 2) {
                 url.searchParams.delete('min');
                 url.searchParams.delete('max');
@@ -678,19 +699,17 @@ border: 1px solid black;
             $('.sortProduct').css({"background-color": "white" ,"color": "#8392a5"});
             $('#sort-'+color).css({
             "background-color": "#cb1c22","color": "white"});
+            url.searchParams.set('colum', colum, );
+            url.searchParams.set('type', type, );
 
-            if (typeof colum !== 'undefined' && typeof type !== 'undefined') {
-                url.searchParams.set('colum', colum, );
-                url.searchParams.set('type', type, );
-
-            }
+            
             window.history.pushState({}, '', url);
             $.ajax({
                 type: 'get',
                 url:url,
                 success: function(data) {
                     LoadProduct(data);
-                    paging(data);
+               
                 }
             });
     });
@@ -698,7 +717,9 @@ border: 1px solid black;
 
 <script>
     $(document).on('click', '.pagingProducts',function(){
+
         var id = $(this).attr('id');
+        var page = $(this).data("page");
         $('.pagingProducts').css({
             "background-color":"white",
             "color":"rgb(128, 126, 126)"
@@ -708,16 +729,21 @@ border: 1px solid black;
             "background-color":"black",
             "color":"white"
         });
+
+       
  
         var url = new URL(window.location);
-        var page = $(this).data("page");
-            url.searchParams.set('page', (page));
+        
+            url.searchParams.set('page', page);
             window.history.pushState({}, '', url);
             $.ajax({
                 type: 'get',
                 url:url,
                 success: function(data) {
                     LoadProduct(data);
+                    $('html, body').animate({
+          scrollTop: 50
+        }, 1000);
 
                 }
             });
@@ -734,12 +760,9 @@ border: 1px solid black;
         if(cate === 'all'){
         url.searchParams.delete('cate' );
             }
-            if(brands !== 'null'){
-                    url.searchParams.delete('brands');
-                }
-            if(page !== 'null'){
-                    url.searchParams.delete('page');
-                }
+        url.searchParams.delete('brands');
+        url.searchParams.delete('page');
+                
             window.history.pushState({}, '', url);
             $.ajax({
                 type: 'get',
@@ -769,7 +792,7 @@ border: 1px solid black;
 
 <script>
     function LoadProduct(data){
-
+      
                     var html = ''
                     $.each(data.products.products, function(key, product) {
 
@@ -780,7 +803,7 @@ border: 1px solid black;
                       '<div class="add-cart">'+
                         '<div class="add" >'+
                             '<div style="width: 100%;margin-top: 5px;">' +
-                                '<a class="addToCart" href="" data-url="http://localhost/sell-phone/public/cart/'+ product.id +'" ><span>Add To Cart</span></a>' +
+                                '<a class="addToCart" href="" data-url="http://localhost/sell-phone/public/cart/'+ product.id +'" ><span>Giỏ hàng <i class="fas fa-cart-plus"></i></span></a>' +
                            ' </div></div> </div>' +
                         '<div class="product-name">' +
                         ' <span> '+product.name+' </span></div>' +
@@ -791,9 +814,19 @@ border: 1px solid black;
                     });
                     $('.show-list-product').html(html);
                     // ---------------------- load count ----------------------------------------------------
-                    var countHtml ='';
-                    countHtml += ' <span>(' + data.count + ' sản phẩm )</span>' 
-                    $('.count-product').html(countHtml);
+                    var url = new URL(window.location);
+                    var search =  url.searchParams.get('search');
+                    if( search == null ) {
+                        if(data.products.count == 0){
+                        $('.name-category').html('<span>Không có sản phẩm này</span>');
+                    }else{
+                        $('.name-category').html('<span> ' + data.brands[0].name + ' </span>');
+                        
+                    }  
+                    }
+                 
+
+                    $('.count-product').html('<span>(' + data.count + ' sản phẩm )</span>');
 
                    
                    
@@ -801,48 +834,21 @@ border: 1px solid black;
    
     }
     function paging(data){
-        var count = Math.ceil(data.count / 12);
-                    var page = '';
+        
+        var count = Math.ceil(data.count / 16);
+        var page = '';
+        if( count >= 1 ){
+           
 
-        page +=  '<a href="Javascript:0" style="background-color:black;color:white;" class="pagingProducts" data-page="1"  id="take-1">1</a>'
-                    for (var i = 2; i <= count; i++) {
-                        page +=
-         '<a href="Javascript:0" class="pagingProducts" data-page="' + i + '"  id="take-' + i + '">' + i + '</a>'
-                    }
-                    $('.take-product').html(page);
+page +=  '<a href="Javascript:0" style="background-color:black;color:white;" class="pagingProducts" data-page="1"  id="take-1">1</a>'
+for (var i = 2; i <= count; i++) {
+    page +=
+'<a href="Javascript:0" class="pagingProducts" data-page="' + i + '"  id="take-' + i + '">' + i + '</a>'
+}
+}
+        $('.take-product').html(page);                   
     }
 </script>
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
 
 
 

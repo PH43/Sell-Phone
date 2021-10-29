@@ -327,7 +327,7 @@ display: block;
 
 
             <div class="header-buyonline">
-                <span>Mua online giảm 10%</span>
+                <span>Sản Phẩm Chính Hãng 100%</span>
             </div>
             <div class="header-cart">
                 <span class="cart-show"><i class=" fas fa-shopping-cart"></i> <a href="{{ route('show-cart') }}">Giỏ hàng</a><br>

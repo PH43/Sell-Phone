@@ -270,32 +270,40 @@
                     </thead>
 
                     <tbody>
-                        @foreach ($cart['cart'] as $cart)
+                        @foreach ($cart['cart'] as $product)
                             @php
-                                $total += $cart['qty'] * $cart['price'];
+                                $total += $product['qty'] * $product['price'];
                             @endphp
 
-                            <tr class="cart-{{ $cart['id'] }}">
+                            <tr class="cart-{{ $product['id'] }}">
                                 <th scope="row"><img style="width: 100px;height: 100px"
-                                        src=" {{ asset('images/productImages/' . $cart['image']) }}" alt=""> </th>
-                                <td>{{ $cart['name'] }}</td>
-                                <td><input class="qty" data-cartid="{{ $cart['id'] }}"
-                                        data-price="{{ $cart['price'] }}" style="width: 40px" type="number"
-                                        value="{{ $cart['qty'] }}" id="qty-{{ $cart['id'] }}" min="1" max="10"></td>
-                                <td> ${{ number_format($cart['price'], 0, ',') }}</td>
-                                <td class="total-price-{{ $cart['id'] }}">
-                                    <span>${{ number_format($cart['qty'] * $cart['price'], 0, ',') }} </span>
+                                        src=" {{ asset('images/productImages/' . $product['image']) }}" alt=""> </th>
+                                <td>{{ $product['name'] }}</td>
+                                <td><input class="qty" data-cartid="{{ $product['id'] }}"
+                                        data-price="{{ $product['price'] }}" style="width: 40px" type="number"
+                                        value="{{ $product['qty'] }}" id="qty-{{ $product['id'] }}" min="1" max="10"></td>
+                                <td> ${{ number_format($product['price'], 0, ',') }}</td>
+                                <td class="total-price-{{ $product['id'] }}">
+                                    <span>${{ number_format($product['qty'] * $product['price'], 0, ',') }} </span>
                                 </td>
-                                <td><a href="" onclick="deleteCart({{ $cart['id'] }})">Delete</a></td>
-                            </tr>
+                                <td><a style="text-decoration: none; color: red;" 
+                                    href="" onclick="deleteCart({{ $product['id'] }})"><i 
+                                    style="transform: translateX(8px);font-size: 20px;" 
+                                    class="fas fa-times"></i></a></td></tr>
                         @endforeach
 
                     </tbody>
                 </table>
             </div>
 
-
-
+            @else
+            <span style="margin-left: 2%;">Không có sản phẩm trong giỏ hàng của bạn</span>
+         
+        @endif
+        <div class="message" style="display: none;margin-left: 2%;">
+            <span > Kiểm tra email để xem giỏ hàng của bạn </span>
+            <a href="https://mailtrap.io/inboxes/1507477/messages/2442154038">https://mailtrap.io/inboxes/1507477/messages/2442154038</a>
+        </div>
             <div class="payment">
                 <div class="category-payment">
                     <div class="shiping">
@@ -304,6 +312,7 @@
                     </div>
                     <div class="payment-format">
                         <li>
+
                             <h5>Hình Thức Thanh Toán</h5>
                         </li>
                         <li> <span>Thanh toán khi nhận hàng</span> </li>
@@ -319,22 +328,18 @@
 
 
                         <span>TỔNG THANH TOÁN <div class="total">
-                                <h5>{{ number_format($total, 0, ',') }}$</h5>
+                                <h5>${{ number_format($total, 0, ',') }}</h5>
                             </div></span>
                         <span>Giao hàng & thuế được tính khi thanh toán</span>
                     </div>
-
+                 
                     <div class="payment-cart">
-                        <a href="" class="order-products">Đặt hàng</a>
+                        <a href="" class="order-products" @if(!empty($cart['cart'])) id="1"  @endif >Đặt hàng</a>
                     </div>
                 </div>
             </div>
-        @else
-            <span style="margin-left: 2%;">Không có sản phẩm trong giỏ hàng của bạn</span>
-        @endif
-        <div class="message" style="display: none;">
-            <span style="margin-left: 2%;"> Kiểm tra email để xem giỏ hàng của bạn </span>
-        </div>
+    
+      
     </div>
 
 
@@ -345,13 +350,15 @@
 
     <div class="fixed-top form-order">
         <div class="order-product">
+            
             <div class="enter-info  ">
                 <a href="javascript:0"
                     style="float:right;font-size: 20px;;color: black;margin-right: 10px;transform: translateY(-20px)"
                     id="close-form-order"><i class="fas fa-times"></i></a>
-                <h5>ORDERS PRODUCT</h5>
-
-                <h6 style="line-height: 40px;">Để đặt hàng, vui lòng thêm địa chỉ nhận hàng</h6>
+                <h5>Mua sản phẩm</h5>
+             
+                <h6 style="line-height: 40px;">Để mua sản phẩm, vui lòng thêm địa chỉ nhận hàng</h6>
+               
                 <form method="post" action="{{ route('order') }}" id="order-form" style="text-align: center;">
                     @csrf
 
@@ -369,7 +376,7 @@
                                 @if (Auth::check())value="{{ Auth::user()->email }}"@endif>
                         </div>
                         <div class="input">
-                            <span class="numberphone">Số điện thoại</span>
+                            <span class="numberphone" @if (Auth::check())  style="opacity: 1;" @endif>Số điện thoại</span>
                             <input type="text" class="info" name="numberphone" id="numberphone"
                                 @if (Auth::check())value="0{{ Auth::user()->number_phone }}"@endif placeholder="Số điện thoại">
                         </div>
@@ -410,13 +417,15 @@
                     </div>
                     <input style="margin-top: 50px" type="submit" class="requestorder btn btn-primary" value="hoàn thành"
                         class="btn btn-danger">
+                        <div  style="width: 100%;text-align: left;margin-top: 20px;">
+                           <div id="example1"></div>
+                          </div>
                 </form>
             </div>
         </div>
     </div>
 
-
-
+  
     <script>
         // ------------------------------Show Span-------------------------------------------------------------------
         $('.info').keyup(function() {
@@ -503,11 +512,16 @@
             });
   
     </script>
+
     <script>
         // ------------------------------Order Product--------------------------------------------------
         $(document).on('click', '.requestorder', function(e) {
             e.preventDefault();
+          
             if ($("#order-form").valid()) {
+                $("#example1").css({"width": "0px","margin-left": "-10px","height": "10px","background-color": "orange"});
+                $("#example1").animate({"width": "100%"}, 5000);
+
                 var name = $("#name").val();
                 var province = $("#provinces").val();
                 var district = $("#districts").val();
@@ -537,13 +551,19 @@
                         $('.body').hide(500);
                         if (data == 1) {
                             alert('Mua hành thành công');
+                            // remove table cart
                             $('.show-cart').remove();
-                            $('.payment').remove();
+                            //send message
                             $('.message').show();
+                            // hidden form order
                             $('.order-product').hide(500);
-                            $('.add-product-cart').remove();
+                            // fix total
+                            $('.total').html('<h5>0</h5>')
+                            // fix button đặt hàng
+                     $('.payment-cart').html('<a href="" class="order-products"    >Đặt hàng</a>');
                             //   document.getElementById('order-form').reset();
                         } else {
+                            $("#example1").stop();
                             alert(data);
                         }
                     }
@@ -555,95 +575,19 @@
 
         });
     </script>
-
-    <script>
-        // ------------------------------Quận huyện--------------------------------------------------
-        $(document).on('click', '#provinces', function() {
-            var name = $(this).val();
-            var id = $(this).attr('id')
-
-            if (name != '') {
-                $('.' + id).css("opacity", 1);
-                $.ajax({
-                    type: "get",
-                    url: "http://localhost/sell-phone/public/cart/address/dictrict/" + name,
-                    success: function(data) {
-                        var address = '';
-
-                        address += '<div class="input">' +
-                            '     <span class="districts" >Quận,huyện</span>' +
-                            '<select style="width: 90%;margin-left: 5%;" name="districts" id="districts" class="form-select"' +
-                            'aria-label="Default select example" name="dictricts" placeholder="Address">' +
-                            '<option value="" selected>Quận,Huyện</option>'
-                        $.each(data[0].districts, function(key, data) {
-
-                            address += '<option  value="' + data.name + '"> ' + data.name +
-                                ' </option>'
-                        })
-                        address += '</select>' +
-                            '</div>'
-
-                        $('.districts').html(address);
-
-                    }
-                });
-            }
-
-        });
-    </script>
-    <script>
-        $(document).on('click', '#districts', function() {
-            // ------------------------------Phường Xã--------------------------------------------------
-            var name = $(this).val();
-            var id = $(this).attr('id')
-
-            if (name != '') {
-                $('.' + id).css("opacity", 1);
-                $.ajax({
-                    type: "get",
-                    url: "http://localhost/sell-phone/public/cart/address/ward/" + name,
-                    success: function(data) {
-                        var address = '';
-
-                        address += '<div class="input">' +
-                            '     <span class="wards" >Phường,Xã</span>' +
-                            '<select style="width: 90%;margin-left: 5%;" name="wards" id="wards" class="form-select"' +
-                            'aria-label="Default select example"  placeholder="Address">' +
-                            '<option value="" selected>Phường,Xã</option>'
-                        $.each(data[0].wards, function(key, data) {
-
-                            address += '<option  value="' + data.name + '"> ' + data.name +
-                                ' </option>'
-                        })
-                        address += '</select>' +
-                            '</div>'
-
-                        $('.wards').html(address);
-                    }
-                });
-            }
-
-        });
-    </script>
-
-    <script>
-        // ------------------------------Địa chỉ chi tiết--------------------------------------------------
-        $(document).on('click', '#wards', function() {
-            var id = $(this).attr('id')
-            if ($(this).val() != '') {
-                $('.' + id).css("opacity", 1);
-                $('#detail').show();
-            }
-
-        });
-    </script>
-
     <script>
         // ------------------------------Show form Order--------------------------------------------------
         $(document).on('click', '.order-products', function(e) {
             e.preventDefault();
+           var id = $(this).attr('id')
+
+           if( typeof id  !== 'undefined') {
             $('.order-product').show(500);
             $('.body').show(300);
+           }else{
+               alert('Không có sản phẩm trong giỏ hàng của bạn');
+           }
+      
 
         });
         $('#close-form-order').click(function() {
@@ -659,29 +603,19 @@
                 type: "get",
                 url: "http://localhost/sell-phone/public/cart/delete/" + id,
                 success: function(data) {
-                    console.log(data);
                     $("#cart-" + id).remove();
                     $('.cart-' + id).remove();
                     var totalPrice = 0;
-
                     $.each(data.cart, function(key, data) {
                         totalPrice += (data.qty * data.price);
                     });
 
-                    var html = '';
-                    console.log(totalPrice);
-                    html += '<h5> $' + formatNumber(totalPrice) + ' </h5>'
-                    $('.total').html(html);
-
-
+                    $('.total').html('<h5> $' + formatNumber(totalPrice) + ' </h5>');
 
                     if (data.cart.length <= 0) {
                         $('.show-cart').remove();
-                        $('.payment').remove();
-
-                        var message = '';
-                        message += 'Không có sản phẩm trong giỏ hàng của bạn'
-                        $('.message').html(message);
+                        $('.payment-cart').html('<a href="" class="order-products"    >Đặt hàng</a>');
+                        $('.message').html('Không có sản phẩm trong giỏ hàng của bạn');
                     }
                 }
             })
@@ -696,46 +630,117 @@
             var cartId = $(this).data("cartid");
             var price = $(this).data("price");
             if (qty > 10) {
-                alert("You can only buy less than 10 products");
+                alert("Bạn chỉ có thể mua ít hơn 11 sản phẩm");
                 $("#qty-" + cartId).val(10);
-
-                requestCart(cartId, 10, price);
-
-
+                updateCart(cartId, 10, price);
             } else if (qty < 1) {
                 deleteCart(cartId);
             } else {
-
-                requestCart(cartId, qty, price);
+                updateCart(cartId, qty, price);
             }
         });
     </script>
 
 
     <script>
-        function requestCart(cartId, qty, price) {
-
+        function updateCart(cartId, qty, price) {
             // ------------------------------Request Update Cart--------------------------------------------------
             $.ajax({
                 type: "get",
                 url: "http://localhost/sell-phone/public/cart/" + cartId + "/update/" + qty,
                 success: function(data) {
-
-                    var total = '';
-                    total += '<span> $' + formatNumber(qty * price) + '</span> '
-                    $('.total-price-' + cartId).html(total);
-
+                    $('.total-price-' + cartId).html('<span> $' + formatNumber(qty * price) + '</span>');
                     var totalPrice = 0;
                     $.each(data.cart, function(key, data) {
                         totalPrice += (data.qty * data.price);
                     });
-
-                    var html = '';
-
-                    html += '<h5> $' + formatNumber(totalPrice) + ' </h5>'
-                    $('.total').html(html);
+                    $('.total').html('<h5> $' + formatNumber(totalPrice) + ' </h5>');
                 }
             })
         }
     </script>
+
+
+
+<script>
+    // ------------------------------Quận huyện--------------------------------------------------
+    $(document).on('click', '#provinces', function() {
+        var name = $(this).val();
+        var id = $(this).attr('id')
+
+        if (name != '') {
+            $('.' + id).css("opacity", 1);
+            $.ajax({
+                type: "get",
+                url: "http://localhost/sell-phone/public/cart/address/dictrict/" + name,
+                success: function(data) {
+                    var address = '';
+
+                    address += '<div class="input">' +
+                        '     <span class="districts" >Quận,huyện</span>' +
+                        '<select style="width: 90%;margin-left: 5%;" name="districts" id="districts" class="form-select"' +
+                        'aria-label="Default select example" name="dictricts" placeholder="Address">' +
+                        '<option value="" selected>Quận,Huyện</option>'
+                    $.each(data[0].districts, function(key, data) {
+
+                        address += '<option  value="' + data.name + '"> ' + data.name +
+                            ' </option>'
+                    })
+                    address += '</select>' +
+                        '</div>'
+
+                    $('.districts').html(address);
+
+                }
+            });
+        }
+
+    });
+</script>
+<script>
+    $(document).on('click', '#districts', function() {
+        // ------------------------------Phường Xã--------------------------------------------------
+        var name = $(this).val();
+        var id = $(this).attr('id')
+
+        if (name != '') {
+            $('.' + id).css("opacity", 1);
+            $.ajax({
+                type: "get",
+                url: "http://localhost/sell-phone/public/cart/address/ward/" + name,
+                success: function(data) {
+                    var address = '';
+
+                    address += '<div class="input">' +
+                        '     <span class="wards" >Phường,Xã</span>' +
+                        '<select style="width: 90%;margin-left: 5%;" name="wards" id="wards" class="form-select"' +
+                        'aria-label="Default select example"  placeholder="Address">' +
+                        '<option value="" selected>Phường,Xã</option>'
+                    $.each(data[0].wards, function(key, data) {
+
+                        address += '<option  value="' + data.name + '"> ' + data.name +
+                            ' </option>'
+                    })
+                    address += '</select>' +
+                        '</div>'
+
+                    $('.wards').html(address);
+                }
+            });
+        }
+
+    });
+</script>
+
+<script>
+    // ------------------------------Địa chỉ chi tiết--------------------------------------------------
+    $(document).on('click', '#wards', function() {
+        var id = $(this).attr('id')
+        if ($(this).val() != '') {
+            $('.' + id).css("opacity", 1);
+            $('#detail').show();
+        }
+
+    });
+</script>
 @endsection
