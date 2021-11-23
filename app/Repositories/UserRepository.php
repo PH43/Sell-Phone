@@ -16,7 +16,6 @@ public function updateAccount($param){
     $user = User::find(Auth::user()->id);
     $user->update([
         'name' => $param['name'],
-        'email' => $param['email'],
         'number_phone' => $param['phone'],
     ]);
 }

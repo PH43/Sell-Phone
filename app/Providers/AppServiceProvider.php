@@ -2,6 +2,7 @@
 
 namespace App\Providers;
 
+use App\Models\brand;
 use App\Models\category;
 use Illuminate\Support\ServiceProvider;
 
@@ -24,8 +25,12 @@ class AppServiceProvider extends ServiceProvider
      */
     public function boot()
     { 
-        $categories =  category::with('brands')->get();
+        $categories =  category::with(['brands' => function($q){
+            $q->with('image');
+        }])->get();
+        $brands = brand::with('image')->get()->toArray();
+        
         view()->share('categories', $categories);
-
+        view()->share('brands', $brands);
     }
 }

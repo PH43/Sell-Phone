@@ -80,13 +80,18 @@ class CommentRepository implements CommentRepositoryInterface
             }
            
         } 
-   
-
-       $star['biggest'] = DB::table('ratings')->selectRaw('count(*) as count,star')
-       ->where('product_id', $id)
-       ->groupBy('star')
-       ->orderBy('count','desc')->first();
-      
+        $total = 0;
+        for($i = 1; $i <=5 ; $i++){
+            $total += ($i * $star[$i]);
+        }
+     
+        if($star['count'] >= 1){
+            $star['biggest'] =   round($total/$star['count']); 
+        }else{
+            $star['biggest'] = 1;
+        }   
+    
+    
    return  $star;
  
 

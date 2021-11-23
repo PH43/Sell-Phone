@@ -27,8 +27,6 @@ class ListProductController extends Controller
         $data =  $this->productRepo->filterProduct($rq->all());
 
         if ($rq->ajax()) {
-      
-           
             if ($rq->cate) {
                 $brands = category::with('brands')->where('id', $rq->cate)->get()->toArray();
             } else {
@@ -46,6 +44,7 @@ class ListProductController extends Controller
             } else {
                 $category = category::with('brands')->where('id', $rq->cate)->get()->toArray();
             }
+          //  dd($category);
             return view('content/body/listProduct', compact('data', 'category'));
         }
     }

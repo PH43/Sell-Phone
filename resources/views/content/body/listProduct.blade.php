@@ -403,22 +403,16 @@ border: 1px solid black;
                         @endif
                         <span class="name-factory"></span></span>
                     <span class="count-product"><span >({{ $data['count'] }} Sản phẩm)</span></span>
+            
                     <div class="images-category">
                         <div class="owl-carousel owl-theme">
-
-                            <a href=""> <img src="https://s3n.cashify.in/cashify/brand/img/xhdpi/2e7cdc22-5a5f.jpg" alt=""></a>
-                            <a href=""><img src="https://cshprod.s3.amazonaws.com/imageLibrary/samsung_200x200_a17632a44caa.png"
-                                    alt=""></a>
-                            <a href=""> <img src="https://cshprod.s3.amazonaws.com/imageLibrary/oneplus_200x200_a89743874574.png"
-                                    alt=""></a>
-                            <a href=""><img src="https://cdn.shopify.com/s/files/1/0083/6380/2720/files/gionee-logo.svg" alt=""></a>
-                            <a href=""> <img src="https://cdn.shopify.com/s/files/1/0083/6380/2720/files/motorola-logo.png" alt=""></a>
-                            <a href=""><img src="https://cdn.shopify.com/s/files/1/0083/6380/2720/files/mi-logo.png" alt=""></a>
-                            <a href=""><img src="https://cshprod.s3.amazonaws.com/imageLibrary/oppo_200x200_8456cca0cb1d.png"
-                                    alt=""></a>
-            
+                            @foreach ($brands as $brand )
+                            <a href=" "> <img src="{{ asset('images/brands/'.$brand['image']['url'] ) }}" alt=""></a>             
+                            @endforeach
+                       
                         </div>
                     </div>
+                    
                 </div>
 
             </div>
@@ -622,10 +616,29 @@ border: 1px solid black;
 
     </div>
   <script>
-      
+   
+
+
+
+window.addEventListener('popstate', function() { 
+    var url = new URL(window.location);
+
+    $.ajax({
+                type: 'get',
+                url:url,
+                success: function(data) {
+                    LoadProduct(data);
+                    paging(data);
+                   
+                }
+            });
+});
+
+
   </script>
 <script>
     $(document).on('click','.brandProducts', function(e){
+     
         var url = new URL(window.location);
         var id = $(this).attr('id')
         var brands = Array.from(document.querySelectorAll(".brandProducts"))
@@ -868,7 +881,7 @@ for (var i = 2; i <= count; i++) {
                 items: 3
             },
             1024: {
-                items: 7
+                items: 9
             }
         }
     });

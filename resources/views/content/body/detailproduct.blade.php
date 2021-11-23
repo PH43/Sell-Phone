@@ -486,8 +486,8 @@ label.error{
   transform: translateX(-1060px);
 }
     </style>
-    @if(isset($data['rating']['biggest']->star))
-    @php $star = $data['rating']['biggest']->star @endphp
+    @if(isset($data['rating']['biggest']))
+    @php $star = $data['rating']['biggest'] @endphp
     @else
     @php $star = 1 @endphp
     @endif
@@ -577,7 +577,7 @@ label.error{
 <div class="qty-ratings1">
     <h1>{{$star}}/5</h1>
 </div>
-<label for="" class="qty-stars" > @for($i=1;$i<=5;$i++) <i @if( $i <= $star ) style="color:#ea9d02 ;" @endif class="fas fa-star"></i> @endfor </label>
+<label for="" class="qty-stars" > @for($i=1;$i<=5;$i++) <i @if( $i <= $star) style="color:#ea9d02 ;" @endif class="fas fa-star"></i> @endfor </label>
 <span class="qty-ratings"><span>{{$data['rating']['count']}} bài đánh giá</span></span>
 
 </div>
@@ -795,7 +795,7 @@ label.error{
              _token:token,
          },
          success:function(data) {
-             console.log(data.count);
+             console.log(data);
             var rating ={};
 // load chart
              $.each(data.rating, function(key,data){
@@ -808,16 +808,16 @@ label.error{
              var qtyRatings = '<span>'+data.count+' bài đánh giá</span>'
               $('#qty-ratings').html(qtyRatings);
               $('.qty-ratings').html(qtyRatings);
-              $('.qty-ratings1').html('<h1>'+data.biggest.star+'/5</h1>');
+              $('.qty-ratings1').html('<h1>'+data.biggest+'/5</h1>');
             
 
 // load star
               var qtyStars = ''
-              for(var i = 1; i <= data.biggest.star; i++){
+              for(var i = 1; i <= data.biggest; i++){
 
          qtyStars +=   '<i style="color:#ea9d02 ;" class="fas fa-star">  </i>'
                 }
-                for(var i = data.biggest.star; i < 5; i++){
+                for(var i = data.biggest; i < 5; i++){
          qtyStars +=   '<i  class="fas fa-star"></i>'
                 }
                 $('.qty-stars').html(qtyStars);
@@ -906,14 +906,21 @@ $(document).on('click','.loadComment', function(e){
         dataType: 'json',
     
         success: function(data) {
+        $('#page-'+ page_id).hide();
+          $('#page-'+ (page_id + 1)).show();
             var comment = '';
+
             $.each(data.data, function(key, data){
-                console.log(data);
+                if(data.user == null ){
+                    var name = 'Ẩn danh';
+                }else{
+                    name = data.user.name;
+                }
                 comment += '<div class="get-comment">' +
                         
                     '  <img src="{{ asset('/images/avatar-profile.png') }}" alt="">' +
                     '  <div class="user-comment">' +
-                            '<h5>' + data.user.name + '</h5>' +
+                            '<h5>' + name + '</h5>' +
             '<span><i class="fas fa-clock"></i>'+ data.updated_at +'</span> <span><i></i></span>' + 
                            ' <label>  ' + data.content + ' </label>' +
                          ' </div>' +
@@ -923,12 +930,7 @@ $(document).on('click','.loadComment', function(e){
                                    ' <a href=""><i class="fas fa-flag"></i> Báo xấu</a>' +
                       '  </div></div>' 
             });
-                     
-                       
-                  $('#page-'+ page_id).hide();
-          
-                  $('#page-'+ (page_id + 1)).show();
-                  
+                         
                 $('.show-comment').html(comment);
                             }
     });

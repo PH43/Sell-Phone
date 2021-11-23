@@ -40,7 +40,7 @@ class DetailProductController extends Controller
         } else {
             $data['status'] = 'Hết hàng';
         }
-        //dd($data);
+         // dd($data['rating']);
         return  view('content/body/detailproduct', compact('data'));
     }
 
@@ -56,7 +56,7 @@ class DetailProductController extends Controller
     public function loadMoreComments($productId, $page)
     {
 
-        $comments = $this->commentRepo->listComment('product_id', $productId, null, ($page * 5));
+        $comments = $this->commentRepo->listComment( $productId, ($page * 5));
 
         return response()->json($comments);
     }

@@ -58,6 +58,7 @@
         .old-password label {
             color: red;
             margin-left: 50%;
+            font-weight: 600;
         }
 
     </style>
@@ -80,9 +81,14 @@
                     <span for="">Nhập lại mật khẩu:</span>
                     <input type="password" id="passwordagain" name="passwordagain">
                 </div>
-                <div style="width: 100%; height: 80px;text-align: center;clear: both;margin-top:20px;">
+                <div style="width: 100%; height: 130px;text-align: center;clear: both;margin-top:20px;">
                     <input id="submit" style="margin-top: 20px;" class="btn btn-secondary" type="submit"
                         value="Đổi mật khẩu">
+                        <div style="margin: 20px;" >
+                            
+                            <input type="checkbox" class="show-password">
+                            <label for="">Hiển thị mật khẩu</label>
+                        </div>
                 </div>
             </form>
 
@@ -126,7 +132,23 @@
     });
     </script>
 
+<script>
+        $(document).on('click','.show-password', function(){
+     console.log( $('#password').get(0));
+     if(  $('.show-password').val() != 1 ){
+         
+         $('.show-password').val(1);
+         $('#password').get(0).type = 'text';
+         $('#passwordagain').get(0).type = 'text';
 
+     }else{
+         $('.show-password').val(2);
+         $('#password').get(0).type = 'password';
+         $('#passwordagain').get(0).type = 'password';
+     }
+
+ });
+</script>
     <script>
         $('#submit').click(function(e) {
             e.preventDefault();

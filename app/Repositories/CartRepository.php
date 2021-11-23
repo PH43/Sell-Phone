@@ -5,13 +5,13 @@ use Illuminate\Http\Request;
 use App\Models\product;
 use Illuminate\Support\Facades\Session;
 
-class CartRepository implements CartRepositoryInterface
+class CartRepository implements CartRepositoryInterface 
 {
 public function addToCart($id ){
      $product = product::with('image')->find($id);
 
      $cart = session('cart');
-     if(isset($cart[$id]) ){
+     if($cart[$id] ){
         if($cart[$id]['qty'] < 10 ){
           $cart[$id]['qty'] = $cart[$id]['qty'] + 1;
         }

@@ -410,8 +410,8 @@
                         @if (isset(Auth::user()->id))  <input type="hidden" name="user_id" id="user_id" placeholder="Password" value="{{ Auth::user()->id }}">  @endif
 
                         <div class="input">
-                            <span for="" class="message">Lời nhắn</span>
-                            <textarea class="info" name="message" id="message" placeholder="Lời nhắn" rows="3.5"
+                            <span for="" class="message" >Lời nhắn </span>
+                            <textarea  class="info" name="message" id="message" placeholder="Lời nhắn (Có thể để trống)" rows="3.5"
                                 cols="67"></textarea>
                         </div>
                     </div>
@@ -559,6 +559,8 @@
                             $('.order-product').hide(500);
                             // fix total
                             $('.total').html('<h5>0</h5>')
+                            // remove cart headers
+                            $('.add-product-cart').remove();
                             // fix button đặt hàng
                      $('.payment-cart').html('<a href="" class="order-products"    >Đặt hàng</a>');
                             //   document.getElementById('order-form').reset();
@@ -630,7 +632,7 @@
             var cartId = $(this).data("cartid");
             var price = $(this).data("price");
             if (qty > 10) {
-                alert("Bạn chỉ có thể mua ít hơn 11 sản phẩm");
+                alert("Bạn chỉ có thể mua tối đa 10 sản phẩm");
                 $("#qty-" + cartId).val(10);
                 updateCart(cartId, 10, price);
             } else if (qty < 1) {

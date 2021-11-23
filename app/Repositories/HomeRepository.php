@@ -20,6 +20,8 @@ class HomeRepository implements HomeRepositoryInterface
 
     public function topProduct($id, $table)
     {
+        
+
         if ($table == 'order_details') {
             $querry = 'sum(order_details.quantity)';
         } else {

@@ -67,16 +67,17 @@
             <div class="name-form">Thay đổi mật khẩu</div>
             <form action="" id="updateInfo" method="post">
                 @csrf
+                <div class="old-password" style="text-align: left">
+                    <span for="">Email:</span>
+                    <input type="button"  value="{{$user->email}}">
+
+                </div>
                 <div class="old-password">
                     <span for="">Họ và tên:</span>
                     <input type="text" value="{{$user->name}}" id="name"  name="name">
 
                 </div>
-                <div class="old-password">
-                    <span for="">Email:</span>
-                    <input type="email"  value="{{$user->email}}" id="email" name="email">
-
-                </div>
+            
 
                 <div class="old-password">
                     <span for="">Số điện thoại:</span>
@@ -103,6 +104,7 @@
                         required: true,
                         minlength: 3,
                         maxlength: 24,
+                        
                     },
                     "phone": {
                         required: true,
@@ -110,10 +112,7 @@
                         maxlength: 12,
                         number: true,
                     },
-                    "email": {
-                        required: true,
-                        email: true,
-                    },
+               
                
 
                 },
@@ -122,6 +121,7 @@
                         required: "Không được để trống",
                         minlength: "Họ và tên phải lớn hơn 3 ký tự",
                         maxlength: "Họ và tên phải ít hơn 24 ký tự",
+                        string: "Tên không hợp lệ",
                     },
                     "phone": {
                         required: "Không được để trống",
@@ -129,10 +129,7 @@
                         maxlength: "Số điện thoại không hợp lệ",
                         number: "Số điện thoại không hợp lệ",
                     },
-                    "email": {
-                        required: "Không được để trống",
-                        email: "Email không hợp lệ",
-                    },
+                
             
 
                 }
@@ -145,8 +142,8 @@
 <script>
     $(document).on('click', '#update',function(e){
         e.preventDefault();
-        var name = $("#name").val();
-        var email = $("#email").val();
+        if($('#updateInfo').valid() ){
+            var name = $("#name").val();
         var phone = $("#phone").val();
         var token = $('input[name=_token]').val()
         
@@ -155,15 +152,17 @@
             url: "{{route('updateAccount')}}",
             data:{
                 name:name,
-                email:email,
                 phone:phone,
                 _token:token,
             },
             success: function(data) {
                 alert('Thay đổi thành công')
+                $('.users').html('<a href="">'+name+'</a>')
           
             }
         });
+        }
+  
     });
 </script>
 @endsection

@@ -50,11 +50,33 @@ class RegisterController extends Controller
     protected function validator(array $data)
     {
         return Validator::make($data, [
+
             'name' => ['required', 'string', 'max:255'],
-            'email' => ['required', 'string', 'email', 'max:255', 'unique:users'],
+            'email' => ['required', 'email', 'max:255', 'unique:users,email'],
             'password' => ['required', 'string', 'min:8', 'confirmed'],
             'number_phone' => ['required', 'min:9','max:11'],
-        ]);
+        ],
+            [
+            'name.required' => 'Họ và tên không được trống',
+            'name.max' => 'Họ và tên không được quá 255 ký tự',
+            'name.string' => 'Họ và tên không hợp lệ',
+            //---
+            'email.required' => 'Email Không được để trống',
+            'email.max' => 'Email không được quá 255 ký tự',
+            'email.email' => 'Email không hợp lệ',
+
+            'email.unique' => 'Email đã được sử dụng',
+            //----
+            'password.required' => 'mật khẩu Không được để trống',
+            'password.min' => 'Mật khẩu phải lớn hơn 8 ký tự',
+            'password.confirmed' => 'Nhập lại password không hợp lệ',
+            //-----
+            'number_phone.required' => 'Số điện thoại không được để trống',
+            'number_phone.min' => 'Số điện thoại phải lớn hơn 7 ký tự',
+            'number_phone.max' => 'Số điện thoại phải nhỏ hơn 12 ký tự',
+                ]
+    
+    );
     }
 
     /**

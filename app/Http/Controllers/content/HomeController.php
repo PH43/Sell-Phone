@@ -3,6 +3,8 @@
 namespace App\Http\Controllers\content;
 
 use App\Http\Controllers\Controller;
+use App\Models\brand;
+use App\Models\category;
 use App\Models\comment;
 use App\Models\order;
 use App\Models\order_detail;
@@ -55,17 +57,28 @@ class HomeController extends Controller
     public function test(Request $rq)
     
     {
-  
-   return 'success';
-        $product = DB::table('order_details')
-        ->selectRaw('products.*, images.*,sum(order_details.quantity) as sum, order_details.product_id'  )
-        ->join('products','products.id','=',   'order_details.product_id')
-        ->join('images','images.imageable_id', '=' ,'products.id')
-        ->where('products.category_id', 1)
-        ->groupBy('product_id')
-        ->orderBy('sum' , 'desc')->take(6)->get()->toArray();
-        return $product;
-
+        $numbers = array( 3, 4, 2, 1, 5);
+        $count = count($numbers);
+  for($i = 0; $i < $count ;$i++){
+    //  echo $i;
+      for($j = $i + 1; $j < $count ;$j++){
+      //  echo $j;
+        if($numbers[$i] > ($numbers[$j] + 1)){
+           
+            $temp = $numbers[$i];
+            $numbers[$i] = $numbers[$j];
+            $numbers[$j] = $temp;
+            
+            
+        } 
+    //    echo $temp = $numbers[$i];
+      }
+   
+  }      
+  print_r($numbers);
+  for ($i = 0; $i < $count; $i++){
+    echo $numbers[$i] . ' ';
+}
 
     
     }

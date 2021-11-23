@@ -360,7 +360,7 @@ display: block;
             <div class="header-login">
                 @guest
                     @if (Route::has('login'))
-                        <span><i class="fas fa-user-alt"></i> <a href="{{ route('login') }}">Login</a></span>
+                        <span><i class="fas fa-user-alt"></i> <a href="{{ route('login') }}">Đăng nhập</a></span>
                     @endif
                 @else
 
@@ -449,7 +449,10 @@ display: block;
     
     });
     function searchProduct(search,token){
-       $.ajax({
+
+        if (search.trim().length >= 3) {
+
+            $.ajax({
            type: "POST",
            url: "{{ route('search-product') }}",
            data: {
@@ -459,36 +462,41 @@ display: block;
            },
            success: function(data) {
                var html = '';
+               if(data.length > 0){
                $.each(data, function(key, data) {
                    html += '<a style="text-decoration:none" href="http://localhost/sell-phone/public/product/' + data.id + '"><span>' + data.name + '</span></a>'
-
                });
-               $('.search-product').show();
-               if (search.length <= 2) {
-                   $('.search-product').hide();
+                
+               }else{
+                html += '<a style="text-decoration:none; color: red;font-weight:500;" href="Javascript:0"><span> Không tìm thấy sẩn phẩm </span></a>'
                }
+               $('.search-product').show();
                $('.show-search-product').html(html);
-
+              
            }
-       })
+            });
+                  
+               }else{
+                $('.search-product').hide();
+               }
+               
+
    
 }
 $(document).on('click', '.search', function() {
+
     var search = $(this).val();
     var token = $('meta[name="csrf-token"]').attr('content');
-    if (search.trim().length >= 2) {
-   
-       
+
         searchProduct(search,token);
-    }
+    
     });
 
     $(document).on('keyup', '.search', function() {
         var search = $(this).val();
     var token = $('meta[name="csrf-token"]').attr('content');
-    if (search.trim().length >= 2) {       
+      
         searchProduct(search,token);
-    }
     });
 
 
@@ -505,7 +513,7 @@ $.ajax({
     type: "get",
     url:  url,
     success: function(data){
-     console.log(data);
+     console.log('header');
       var cart = ''
       $.each(data, function (key, data){
         cart +=  

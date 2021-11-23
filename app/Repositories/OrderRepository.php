@@ -69,6 +69,7 @@ class orderRepository implements OrderRepositoryInterface
         $cart = session()->all();
         foreach ($cart['cart'] as $cart) {
             $product = product::find($cart['id']);
+            
             if ($cart['qty'] > $product->quantity) {
 
                 return $cart['name'];
@@ -88,7 +89,7 @@ class orderRepository implements OrderRepositoryInterface
     public function sendMail($info)
     {
         $address =  $info['provinces'] . ',' . $info['districts'] . ',' . $info['wards'] . ',' . $info['addressDetails'];
-
+        
         $mailInfo = [
             'name' => $info['customer_name'],
             'phone' =>  $info['numberphone'],
